@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.telegram.messenger"
+    package="org.telegram.messenger_test"
     android:installLocation="auto">
 
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
@@ -19,8 +19,8 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
 
-    <permission android:name="org.telegram.messenger.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
-    <permission android:name="org.telegram.messenger.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <permission android:name="org.telegram.messenger_test.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
+    <permission android:name="org.telegram.messenger_test.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 
     <application
         android:allowBackup="false"

@@ -22,10 +22,10 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.View;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.R;
-import org.telegram.messenger.UserObject;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.ImageReceiver;
+import org.telegram.messenger_test.R;
+import org.telegram.messenger_test.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 

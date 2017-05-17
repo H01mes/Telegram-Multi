@@ -12,8 +12,8 @@ import android.content.Context;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.R;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RadialProgressView;

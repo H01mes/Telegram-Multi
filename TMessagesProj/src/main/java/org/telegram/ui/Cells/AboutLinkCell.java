@@ -24,12 +24,12 @@ import android.view.MotionEvent;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.Emoji;
-import org.telegram.messenger.FileLog;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.browser.Browser;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.Emoji;
+import org.telegram.messenger_test.FileLog;
+import org.telegram.messenger_test.LocaleController;
+import org.telegram.messenger_test.MessageObject;
+import org.telegram.messenger_test.browser.Browser;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.ActionBar.Theme;

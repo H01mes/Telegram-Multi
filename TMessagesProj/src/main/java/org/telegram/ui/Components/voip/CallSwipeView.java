@@ -21,8 +21,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.FileLog;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.FileLog;
 
 import java.util.ArrayList;
 

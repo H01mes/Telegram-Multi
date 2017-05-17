@@ -24,12 +24,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.LocaleController;
+import org.telegram.messenger_test.ApplicationLoader;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import org.telegram.messenger_test.MessagesController;
+import org.telegram.messenger_test.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BaseFragment;

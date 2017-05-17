@@ -13,12 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
-import org.telegram.messenger.query.StickersQuery;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView;
+import org.telegram.messenger_test.LocaleController;
+import org.telegram.messenger_test.NotificationCenter;
+import org.telegram.messenger_test.R;
+import org.telegram.messenger_test.query.StickersQuery;
+import org.telegram.messenger_test.support.widget.LinearLayoutManager;
+import org.telegram.messenger_test.support.widget.RecyclerView;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;

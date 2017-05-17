@@ -44,35 +44,29 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.Emoji;
-import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
-import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.Utilities;
-import org.telegram.messenger.voip.EncryptionKeyEmojifier;
-import org.telegram.messenger.voip.VoIPController;
-import org.telegram.messenger.voip.VoIPService;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.ApplicationLoader;
+import org.telegram.messenger_test.BuildVars;
+import org.telegram.messenger_test.ContactsController;
+import org.telegram.messenger_test.Emoji;
+import org.telegram.messenger_test.ImageReceiver;
+import org.telegram.messenger_test.LocaleController;
+import org.telegram.messenger_test.NotificationCenter;
+import org.telegram.messenger_test.R;
+import org.telegram.messenger_test.Utilities;
+import org.telegram.messenger_test.voip.EncryptionKeyEmojifier;
+import org.telegram.messenger_test.voip.VoIPController;
+import org.telegram.messenger_test.voip.VoIPService;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -87,7 +81,6 @@ import org.telegram.ui.Components.voip.FabBackgroundDrawable;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 
 public class VoIPActivity extends Activity implements VoIPService.StateListener, NotificationCenter.NotificationCenterDelegate{
 

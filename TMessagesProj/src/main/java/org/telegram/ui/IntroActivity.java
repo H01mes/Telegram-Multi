@@ -29,12 +29,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.BuildVars;
+import org.telegram.messenger_test.LocaleController;
+import org.telegram.messenger_test.R;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.ui.ActionBar.Theme;
 
 public class IntroActivity extends Activity {
 

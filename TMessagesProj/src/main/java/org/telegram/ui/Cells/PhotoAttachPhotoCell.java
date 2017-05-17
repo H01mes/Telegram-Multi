@@ -16,9 +16,9 @@ import android.view.SoundEffectConstants;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.MediaController;
-import org.telegram.messenger.R;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.MediaController;
+import org.telegram.messenger_test.R;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.LayoutHelper;

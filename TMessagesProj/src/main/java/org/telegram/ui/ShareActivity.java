@@ -20,12 +20,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLog;
-import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
-import org.telegram.messenger.Utilities;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.ApplicationLoader;
+import org.telegram.messenger_test.FileLog;
+import org.telegram.messenger_test.MessageObject;
+import org.telegram.messenger_test.R;
+import org.telegram.messenger_test.Utilities;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ShareAlert;

@@ -18,8 +18,8 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.view.View;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.FileLog;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.FileLog;
 
 public class ClippingImageView extends View {
 

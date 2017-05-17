@@ -14,7 +14,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.support.annotation.ColorInt;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -22,8 +21,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.LocaleController;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 

@@ -23,11 +23,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.R;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.MessageObject;
+import org.telegram.messenger_test.ApplicationLoader;
+import org.telegram.messenger_test.FileLoader;
+import org.telegram.messenger_test.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;

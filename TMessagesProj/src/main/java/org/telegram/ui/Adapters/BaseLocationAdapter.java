@@ -13,9 +13,9 @@ import android.os.AsyncTask;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.FileLog;
+import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.BuildVars;
+import org.telegram.messenger_test.FileLog;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.RecyclerListView;
