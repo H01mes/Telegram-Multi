@@ -387,6 +387,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 } else if (id == 10) {
                     presentFragment(new CallLogActivity());
                     drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 11) {
+//                    presentFragment(new CallLogActivity());
+                    Intent changeUser = new Intent(getApplicationContext(), ChangeUserActivity.class);
+                    startActivity(changeUser);
+                    drawerLayoutContainer.closeDrawer(false);
                 }
             }
         });

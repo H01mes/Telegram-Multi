@@ -20,6 +20,7 @@ dependencies {
     compile 'net.hockeyapp.android:HockeySDK:4.1.2'
     compile 'com.googlecode.mp4parser:isoparser:1.0.6'
     compile 'com.stripe:stripe-android:2.0.2'
+    compile 'commons-io:commons-io:2.4'
 }
 
 android {

@@ -103,6 +103,7 @@
   <string name="Connecting">Подключение...</string>
   <string name="Updating">Обновление...</string>
   <string name="NewSecretChat">Создать секретный чат</string>
+  <string name="Change_another_user">Сменить пользователя</string>
   <string name="AwaitingEncryption">Ждём, когда %s появится в сети...</string>
   <string name="EncryptionRejected">Секретный чат отменён</string>
   <string name="EncryptionProcessing">Обмен ключами шифрования...</string>
