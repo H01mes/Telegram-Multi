@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -117,6 +118,9 @@ public class ApplicationLoader extends Application {
         }
 
         applicationInited = true;
+        SharedPreferences userID = ApplicationLoader.applicationContext.getSharedPreferences("userID", Context.MODE_PRIVATE);
+        Change_user_helper.setUserTag(userID.getString("userID","_user_0"));
+        Log.i("userTAG", "postInitApplication: " + Change_user_helper.getUserTag());
         convertConfig();
 
         try {

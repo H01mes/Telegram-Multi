@@ -1,11 +1,18 @@
 package org.telegram.ui;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.LocaleController;
 import org.telegram.messenger_test.R;
 import org.telegram.messenger_test.UserConfig;
@@ -38,5 +45,32 @@ public class ChangeUserActivity extends Activity {
 //        tvName.setText(userName);
 //        tvPnone.setText(userPhone);
         Toast.makeText(this,userName.toString() + " " + userPhone.toString(),Toast.LENGTH_LONG).show();
+    }
+
+    public void setUser1(View v) {
+        Change_user_helper.setUserTag("_user_0");
+        SharedPreferences sharedPref = getSharedPreferences("userID", Context.MODE_PRIVATE);
+        sharedPref.edit().putString("userID", Change_user_helper.getUserTag()).commit();
+        sharedPref.edit().apply();
+        Log.i("userTAG", "setUser2: tag changed to " + Change_user_helper.getUserTag());
+        restart();
+    }
+
+    public void setUser2(View v) {
+        Change_user_helper.setUserTag("_user_1");
+        SharedPreferences sharedPref = getSharedPreferences("userID", Context.MODE_PRIVATE);
+        sharedPref.edit().putString("userID", Change_user_helper.getUserTag()).commit();
+        sharedPref.edit().apply();
+        Log.i("userTAG", "setUser2: tag changed to " + Change_user_helper.getUserTag());
+        restart();
+    }
+
+    public void restart() {
+        Intent launchIntent = new Intent(getApplicationContext(), org.telegram.ui.LaunchActivity.class);
+        PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0, launchIntent , 0);
+        AlarmManager manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 500, intent);
+        Log.i("userTAG", "restarting... " + Change_user_helper.getUserTag());
+        System.exit(2);
     }
 }
