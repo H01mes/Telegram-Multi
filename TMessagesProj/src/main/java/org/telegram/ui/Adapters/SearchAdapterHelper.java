@@ -10,9 +10,9 @@ package org.telegram.ui.Adapters;
 
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLitePreparedStatement;
-import org.telegram.messenger_test.AndroidUtilities;
-import org.telegram.messenger_test.FileLog;
-import org.telegram.messenger_test.MessagesStorage;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;

@@ -12,7 +12,7 @@ import android.graphics.*;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
-import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger.AndroidUtilities;
 
 public class FabBackgroundDrawable extends Drawable {
 

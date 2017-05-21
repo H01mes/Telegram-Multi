@@ -15,7 +15,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
 
-import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger.AndroidUtilities;
 
 public class MenuDrawable extends Drawable {
 

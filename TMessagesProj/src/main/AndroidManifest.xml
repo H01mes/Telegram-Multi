@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.telegram.messenger_test"
+    package="org.telegram.messenger"
     android:installLocation="auto">
 
     <supports-screens
@@ -351,7 +351,7 @@
             android:name=".AppStartReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="org.telegram.start" />
+                <action android:name="org.telegram.plus.start" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>

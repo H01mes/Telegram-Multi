@@ -17,17 +17,17 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 
 import org.telegram.PhoneFormat.PhoneFormat;
-import org.telegram.messenger_test.AndroidUtilities;
-import org.telegram.messenger_test.ChatObject;
-import org.telegram.messenger_test.ImageReceiver;
-import org.telegram.messenger_test.LocaleController;
-import org.telegram.messenger_test.MessagesController;
-import org.telegram.messenger_test.UserObject;
-import org.telegram.messenger_test.R;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.UserObject;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.messenger_test.UserConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.ActionBar.Theme;
 

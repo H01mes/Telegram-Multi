@@ -19,12 +19,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import org.telegram.messenger_test.AndroidUtilities;
-import org.telegram.messenger_test.Bitmaps;
-import org.telegram.messenger_test.ImageLoader;
-import org.telegram.messenger_test.FileLog;
-import org.telegram.messenger_test.LocaleController;
-import org.telegram.messenger_test.R;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Bitmaps;
+import org.telegram.messenger.ImageLoader;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BaseFragment;

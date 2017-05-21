@@ -14,10 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.telegram.PhoneFormat.PhoneFormat;
-import org.telegram.messenger_test.Change_user_helper;
-import org.telegram.messenger_test.LocaleController;
-import org.telegram.messenger_test.R;
-import org.telegram.messenger_test.UserConfig;
+import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 
 public class ChangeUserActivity extends Activity {

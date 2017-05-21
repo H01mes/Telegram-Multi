@@ -12,12 +12,12 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.telegram.messenger_test.AndroidUtilities;
-import org.telegram.messenger_test.LocaleController;
-import org.telegram.messenger_test.MessagesController;
-import org.telegram.messenger_test.R;
-import org.telegram.messenger_test.UserConfig;
-import org.telegram.messenger_test.support.widget.RecyclerView;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DrawerActionCell;
 import org.telegram.ui.Cells.DividerCell;

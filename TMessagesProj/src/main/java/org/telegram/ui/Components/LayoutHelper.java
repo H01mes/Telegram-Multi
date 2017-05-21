@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger.AndroidUtilities;
 
 public class LayoutHelper {
 

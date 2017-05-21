@@ -32,10 +32,10 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import org.telegram.messenger_test.AndroidUtilities;
-import org.telegram.messenger_test.FileLog;
-import org.telegram.messenger_test.LocaleController;
-import org.telegram.messenger_test.R;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.Components.LayoutHelper;
 
 import java.lang.reflect.Field;

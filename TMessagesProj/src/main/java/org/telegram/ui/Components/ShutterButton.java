@@ -18,8 +18,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import org.telegram.messenger_test.AndroidUtilities;
-import org.telegram.messenger_test.R;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.R;
 
 public class ShutterButton extends View {
 

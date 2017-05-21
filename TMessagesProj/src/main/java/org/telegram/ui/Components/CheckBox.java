@@ -19,7 +19,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger.AndroidUtilities;
 
 public class CheckBox extends View {
 

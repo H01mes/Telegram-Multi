@@ -17,9 +17,9 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import org.telegram.messenger_test.AndroidUtilities;
-import org.telegram.messenger_test.Emoji;
-import org.telegram.messenger_test.query.StickersQuery;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
+import org.telegram.messenger.query.StickersQuery;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;

@@ -10,16 +10,16 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.PowerManager;
 
-import org.telegram.messenger_test.AndroidUtilities;
-import org.telegram.messenger_test.BuildVars;
-import org.telegram.messenger_test.ContactsController;
-import org.telegram.messenger_test.ApplicationLoader;
-import org.telegram.messenger_test.FileLog;
-import org.telegram.messenger_test.MessagesController;
-import org.telegram.messenger_test.NotificationCenter;
-import org.telegram.messenger_test.StatsController;
-import org.telegram.messenger_test.UserConfig;
-import org.telegram.messenger_test.Utilities;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.StatsController;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;

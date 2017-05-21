@@ -17,7 +17,7 @@ import android.text.TextDirectionHeuristics;
 import android.text.TextPaint;
 import android.text.TextUtils;
 
-import org.telegram.messenger_test.FileLog;
+import org.telegram.messenger.FileLog;
 
 import java.lang.reflect.Constructor;
 

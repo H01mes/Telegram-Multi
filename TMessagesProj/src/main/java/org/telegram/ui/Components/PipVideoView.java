@@ -25,11 +25,11 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
-import org.telegram.messenger_test.AndroidUtilities;
-import org.telegram.messenger_test.ApplicationLoader;
-import org.telegram.messenger_test.Change_user_helper;
-import org.telegram.messenger_test.FileLog;
-import org.telegram.messenger_test.exoplayer2.ui.AspectRatioFrameLayout;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.ui.ActionBar.ActionBar;
 
 import java.util.ArrayList;

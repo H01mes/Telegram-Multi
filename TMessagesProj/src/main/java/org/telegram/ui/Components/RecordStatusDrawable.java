@@ -13,7 +13,7 @@ import android.graphics.ColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 
-import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class RecordStatusDrawable extends Drawable {

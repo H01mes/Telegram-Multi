@@ -10,7 +10,7 @@ package org.telegram.ui.Components;
 
 import android.text.TextPaint;
 
-import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger.AndroidUtilities;
 
 public class URLSpanNoUnderlineBold extends URLSpanNoUnderline {
     public URLSpanNoUnderlineBold(String url) {

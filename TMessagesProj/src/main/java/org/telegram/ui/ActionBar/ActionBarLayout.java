@@ -33,9 +33,9 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import org.telegram.messenger_test.AndroidUtilities;
-import org.telegram.messenger_test.Change_user_helper;
-import org.telegram.messenger_test.R;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.R;
 import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;

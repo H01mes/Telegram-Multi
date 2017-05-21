@@ -8,7 +8,7 @@
 
 package org.telegram.tgnet;
 
-import org.telegram.messenger_test.FileLog;
+import org.telegram.messenger.FileLog;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -28,7 +28,7 @@ android {
     buildToolsVersion '25.0.2'
 
     useLibrary 'org.apache.http.legacy'
-    defaultConfig.applicationId = "org.telegram.messenger_test"
+    defaultConfig.applicationId = "org.telegram.multi"
 
     sourceSets.main.jniLibs.srcDirs = ['./jni/']
 
@@ -48,12 +48,13 @@ android {
     }
 
     signingConfigs {
-        debug {
-
+        config {
+            keyAlias 'olegsvs_2017'
+            keyPassword 'Roverpc1342'
+            storeFile file('C:/Users/user/Downloads/key.jks')
+            storePassword 'Roverpc1342'
         }
-
-        release {
-
+        config1 {
         }
     }
 
@@ -64,20 +65,16 @@ android {
             signingConfig signingConfigs.debug
             applicationIdSuffix ".beta"
         }
-
         release {
-            debuggable false
-            jniDebuggable false
-            signingConfig signingConfigs.release
+            debuggable true
+            jniDebuggable true
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-
         foss {
             debuggable false
             jniDebuggable false
-            signingConfig signingConfigs.release
         }
     }
 
@@ -154,13 +151,13 @@ android {
         minSdkVersion 14
         targetSdkVersion 25
         versionName "3.18.0"
-
         externalNativeBuild {
             ndkBuild {
                 arguments "NDK_APPLICATION_MK:=jni/Application.mk", "APP_PLATFORM:=android-14"
                 abiFilters "armeabi-v7a", "x86"
             }
         }
+        signingConfig signingConfigs.config
     }
 }
 
