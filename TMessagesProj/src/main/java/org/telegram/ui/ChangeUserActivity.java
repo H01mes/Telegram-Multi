@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -25,9 +27,10 @@ public class ChangeUserActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_user);
 
-//        TextView tvName = (TextView)findViewById(R.id.tvName);
+        TextView userCurrent = (TextView)findViewById(R.id.tvUserCurrent);
 //        TextView tvPnone = (TextView)findViewById(R.id.tvPhone);
-
+        Button btUser1 = (Button)findViewById(R.id.setUser1);
+        Button btUser2 = (Button)findViewById(R.id.setUser2);
         TLRPC.User user = UserConfig.getCurrentUser();
         String userName;
         String userPhone;
@@ -44,7 +47,11 @@ public class ChangeUserActivity extends Activity {
         }
 //        tvName.setText(userName);
 //        tvPnone.setText(userPhone);
-        Toast.makeText(this,userName.toString() + " " + userPhone.toString(),Toast.LENGTH_LONG).show();
+
+        btUser1.setText(getUserTag("_user_0"));
+        btUser2.setText(getUserTag("_user_1"));
+        userCurrent.setText("Current user " + userName.toString() + " " + userPhone.toString());
+        Toast.makeText(this,"Current user " + userName.toString() + " " + userPhone.toString(),Toast.LENGTH_LONG).show();
     }
 
     public void setUser1(View v) {
@@ -72,5 +79,11 @@ public class ChangeUserActivity extends Activity {
         manager.set(AlarmManager.RTC, System.currentTimeMillis() + 500, intent);
         Log.i("userTAG", "restarting... " + Change_user_helper.getUserTag());
         System.exit(2);
+    }
+
+    public String getUserTag(String tag) {
+        SharedPreferences userPhone = getSharedPreferences("users" + tag.toString(), Context.MODE_PRIVATE);
+        return userPhone.getString("phone_user1","не задан");
+//        Log.i("userTAG", "postInitApplication: " + Change_user_helper.getUserTag());
     }
 }

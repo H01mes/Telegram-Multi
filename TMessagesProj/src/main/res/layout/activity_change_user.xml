@@ -25,4 +25,14 @@ android:layout_height="match_parent">
         android:layout_alignLeft="@+id/setUser1"
         android:layout_alignStart="@+id/setUser1"
         android:layout_marginTop="18dp" />
+
+    <TextView
+        android:id="@+id/tvUserCurrent"
+        android:theme="@style/HockeyApp.ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:text="TextView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

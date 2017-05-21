@@ -3,6 +3,7 @@
 <!--Translation by Khalid Alaraifi-->
 
 <resources>
+    <string name="Change_another_user">Change user</string>
     <string name="AppName">تيليجرام</string>
     <string name="AppNameBeta">نسخة تيليجرام التجريبية</string>
     <string name="LanguageName">العربية</string>
