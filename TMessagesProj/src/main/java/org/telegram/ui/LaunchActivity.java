@@ -43,6 +43,7 @@ import android.widget.Toast;
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger_test.BuildVars;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.ChatObject;
 import org.telegram.messenger_test.ContactsController;
 import org.telegram.messenger_test.ImageLoader;
@@ -139,7 +140,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 return;
             }
             if (intent != null && !intent.getBooleanExtra("fromIntro", false)) {
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2"+ Change_user_helper.userTag, MODE_PRIVATE);
                 Map<String, ?> state = preferences.getAll();
                 if (state.isEmpty()) {
                     Intent intent2 = new Intent(this, IntroActivity.class);
@@ -355,7 +356,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     if (!MessagesController.isFeatureEnabled("broadcast_create", actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1))) {
                         return;
                     }
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                     if (!BuildVars.DEBUG_VERSION && preferences.getBoolean("channel_intro", false)) {
                         Bundle args = new Bundle();
                         args.putInt("step", 0);

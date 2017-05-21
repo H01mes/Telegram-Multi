@@ -43,6 +43,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.Emoji;
 import org.telegram.messenger_test.EmojiData;
 import org.telegram.messenger_test.LocaleController;
@@ -1105,7 +1106,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 return false;
             }
         });
-        currentPage = getContext().getSharedPreferences("emoji", Activity.MODE_PRIVATE).getInt("selected_page", 0);
+        currentPage = getContext().getSharedPreferences("emoji"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).getInt("selected_page", 0);
         loadRecents();
     }
 
@@ -1160,12 +1161,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
         if (currentPage != newPage) {
             currentPage = newPage;
-            getContext().getSharedPreferences("emoji", Activity.MODE_PRIVATE).edit().putInt("selected_page", newPage).commit();
+            getContext().getSharedPreferences("emoji"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).edit().putInt("selected_page", newPage).commit();
         }
     }
 
     public void clearRecentEmoji() {
-        SharedPreferences preferences = getContext().getSharedPreferences("emoji", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = getContext().getSharedPreferences("emoji"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         preferences.edit().putBoolean("filled_default", true).commit();
         emojiUseHistory.clear();
         recentEmoji.clear();
@@ -1241,7 +1242,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     }
 
     private void saveRecentEmoji() {
-        SharedPreferences preferences = getContext().getSharedPreferences("emoji", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = getContext().getSharedPreferences("emoji"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         StringBuilder stringBuilder = new StringBuilder();
         for (HashMap.Entry<String, Integer> entry : emojiUseHistory.entrySet()) {
             if (stringBuilder.length() != 0) {
@@ -1255,7 +1256,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     }
 
     private void saveEmojiColors() {
-        SharedPreferences preferences = getContext().getSharedPreferences("emoji", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = getContext().getSharedPreferences("emoji"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         StringBuilder stringBuilder = new StringBuilder();
         for (HashMap.Entry<String, String> entry : emojiColor.entrySet()) {
             if (stringBuilder.length() != 0) {
@@ -1443,7 +1444,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     }
 
     public void loadRecents() {
-        SharedPreferences preferences = getContext().getSharedPreferences("emoji", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = getContext().getSharedPreferences("emoji"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
 
         String str;
         try {

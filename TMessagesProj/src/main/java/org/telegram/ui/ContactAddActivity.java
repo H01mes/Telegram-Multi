@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.ContactsController;
 import org.telegram.messenger_test.LocaleController;
 import org.telegram.messenger_test.ApplicationLoader;
@@ -102,7 +103,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                         user.last_name = lastNameField.getText().toString();
                         ContactsController.getInstance().addContact(user);
                         finishFragment();
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                         preferences.edit().putInt("spam3_" + user_id, 1).commit();
                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_NAME);
                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.peerSettingsDidLoaded, (long) user_id);
@@ -251,7 +252,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     public void onResume() {
         super.onResume();
         updateAvatarLayout();
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         boolean animations = preferences.getBoolean("view_animations", true);
         if (!animations) {
             firstNameField.requestFocus();

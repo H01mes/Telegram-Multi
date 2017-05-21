@@ -69,6 +69,7 @@ import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger_test.BuildConfig;
 import org.telegram.messenger_test.BuildVars;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.ChatObject;
 import org.telegram.messenger_test.Emoji;
 import org.telegram.messenger_test.LocaleController;
@@ -717,7 +718,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         MessagesController.getInstance().setLastCreatedDialogId(dialog_id, true);
 
         if (startLoadFromMessageId == 0) {
-            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
             int messageId = sharedPreferences.getInt("diditem" + dialog_id, 0);
             if (messageId != 0) {
                 loadingFromOldPosition = true;
@@ -1871,7 +1872,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         showDialog(builder.create());
                     } else {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                         preferences.edit().putInt("pin_" + dialog_id, info.pinned_msg_id).commit();
                         updatePinnedMessageView(true);
                     }
@@ -2236,7 +2237,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                         if (allowStickersPanel && (!mentionsAdapter.isBotContext() || (allowContextBotPanel || allowContextBotPanelSecond))) {
                             if (currentEncryptedChat != null && mentionsAdapter.isBotContext()) {
-                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                                 if (!preferences.getBoolean("secretbot", false)) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
@@ -3296,7 +3297,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void showGifHint() {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         if (preferences.getBoolean("gifhint", false)) {
             return;
         }
@@ -3821,7 +3822,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     MessagesController.getInstance().secretWebpagePreview = 1;
-                                    ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putInt("secretWebpage2", MessagesController.getInstance().secretWebpagePreview).commit();
+                                    ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).edit().putInt("secretWebpage2", MessagesController.getInstance().secretWebpagePreview).commit();
                                     foundUrls = null;
                                     searchLinks(charSequence, force);
                                 }
@@ -3831,7 +3832,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             showDialog(builder.create());
 
                             MessagesController.getInstance().secretWebpagePreview = 0;
-                            ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putInt("secretWebpage2", MessagesController.getInstance().secretWebpagePreview).commit();
+                            ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).edit().putInt("secretWebpage2", MessagesController.getInstance().secretWebpagePreview).commit();
                         }
                     });
                     return;
@@ -4131,7 +4132,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 return;
             }
             if (replyingMessageObject != null && replyingMessageObject.messageOwner.reply_markup instanceof TLRPC.TL_replyKeyboardForceReply) {
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                 preferences.edit().putInt("answered_" + dialog_id, replyingMessageObject.getId()).commit();
             }
             if (foundWebPage != null) {
@@ -4315,7 +4316,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (!muted) {
             if (instant) {
                 long flags;
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putInt("notify2_" + dialog_id, 2);
                 flags = 1;
@@ -4332,7 +4333,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 showDialog(AlertsCreator.createMuteAlert(getParentActivity(), dialog_id));
             }
         } else {
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("notify2_" + dialog_id, 0);
             MessagesStorage.getInstance().setDialogFlags(dialog_id, 0);
@@ -6793,7 +6794,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     botButtons = new MessageObject(message, null, false);
                     if (chatActivityEnterView != null) {
                         if (botButtons.messageOwner.reply_markup instanceof TLRPC.TL_replyKeyboardForceReply) {
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                             if (preferences.getInt("answered_" + dialog_id, 0) != botButtons.getId() && (replyingMessageObject == null || chatActivityEnterView.getFieldText() == null)) {
                                 botReplyButtons = botButtons;
                                 chatActivityEnterView.setButtons(botButtons);
@@ -7209,7 +7210,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 pinnedMessageObject = messagesDict[0].get(info.pinned_msg_id);
             }
         }
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         if (info == null || info.pinned_msg_id == 0 || info.pinned_msg_id == preferences.getInt("pin_" + dialog_id, 0) || actionBar != null && actionBar.isActionModeShowed()) {
             hidePinnedMessageView(animated);
         } else {
@@ -7295,7 +7296,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (reportSpamView == null) {
             return;
         }
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         boolean show;
         if (currentEncryptedChat != null) {
             show = !(currentEncryptedChat.admin_id == UserConfig.getClientUserId() || ContactsController.getInstance().isLoadingContacts()) && ContactsController.getInstance().contactsDict.get(currentUser.id) == null;
@@ -7571,7 +7572,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         MessagesController.getInstance().cancelTyping(0, dialog_id);
 
-        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).edit();
         int messageId = 0;
         int offset = 0;
         if (chatLayoutManager != null) {
@@ -8997,7 +8998,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     showOpenGameAlert(game, messageObject, urlStr, false, uid);
-                    ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE).edit().putBoolean("askgame_" + uid, false).commit();
+                    ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).edit().putBoolean("askgame_" + uid, false).commit();
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);

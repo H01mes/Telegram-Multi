@@ -52,6 +52,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.ChatObject;
 import org.telegram.messenger_test.LocaleController;
 import org.telegram.messenger_test.MessagesStorage;
@@ -680,7 +681,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             public void onClick(View v) {
                                 int i = (Integer) v.getTag();
                                 if (i == 0) {
-                                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+                                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.putInt("notify2_" + did, 0);
                                     MessagesStorage.getInstance().setDialogFlags(did, 0);
@@ -703,7 +704,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                     } else if (i == 4) {
                                         untilTime = Integer.MAX_VALUE;
                                     }
-                                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+                                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = preferences.edit();
                                     long flags;
                                     if (i == 4) {
@@ -1666,7 +1667,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void setPlayProfileAnimation(boolean value) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         if (!AndroidUtilities.isTablet() && preferences.getBoolean("view_animations", true)) {
             playProfileAnimation = value;
         }
@@ -2689,7 +2690,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                         textCell.setTextAndValue(LocaleController.getString("MessageLifetime", R.string.MessageLifetime), value);
                     } else if (i == settingsNotificationsRow) {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                         boolean enabled;
                         long did;
                         if (dialog_id != 0) {

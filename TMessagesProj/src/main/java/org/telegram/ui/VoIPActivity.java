@@ -56,6 +56,7 @@ import android.widget.TextView;
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.messenger_test.ApplicationLoader;
 import org.telegram.messenger_test.BuildVars;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.ContactsController;
 import org.telegram.messenger_test.Emoji;
 import org.telegram.messenger_test.ImageReceiver;
@@ -1123,7 +1124,7 @@ public class VoIPActivity extends Activity implements VoIPService.StateListener,
                     showRetry();
                 } else if (state == VoIPService.STATE_ESTABLISHED) {
                     if(!wasFirstStateChange){
-                        int count=getSharedPreferences("mainconfig", MODE_PRIVATE).getInt("call_emoji_tooltip_count", 0);
+                        int count=getSharedPreferences("mainconfig"+ Change_user_helper.userTag, MODE_PRIVATE).getInt("call_emoji_tooltip_count", 0);
                         if(count<3){
                             setEmojiTooltipVisible(true);
                             hintTextView.postDelayed(tooltipHider=new Runnable(){
@@ -1133,7 +1134,7 @@ public class VoIPActivity extends Activity implements VoIPService.StateListener,
                                     setEmojiTooltipVisible(false);
                                 }
                             }, 5000);
-                            getSharedPreferences("mainconfig", MODE_PRIVATE).edit().putInt("call_emoji_tooltip_count", count+1).apply();
+                            getSharedPreferences("mainconfig"+ Change_user_helper.userTag, MODE_PRIVATE).edit().putInt("call_emoji_tooltip_count", count+1).apply();
                         }
                     }
                     setStateTextAnimated("0:00", false);

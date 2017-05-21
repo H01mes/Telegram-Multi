@@ -17,7 +17,7 @@ public class NotificationDismissReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Context.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
         preferences.edit().putInt("dismissDate", intent.getIntExtra("messageDate", 0)).commit();
     }
 }

@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.R;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Swatch;
@@ -97,7 +98,7 @@ public class ColorPicker extends FrameLayout {
             }
         });
 
-        location = context.getSharedPreferences("paint", Activity.MODE_PRIVATE).getFloat("last_color_location", 1.0f);
+        location = context.getSharedPreferences("paint"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).getFloat("last_color_location", 1.0f);
         setLocation(location);
     }
 
@@ -211,7 +212,7 @@ public class ColorPicker extends FrameLayout {
             if (interacting && delegate != null) {
                 delegate.onFinishedColorPicking();
 
-                getContext().getSharedPreferences("paint", Activity.MODE_PRIVATE).edit().putFloat("last_color_location", location).commit();
+                getContext().getSharedPreferences("paint"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).edit().putFloat("last_color_location", location).commit();
             }
             interacting = false;
             wasChangingWeight = changingWeight;

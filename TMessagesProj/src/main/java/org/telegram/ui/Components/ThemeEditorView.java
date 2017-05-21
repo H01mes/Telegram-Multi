@@ -52,6 +52,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.messenger_test.ApplicationLoader;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.FileLog;
 import org.telegram.messenger_test.LocaleController;
 import org.telegram.messenger_test.R;
@@ -989,7 +990,7 @@ public class ThemeEditorView {
         windowView.setBackgroundResource(R.drawable.theme_picker);
         windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
 
-        preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Context.MODE_PRIVATE);
+        preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig"+ Change_user_helper.userTag, Context.MODE_PRIVATE);
 
         int sidex = preferences.getInt("sidex", 1);
         int sidey = preferences.getInt("sidey", 0);

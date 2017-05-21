@@ -50,7 +50,7 @@ public class TgChooserTargetService extends ChooserTargetService {
         if (!UserConfig.isClientActivated()) {
             return targets;
         }
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.userTag, Activity.MODE_PRIVATE);
         if (!preferences.getBoolean("direct_share", true)) {
             return targets;
         }

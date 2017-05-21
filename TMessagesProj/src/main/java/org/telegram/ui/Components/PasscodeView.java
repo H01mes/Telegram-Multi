@@ -47,6 +47,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.LocaleController;
 import org.telegram.messenger_test.NotificationCenter;
 import org.telegram.messenger_test.ApplicationLoader;
@@ -970,7 +971,7 @@ public class PasscodeView extends FrameLayout {
         }
         setAlpha(1.0f);
         setTranslationY(0);
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         int selectedBackground = preferences.getInt("selectedBackground", 1000001);
         if (selectedBackground == 1000001) {
             backgroundFrameLayout.setBackgroundColor(0xff517c9e);

@@ -40,6 +40,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.messenger_test.ApplicationLoader;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.FileLog;
 import org.telegram.messenger_test.LocaleController;
 import org.telegram.messenger_test.MessagesController;
@@ -1382,7 +1383,7 @@ public class Theme {
         themes.add(themeInfo);
         themesDict.put("Blue", themeInfo);
 
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         String themesString = preferences.getString("themes2", null);
         if (!TextUtils.isEmpty(themesString)) {
             try {
@@ -1419,7 +1420,7 @@ public class Theme {
 
         ThemeInfo applyingTheme = null;
         try {
-            preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+            preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
             String theme = preferences.getString("theme", null);
             if (theme != null) {
                 applyingTheme = themesDict.get(theme);
@@ -1803,7 +1804,7 @@ public class Theme {
         try {
             if (themeInfo.pathToFile != null || themeInfo.assetName != null) {
                 if (save) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("theme", themeInfo.name);
                     if (removeWallpaperOverride) {
@@ -1818,7 +1819,7 @@ public class Theme {
                 }
             } else {
                 if (save) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.remove("theme");
                     if (removeWallpaperOverride) {
@@ -1842,7 +1843,7 @@ public class Theme {
     }
 
     private static void saveOtherThemes() {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         JSONArray array = new JSONArray();
         for (int a = 0; a < otherThemes.size(); a++) {
@@ -1924,7 +1925,7 @@ public class Theme {
                 sortThemes();
             }
             currentTheme = newTheme;
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("theme", currentTheme.name);
             editor.commit();
@@ -2669,7 +2670,7 @@ public class Theme {
 
     public static void setThemeWallpaper(String themeName, Bitmap bitmap, File path) {
         currentColors.remove(key_chat_wallpaper);
-        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().remove("overrideThemeWallpaper").commit();
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).edit().remove("overrideThemeWallpaper").commit();
         if (bitmap != null) {
             themedWallpaper = new BitmapDrawable(bitmap);
             saveCurrentTheme(themeName, false);
@@ -2778,7 +2779,7 @@ public class Theme {
             @Override
             public void run() {
                 synchronized (wallpaperSync) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                     boolean overrideTheme = preferences.getBoolean("overrideThemeWallpaper", false);
                     if (!overrideTheme) {
                         Integer backgroundColor = currentColors.get(key_chat_wallpaper);
@@ -2818,7 +2819,7 @@ public class Theme {
                     if (wallpaper == null) {
                         int selectedColor = 0;
                         try {
-                            preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                            preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                             int selectedBackground = preferences.getInt("selectedBackground", 1000001);
                             selectedColor = preferences.getInt("selectedColor", 0);
                             if (selectedColor == 0) {

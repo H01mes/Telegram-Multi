@@ -71,7 +71,7 @@ public class UserConfig {
     public static void saveConfig(boolean withFile, File oldFile) {
         synchronized (sync) {
             try {
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", Context.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing"+Change_user_helper.userTag, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("registeredForPush", registeredForPush);
                 editor.putString("pushString2", pushString);
@@ -197,7 +197,7 @@ public class UserConfig {
                         int constructor = data.readInt32(false);
                         currentUser = TLRPC.User.TLdeserialize(data, constructor, false);
 
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", Context.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing"+Change_user_helper.userTag, Context.MODE_PRIVATE);
                         registeredForPush = preferences.getBoolean("registeredForPush", false);
                         pushString = preferences.getString("pushString2", "");
                         lastSendMessageId = preferences.getInt("lastSendMessageId", -210000);
@@ -222,7 +222,7 @@ public class UserConfig {
                     FileLog.e(e);
                 }
             } else {
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", Context.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing"+Change_user_helper.userTag, Context.MODE_PRIVATE);
                 registeredForPush = preferences.getBoolean("registeredForPush", false);
                 pushString = preferences.getString("pushString2", "");
                 lastSendMessageId = preferences.getInt("lastSendMessageId", -210000);
@@ -287,7 +287,7 @@ public class UserConfig {
                 if (!notificationsConverted) {
                     try {
                         ArrayList<Long> customDialogs = new ArrayList<>();
-                        preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Context.MODE_PRIVATE);
+                        preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
                         Map<String, ?> all = preferences.getAll();
                         String defaultSound = LocaleController.getString("SoundDefault", R.string.SoundDefault);
                         int defaultVibrate = 0;

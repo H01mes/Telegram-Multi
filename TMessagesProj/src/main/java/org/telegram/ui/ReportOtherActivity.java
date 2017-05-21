@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.messenger_test.ApplicationLoader;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.LocaleController;
 import org.telegram.messenger_test.MessagesController;
 import org.telegram.messenger_test.R;
@@ -129,7 +130,7 @@ public class ReportOtherActivity extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         boolean animations = preferences.getBoolean("view_animations", true);
         if (!animations) {
             firstNameField.requestFocus();

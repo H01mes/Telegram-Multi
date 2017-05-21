@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.messenger_test.ApplicationLoader;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.FileLoader;
 import org.telegram.messenger_test.FileLog;
 import org.telegram.messenger_test.LocaleController;
@@ -166,7 +167,7 @@ public class ThemeActivity extends BaseFragment {
                             listAdapter.notifyDataSetChanged();
                             alertDialog.dismiss();
 
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                             if (preferences.getBoolean("themehint", false)) {
                                 return;
                             }

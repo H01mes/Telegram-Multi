@@ -72,6 +72,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.messenger_test.ApplicationLoader;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.Emoji;
 import org.telegram.messenger_test.FileLoader;
 import org.telegram.messenger_test.FileLog;
@@ -658,7 +659,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         adapter.notifyDataSetChanged();
 
         if (pagesStack.size() == 1 || back) {
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("articles", Activity.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("articles"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
             String key = "article" + currentPage.id;
             int position = preferences.getInt(key, -1);
             int offset;
@@ -1753,7 +1754,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                                     pagesStack.set(0, webPage);
                                     if (pagesStack.size() == 1) {
                                         currentPage = webPage;
-                                        ApplicationLoader.applicationContext.getSharedPreferences("articles", Activity.MODE_PRIVATE).edit().remove("article" + currentPage.id).commit();
+                                        ApplicationLoader.applicationContext.getSharedPreferences("articles"+Change_user_helper.userTag, Activity.MODE_PRIVATE).edit().remove("article" + currentPage.id).commit();
                                         updateInterfaceForCurrentPage(false);
                                     }
                                 }
@@ -2119,7 +2120,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             } else {
                 offset = 0;
             }
-            SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("articles", Activity.MODE_PRIVATE).edit();
+            SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("articles"+Change_user_helper.userTag, Activity.MODE_PRIVATE).edit();
             String key = "article" + currentPage.id;
             editor.putInt(key, position).putInt(key + "o", offset).putBoolean(key + "r", AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y).commit();
         }

@@ -58,7 +58,7 @@ public class StatsController {
     }
 
     private StatsController() {
-        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("stats", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("stats"+Change_user_helper.userTag, Context.MODE_PRIVATE);
         boolean save = false;
         editor = sharedPreferences.edit();
         for (int a = 0; a < 3; a++) {

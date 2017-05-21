@@ -606,7 +606,7 @@ public class MessagesStorage {
             public void run() {
                 try {
                     HashMap<Long, Long> ids = new HashMap<>();
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Context.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
                     Map<String, ?> values = preferences.getAll();
                     for (Map.Entry<String, ?> entry : values.entrySet()) {
                         String key = entry.getKey();

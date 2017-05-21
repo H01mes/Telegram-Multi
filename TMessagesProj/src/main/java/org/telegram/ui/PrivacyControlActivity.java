@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.ContactsController;
 import org.telegram.messenger_test.LocaleController;
 import org.telegram.messenger_test.MessagesController;
@@ -132,7 +133,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     }
 
                     if (currentType != 0 && rulesType == 0) {
-                        final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                        final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                         boolean showed = preferences.getBoolean("privacyAlertShowed", false);
                         if (!showed) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());

@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.messenger_test.ApplicationLoader;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.FileLog;
 import org.telegram.messenger_test.LocaleController;
 import org.telegram.messenger_test.MediaController;
@@ -212,7 +213,7 @@ public class DataSettingsActivity extends BaseFragment {
                                     }
                                 }
                             }
-                            SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit();
+                            SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).edit();
                             if (position == mobileDownloadRow) {
                                 editor.putInt("mobileDataDownloadMask", newMask);
                                 MediaController.getInstance().mobileDataDownloadMask = newMask;
@@ -235,7 +236,7 @@ public class DataSettingsActivity extends BaseFragment {
                 } else if (position == storageUsageRow) {
                     presentFragment(new CacheControlActivity());
                 } else if (position == useLessDataForCallsRow) {
-                    final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                    final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                     Dialog dlg = AlertsCreator.createSingleChoiceDialog(getParentActivity(), DataSettingsActivity.this, new String[]{
                                     LocaleController.getString("UseLessDataNever", R.string.UseLessDataNever),
                                     LocaleController.getString("UseLessDataOnMobile", R.string.UseLessDataOnMobile),
@@ -322,7 +323,7 @@ public class DataSettingsActivity extends BaseFragment {
                     if (position == storageUsageRow) {
                         textCell.setText(LocaleController.getString("StorageUsage", R.string.StorageUsage), true);
                     } else if (position == useLessDataForCallsRow) {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                         String value = null;
                         switch (preferences.getInt("VoipDataSaving", VoIPController.DATA_SAVING_NEVER)) {
                             case VoIPController.DATA_SAVING_NEVER:
@@ -362,7 +363,7 @@ public class DataSettingsActivity extends BaseFragment {
                     if (position == mobileDownloadRow || position == wifiDownloadRow || position == roamingDownloadRow) {
                         int mask;
                         String value;
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                         if (position == mobileDownloadRow) {
                             value = LocaleController.getString("WhenUsingMobileData", R.string.WhenUsingMobileData);
                             mask = MediaController.getInstance().mobileDataDownloadMask;

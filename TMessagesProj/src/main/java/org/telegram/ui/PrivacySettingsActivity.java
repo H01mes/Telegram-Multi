@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.messenger_test.ApplicationLoader;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.ContactsController;
 import org.telegram.messenger_test.LocaleController;
 import org.telegram.messenger_test.MessagesController;
@@ -225,7 +226,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     } else {
                         MessagesController.getInstance().secretWebpagePreview = 1;
                     }
-                    ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putInt("secretWebpage2", MessagesController.getInstance().secretWebpagePreview).commit();
+                    ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putInt("secretWebpage2"+ Change_user_helper.userTag, MessagesController.getInstance().secretWebpagePreview).commit();
                     if (view instanceof TextCheckCell) {
                         ((TextCheckCell) view).setChecked(MessagesController.getInstance().secretWebpagePreview == 1);
                     }

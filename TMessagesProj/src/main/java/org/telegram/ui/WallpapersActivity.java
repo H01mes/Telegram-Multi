@@ -26,6 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.LocaleController;
 import org.telegram.messenger_test.support.widget.LinearLayoutManager;
 import org.telegram.messenger_test.support.widget.RecyclerView;
@@ -88,7 +89,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.wallpapersDidLoaded);
 
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         selectedBackground = preferences.getInt("selectedBackground", 1000001);
         overrideThemeWallpaper = preferences.getBoolean("overrideThemeWallpaper", false);
         selectedColor = preferences.getInt("selectedColor", 0);
@@ -170,7 +171,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                     }
 
                     if (done) {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putInt("selectedBackground", selectedBackground);
                         editor.putInt("selectedColor", selectedColor);

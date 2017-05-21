@@ -48,6 +48,7 @@ import android.widget.TextView;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger_test.AndroidUtilities;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.ContactsController;
 import org.telegram.messenger_test.MessagesController;
 import org.telegram.messenger_test.MessagesStorage;
@@ -147,7 +148,6 @@ public class LoginActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
-
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -263,7 +263,7 @@ public class LoginActivity extends BaseFragment {
     private Bundle loadCurrentState() {
         try {
             Bundle bundle = new Bundle();
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", Context.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2"+ Change_user_helper.userTag, Context.MODE_PRIVATE);
             Map<String, ?> params = preferences.getAll();
             for (Map.Entry<String, ?> entry : params.entrySet()) {
                 String key = entry.getKey();
@@ -296,7 +296,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     private void clearCurrentState() {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", Context.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2"+ Change_user_helper.userTag, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.commit();
@@ -515,7 +515,7 @@ public class LoginActivity extends BaseFragment {
                     v.saveStateParams(bundle);
                 }
             }
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", Context.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2"+ Change_user_helper.userTag, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
             putBundleToEditor(bundle, editor, null);
@@ -962,7 +962,7 @@ public class LoginActivity extends BaseFragment {
                     }
                     boolean ok = true;
                     if (!permissionsItems.isEmpty()) {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                         if (!allowCancelCall && allowCall) {
                             getParentActivity().requestPermissions(permissionsItems.toArray(new String[permissionsItems.size()]), 6);
                         } else if (preferences.getBoolean("firstlogin", true) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS)) {
@@ -1007,6 +1007,7 @@ public class LoginActivity extends BaseFragment {
             ConnectionsManager.getInstance().cleanup();
             final TLRPC.TL_auth_sendCode req = new TLRPC.TL_auth_sendCode();
             String phone = PhoneFormat.stripExceptNumbers("" + codeField.getText() + phoneField.getText());
+
             ConnectionsManager.getInstance().applyCountryPortNumber(phone);
             req.api_hash = BuildVars.APP_HASH;
             req.api_id = BuildVars.APP_ID;
@@ -1037,6 +1038,8 @@ public class LoginActivity extends BaseFragment {
                 params.putString("ephone", "+" + phone);
             }
             params.putString("phoneFormated", phone);
+            SharedPreferences users = ApplicationLoader.applicationContext.getSharedPreferences("users"+ Change_user_helper.userTag, Context.MODE_PRIVATE);
+            users.edit().putString("phone_user1", phone).commit();
             nextPressed = true;
             needShowProgress();
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -1092,9 +1095,11 @@ public class LoginActivity extends BaseFragment {
                                 permissionsShowItems.add(Manifest.permission.RECEIVE_SMS);
                             }
                             if (!permissionsShowItems.isEmpty()) {
-                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                                 if (preferences.getBoolean("firstloginshow", true) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS)) {
                                     preferences.edit().putBoolean("firstloginshow", false).commit();
+                                    SharedPreferences users = ApplicationLoader.applicationContext.getSharedPreferences("users"+ Change_user_helper.userTag, Context.MODE_PRIVATE);
+                                    users.edit().putInt("users_count", 1).commit();
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);

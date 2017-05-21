@@ -25,6 +25,7 @@ import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.messenger_test.ApplicationLoader;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.ClearCacheService;
 import org.telegram.messenger_test.FileLoader;
 import org.telegram.messenger_test.FileLog;
@@ -319,7 +320,7 @@ public class CacheControlActivity extends BaseFragment {
                     builder.setItems(new CharSequence[]{LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever)}, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, final int which) {
-                            SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit();
+                            SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.userTag, Activity.MODE_PRIVATE).edit();
                             editor.putInt("keep_media", which).commit();
                             if (listAdapter != null) {
                                 listAdapter.notifyDataSetChanged();
@@ -580,7 +581,7 @@ public class CacheControlActivity extends BaseFragment {
                             textCell.setTextAndValue(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), totalSize == 0 ? LocaleController.getString("CacheEmpty", R.string.CacheEmpty) : AndroidUtilities.formatFileSize(totalSize), false);
                         }
                     } else if (position == keepMediaRow) {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
                         int keepMedia = preferences.getInt("keep_media", 2);
                         String value;
                         if (keepMedia == 0) {

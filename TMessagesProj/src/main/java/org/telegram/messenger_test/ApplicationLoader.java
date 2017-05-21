@@ -50,7 +50,7 @@ public class ApplicationLoader extends Application {
     public static volatile long mainInterfacePausedStageQueueTime;
 
     private static void convertConfig() {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("dataconfig", Context.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("dataconfig"+Change_user_helper.userTag, Context.MODE_PRIVATE);
         if (preferences.contains("currentDatacenterId")) {
             SerializedData buffer = new SerializedData(32 * 1024);
             buffer.writeInt32(2);
@@ -94,20 +94,21 @@ public class ApplicationLoader extends Application {
 
     public static File getFilesDirFixed() {
         for (int a = 0; a < 10; a++) {
-            File path = ApplicationLoader.applicationContext.getFilesDir();
+            String tmp = ApplicationLoader.applicationContext.getFilesDir().toString()+Change_user_helper.userTag;
+            File path = new File(tmp);
             if (path != null) {
                 return path;
             }
         }
         try {
             ApplicationInfo info = applicationContext.getApplicationInfo();
-            File path = new File(info.dataDir, "files");
+            File path = new File(info.dataDir, "files"+Change_user_helper.userTag);
             path.mkdirs();
             return path;
         } catch (Exception e) {
             FileLog.e(e);
         }
-        return new File("/data/data/org.telegram.messenger/files");
+        return new File("/data/data/org.telegram.messenger/files"+Change_user_helper.userTag);
     }
 
     public static void postInitApplication() {
@@ -173,7 +174,7 @@ public class ApplicationLoader extends Application {
             systemVersion = "SDK Unknown";
         }
 
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Activity.MODE_PRIVATE);
         boolean enablePushConnection = preferences.getBoolean("pushConnection", true);
 
         MessagesController.getInstance();
@@ -227,7 +228,7 @@ public class ApplicationLoader extends Application {
     }*/
 
     public static void startPushService() {
-        SharedPreferences preferences = applicationContext.getSharedPreferences("Notifications", MODE_PRIVATE);
+        SharedPreferences preferences = applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, MODE_PRIVATE);
 
         if (preferences.getBoolean("pushService", true)) {
             applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
