@@ -148,7 +148,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                         TLRPC.PhotoSize size = FileLoader.getClosestPhotoSizeWithSize(wallPaper.sizes, Math.min(width, height));
                         String fileName = size.location.volume_id + "_" + size.location.local_id + ".jpg";
                         File f = new File(FileLoader.getInstance().getDirectory(FileLoader.MEDIA_DIR_CACHE), fileName);
-                        File toFile = new File(ApplicationLoader.getFilesDirFixed(), "wallpaper.jpg");
+                        File toFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, "wallpaper.jpg");
                         try {
                             done = AndroidUtilities.copyFile(f, toFile);
                         } catch (Exception e) {
@@ -158,7 +158,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                     } else {
                         if (selectedBackground == -1) {
                             File fromFile = updater.getCurrentWallpaperPath();
-                            File toFile = new File(ApplicationLoader.getFilesDirFixed(), "wallpaper.jpg");
+                            File toFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, "wallpaper.jpg");
                             try {
                                 done = AndroidUtilities.copyFile(fromFile, toFile);
                             } catch (Exception e) {
@@ -335,7 +335,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                     if (wallpaperFile != null) {
                         toFile = wallpaperFile;
                     } else {
-                        toFile = new File(ApplicationLoader.getFilesDirFixed(), "wallpaper.jpg");
+                        toFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, "wallpaper.jpg");
                     }
                     if (toFile.exists()) {
                         backgroundImage.setImageURI(Uri.fromFile(toFile));

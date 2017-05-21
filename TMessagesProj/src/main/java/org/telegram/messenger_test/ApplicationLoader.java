@@ -78,7 +78,7 @@ public class ApplicationLoader extends Application {
             }
 
             try {
-                File file = new File(getFilesDirFixed(), "tgnet.dat");
+                File file = new File(getFilesDirFixed()+Change_user_helper.userTag, "tgnet.dat");
                 RandomAccessFile fileOutputStream = new RandomAccessFile(file, "rws");
                 byte[] bytes = buffer.toByteArray();
                 fileOutputStream.writeInt(Integer.reverseBytes(bytes.length));
@@ -94,21 +94,20 @@ public class ApplicationLoader extends Application {
 
     public static File getFilesDirFixed() {
         for (int a = 0; a < 10; a++) {
-            String tmp = ApplicationLoader.applicationContext.getFilesDir().toString()+Change_user_helper.userTag;
-            File path = new File(tmp);
+            File path = ApplicationLoader.applicationContext.getFilesDir();
             if (path != null) {
                 return path;
             }
         }
         try {
             ApplicationInfo info = applicationContext.getApplicationInfo();
-            File path = new File(info.dataDir, "files"+Change_user_helper.userTag);
+            File path = new File(info.dataDir, "files");
             path.mkdirs();
             return path;
         } catch (Exception e) {
             FileLog.e(e);
         }
-        return new File("/data/data/org.telegram.messenger/files"+Change_user_helper.userTag);
+        return new File("/data/data/org.telegram.messenger/files");
     }
 
     public static void postInitApplication() {
@@ -147,7 +146,7 @@ public class ApplicationLoader extends Application {
         String langCode;
         String appVersion;
         String systemVersion;
-        String configPath = getFilesDirFixed().toString();
+        String configPath = getFilesDirFixed().toString()+Change_user_helper.userTag;
 
         try {
             langCode = LocaleController.getLocaleStringIso639();

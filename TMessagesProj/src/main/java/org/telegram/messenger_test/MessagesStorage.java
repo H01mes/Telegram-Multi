@@ -85,7 +85,7 @@ public class MessagesStorage {
     }
 
     public void openDatabase(boolean first) {
-        cacheFile = new File(ApplicationLoader.getFilesDirFixed(), "cache4.db");
+        cacheFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, "cache4.db");
 
         boolean createTable = false;
         //cacheFile.delete();

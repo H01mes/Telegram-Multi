@@ -382,7 +382,7 @@ public class LocaleController {
                     return false;
                 }
 
-                File finalFile = new File(ApplicationLoader.getFilesDirFixed(), languageCode + ".xml");
+                File finalFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, languageCode + ".xml");
                 if (!AndroidUtilities.copyFile(file, finalFile)) {
                     return false;
                 }

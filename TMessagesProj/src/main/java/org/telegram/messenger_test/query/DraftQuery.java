@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger_test.AndroidUtilities;
 import org.telegram.messenger_test.ApplicationLoader;
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.ChatObject;
 import org.telegram.messenger_test.FileLog;
 import org.telegram.messenger_test.MessagesController;
@@ -43,7 +44,7 @@ public class DraftQuery {
     private static boolean loadingDrafts;
 
     static {
-        preferences = ApplicationLoader.applicationContext.getSharedPreferences("drafts", Activity.MODE_PRIVATE);
+        preferences = ApplicationLoader.applicationContext.getSharedPreferences("drafts"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
         Map<String, ?> values = preferences.getAll();
         for (Map.Entry<String, ?> entry : values.entrySet()) {
             try {

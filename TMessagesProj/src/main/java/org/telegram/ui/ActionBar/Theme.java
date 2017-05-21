@@ -1756,7 +1756,7 @@ public class Theme {
             if (themeName.equals("Default") || themeName.equals("Dark") || themeName.equals("Blue")) {
                 return null;
             }
-            File finalFile = new File(ApplicationLoader.getFilesDirFixed(), themeName);
+            File finalFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, themeName);
             if (!AndroidUtilities.copyFile(file, finalFile)) {
                 return null;
             }
@@ -1896,7 +1896,7 @@ public class Theme {
         for (HashMap.Entry<String, Integer> entry : currentColors.entrySet()) {
             result.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
         }
-        File file = new File(ApplicationLoader.getFilesDirFixed(), name);
+        File file = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, name);
         FileOutputStream stream = null;
         try {
             stream = new FileOutputStream(file);
@@ -1943,7 +1943,7 @@ public class Theme {
     }
 
     public static File getAssetFile(String assetName) {
-        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
+        File file = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, assetName);
         if (!file.exists()) {
             InputStream in = null;
             try {
@@ -2827,7 +2827,7 @@ public class Theme {
                                     wallpaper = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.background_hd);
                                     isCustomTheme = false;
                                 } else {
-                                    File toFile = new File(ApplicationLoader.getFilesDirFixed(), "wallpaper.jpg");
+                                    File toFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, "wallpaper.jpg");
                                     if (toFile.exists()) {
                                         wallpaper = Drawable.createFromPath(toFile.getAbsolutePath());
                                         isCustomTheme = true;

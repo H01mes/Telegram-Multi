@@ -93,7 +93,7 @@ public class CacheControlActivity extends BaseFragment {
         databaseRow = rowCount++;
         databaseInfoRow = rowCount++;
 
-        File file = new File(ApplicationLoader.getFilesDirFixed(), "cache4.db");
+        File file = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, "cache4.db");
         databaseSize = file.length();
 
         Utilities.globalQueue.postRunnable(new Runnable() {
@@ -433,7 +433,7 @@ public class CacheControlActivity extends BaseFragment {
                                                     FileLog.e(e);
                                                 }
                                                 if (listAdapter != null) {
-                                                    File file = new File(ApplicationLoader.getFilesDirFixed(), "cache4.db");
+                                                    File file = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, "cache4.db");
                                                     databaseSize = file.length();
                                                     listAdapter.notifyDataSetChanged();
                                                 }

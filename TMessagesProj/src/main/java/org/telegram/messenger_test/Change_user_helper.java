@@ -5,5 +5,5 @@ package org.telegram.messenger_test;
  */
 
 public class Change_user_helper {
-    public static String userTag = "user_0";
+    public static String userTag = "_user_0";
 }

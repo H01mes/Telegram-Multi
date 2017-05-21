@@ -162,7 +162,7 @@ public class UserConfig {
 
     public static void loadConfig() {
         synchronized (sync) {
-            final File configFile = new File(ApplicationLoader.getFilesDirFixed(), "user.dat");
+            final File configFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, "user.dat");
             if (configFile.exists()) {
                 try {
                     SerializedData data = new SerializedData(configFile);

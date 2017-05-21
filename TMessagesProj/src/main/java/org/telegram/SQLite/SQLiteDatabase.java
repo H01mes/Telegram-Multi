@@ -8,6 +8,7 @@
 
 package org.telegram.SQLite;
 
+import org.telegram.messenger_test.Change_user_helper;
 import org.telegram.messenger_test.FileLog;
 import org.telegram.messenger_test.ApplicationLoader;
 
@@ -22,7 +23,7 @@ public class SQLiteDatabase {
 	}
 
 	public SQLiteDatabase(String fileName) throws SQLiteException {
-		sqliteHandle = opendb(fileName, ApplicationLoader.getFilesDirFixed().getPath());
+		sqliteHandle = opendb(fileName, ApplicationLoader.getFilesDirFixed().getPath()+ Change_user_helper.userTag);
 		isOpen = true;
 	}
 
