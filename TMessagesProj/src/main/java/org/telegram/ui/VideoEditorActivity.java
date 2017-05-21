@@ -1218,7 +1218,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
     }
 
     private void didChangedCompressionLevel(boolean request) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("compress_video2", selectedCompression);
         editor.commit();
@@ -1648,7 +1648,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
 
             videoDuration *= 1000;
 
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
             selectedCompression = preferences.getInt("compress_video2", 1);
             updateWidthHeightBitrateForCompression();
 

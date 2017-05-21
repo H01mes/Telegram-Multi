@@ -98,7 +98,7 @@ public class NotificationsController {
 
     public NotificationsController() {
         notificationManager = NotificationManagerCompat.from(ApplicationLoader.applicationContext);
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
         inChatSoundEnabled = preferences.getBoolean("EnableInChatSound", true);
 
         try {
@@ -163,7 +163,7 @@ public class NotificationsController {
                     FileLog.e(e);
                 }
                 setBadge(0);
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.clear();
                 editor.commit();
@@ -222,7 +222,7 @@ public class NotificationsController {
                     if (!ApplicationLoader.mainInterfacePaused) {
                         return;
                     }
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
 
                     boolean notifyDisabled = false;
                     int needVibrate = 0;
@@ -374,7 +374,7 @@ public class NotificationsController {
             @Override
             public void run() {
                 int old_unread_count = total_unread_count;
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
                 for (int a = 0; a < deletedMessages.size(); a++) {
                     int key = deletedMessages.keyAt(a);
                     long dialog_id = -key;
@@ -543,7 +543,7 @@ public class NotificationsController {
 
                 int oldCount = popupArray.size();
                 HashMap<Long, Boolean> settingsCache = new HashMap<>();
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
                 boolean allowPinned = preferences.getBoolean("PinnedMessages", true);
                 int popup = 0;
 
@@ -641,7 +641,7 @@ public class NotificationsController {
             @Override
             public void run() {
                 int old_unread_count = total_unread_count;
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
                 for (HashMap.Entry<Long, Integer> entry : dialogsToUpdate.entrySet()) {
                     long dialog_id = entry.getKey();
 
@@ -739,7 +739,7 @@ public class NotificationsController {
                 pushMessagesDict.clear();
                 total_unread_count = 0;
                 personal_count = 0;
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
                 HashMap<Long, Boolean> settingsCache = new HashMap<>();
 
                 if (messages != null) {
@@ -883,7 +883,7 @@ public class NotificationsController {
             msg = LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
         } else {
             if (chat_id == 0 && from_id != 0) {
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
                 if (preferences.getBoolean("EnablePreviewAll", true)) {
                     if (messageObject.messageOwner instanceof TLRPC.TL_messageService) {
                         if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserJoined) {
@@ -961,7 +961,7 @@ public class NotificationsController {
                     msg = LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, name);
                 }
             } else if (chat_id != 0) {
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
                 if (preferences.getBoolean("EnablePreviewGroup", true)) {
                     if (messageObject.messageOwner instanceof TLRPC.TL_messageService) {
                         if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatAddUser) {
@@ -1337,7 +1337,7 @@ public class NotificationsController {
     private void scheduleNotificationRepeat() {
         try {
             PendingIntent pintent = PendingIntent.getService(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, NotificationRepeat.class), 0);
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Activity.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
             int minutes = preferences.getInt("repeat_messages", 60);
             if (minutes > 0 && personal_count > 0) {
                 alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + minutes * 60 * 1000, pintent);
@@ -1435,7 +1435,7 @@ public class NotificationsController {
         }
 
         try {
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
             int notifyOverride = getNotifyOverride(preferences, opened_dialog_id);
             if (notifyOverride == 2) {
                 return;
@@ -1519,7 +1519,7 @@ public class NotificationsController {
             ConnectionsManager.getInstance().resumeNetworkMaybe();
 
             MessageObject lastMessageObject = pushMessages.get(0);
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Context.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
             int dismissDate = preferences.getInt("dismissDate", 0);
             if (lastMessageObject.messageOwner.date <= dismissDate) {
                 dismissNotification();
@@ -2144,7 +2144,7 @@ public class NotificationsController {
         if ((int) dialog_id == 0) {
             return;
         }
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         TLRPC.TL_account_updateNotifySettings req = new TLRPC.TL_account_updateNotifySettings();
         req.settings = new TLRPC.TL_inputPeerNotifySettings();
         req.settings.sound = "default";

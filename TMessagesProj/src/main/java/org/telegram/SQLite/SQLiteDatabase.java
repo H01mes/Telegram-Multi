@@ -23,7 +23,7 @@ public class SQLiteDatabase {
 	}
 
 	public SQLiteDatabase(String fileName) throws SQLiteException {
-		sqliteHandle = opendb(fileName, ApplicationLoader.getFilesDirFixed().getPath()+ Change_user_helper.userTag);
+		sqliteHandle = opendb(fileName, ApplicationLoader.getFilesDirFixed().getPath()+ Change_user_helper.getUserTag());
 		isOpen = true;
 	}
 

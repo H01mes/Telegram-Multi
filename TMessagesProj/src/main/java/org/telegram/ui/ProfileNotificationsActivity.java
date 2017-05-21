@@ -151,7 +151,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         colorRow = rowCount++;
         ledInfoRow = rowCount++;
 
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         customEnabled = preferences.getBoolean("custom_" + dialog_id, false);
 
         boolean hasOverride = preferences.contains("notify2_" + dialog_id);
@@ -194,7 +194,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             public void onItemClick(int id) {
                 if (id == -1) {
                     if (notificationsEnabled && customEnabled) {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                         preferences.edit().putInt("notify2_" + dialog_id, 0).commit();
                     }
                     finishFragment();
@@ -221,7 +221,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             @Override
             public void onItemClick(View view, int position) {
                 if (position == customRow && view instanceof TextCheckBoxCell) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                     customEnabled = !customEnabled;
                     notificationsEnabled = customEnabled;
                     preferences.edit().putBoolean("custom_" + dialog_id, customEnabled).commit();
@@ -282,7 +282,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             tmpIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
                             tmpIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
                             tmpIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                             Uri currentSound = null;
 
                             String defaultPath = null;
@@ -311,7 +311,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             tmpIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE);
                             tmpIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
                             tmpIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                             Uri currentSound = null;
 
                             String defaultPath = null;
@@ -366,7 +366,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             return;
                         }
                         final Context context1 = getParentActivity();
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                         int notifyMaxCount = preferences.getInt("smart_max_count_" + dialog_id, 2);
                         int notifyDelay = preferences.getInt("smart_delay_" + dialog_id, 3 * 60);
                         if (notifyMaxCount == 0) {
@@ -425,7 +425,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 }
                                 int notifyMaxCount = position % 10 + 1;
                                 int notifyDelay = position / 10 + 1;
-                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                                 preferences.edit().putInt("smart_max_count_" + dialog_id, notifyMaxCount).commit();
                                 preferences.edit().putInt("smart_delay_" + dialog_id, notifyDelay * 60).commit();
                                 if (adapter != null) {
@@ -441,7 +441,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         builder.setNegativeButton(LocaleController.getString("SmartNotificationsDisabled", R.string.SmartNotificationsDisabled), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                                 preferences.edit().putInt("smart_max_count_" + dialog_id, 0).commit();
                                 if (adapter != null) {
                                     adapter.notifyItemChanged(smartRow);
@@ -463,7 +463,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             }
                         }));
                     } else if (position == popupEnabledRow) {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                         preferences.edit().putInt("popup_" + dialog_id, 1).commit();
                         ((RadioCell) view).setChecked(true, true);
                         view = listView.findViewWithTag(2);
@@ -471,7 +471,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             ((RadioCell) view).setChecked(false, true);
                         }
                     } else if (position == popupDisabledRow) {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                         preferences.edit().putInt("popup_" + dialog_id, 2).commit();
                         ((RadioCell) view).setChecked(true, true);
                         view = listView.findViewWithTag(1);
@@ -514,7 +514,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 }
             }
 
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
 
             if (requestCode == 12) {
@@ -612,7 +612,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 }
                 case 1: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                     if (position == soundRow) {
                         String value = preferences.getString("sound_" + dialog_id, LocaleController.getString("SoundDefault", R.string.SoundDefault));
                         if (value.equals("NoSound")) {
@@ -696,7 +696,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 }
                 case 3: {
                     TextColorCell textCell = (TextColorCell) holder.itemView;
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                     int color;
                     if (preferences.contains("color_" + dialog_id)) {
                         color = preferences.getInt("color_" + dialog_id, 0xff0000ff);
@@ -718,7 +718,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 }
                 case 4: {
                     RadioCell radioCell = (RadioCell) holder.itemView;
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                     int popup = preferences.getInt("popup_" + dialog_id, 0);
                     if (popup == 0) {
                         popup = preferences.getInt((int) dialog_id < 0 ? "popupGroup" : "popupAll", 0);
@@ -739,7 +739,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 }
                 case 5: {
                     TextCheckBoxCell cell = (TextCheckBoxCell) holder.itemView;
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                     cell.setTextAndCheck(LocaleController.getString("NotificationsEnableCustom", R.string.NotificationsEnableCustom), customEnabled && notificationsEnabled, false);
                     break;
                 }

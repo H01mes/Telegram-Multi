@@ -652,7 +652,7 @@ public class ActionBarLayout extends FrameLayout {
         if (parentActivity.getCurrentFocus() != null) {
             AndroidUtilities.hideKeyboard(parentActivity.getCurrentFocus());
         }
-        boolean needAnimation = !forceWithoutAnimation && parentActivity.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).getBoolean("view_animations", true);
+        boolean needAnimation = !forceWithoutAnimation && parentActivity.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("view_animations", true);
 
         final BaseFragment currentFragment = !fragmentsStack.isEmpty() ? fragmentsStack.get(fragmentsStack.size() - 1) : null;
 
@@ -861,7 +861,7 @@ public class ActionBarLayout extends FrameLayout {
             AndroidUtilities.hideKeyboard(parentActivity.getCurrentFocus());
         }
         setInnerTranslationX(0);
-        boolean needAnimation = animated && parentActivity.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).getBoolean("view_animations", true);
+        boolean needAnimation = animated && parentActivity.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("view_animations", true);
         final BaseFragment currentFragment = fragmentsStack.get(fragmentsStack.size() - 1);
         BaseFragment previousFragment = null;
         if (fragmentsStack.size() > 1) {

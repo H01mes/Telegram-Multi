@@ -254,7 +254,7 @@ public class AlertsCreator {
                             untilTime = Integer.MAX_VALUE;
                         }
 
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         long flags;
                         if (i == 3) {
@@ -432,7 +432,7 @@ public class AlertsCreator {
 
     public static Dialog createColorSelectDialog(Activity parentActivity, final long dialog_id, final boolean globalGroup, final boolean globalAll, final Runnable onSelect) {
         int currentColor;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         if (globalGroup) {
             currentColor = preferences.getInt("GroupLed", 0xff0000ff);
         } else if (globalAll) {
@@ -485,7 +485,7 @@ public class AlertsCreator {
         builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
-                final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 if (globalAll) {
                     editor.putInt("MessagesLed", selectedColor[0]);
@@ -503,7 +503,7 @@ public class AlertsCreator {
         builder.setNeutralButton(LocaleController.getString("LedDisabled", R.string.LedDisabled), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 if (globalAll) {
                     editor.putInt("MessagesLed", 0);
@@ -522,7 +522,7 @@ public class AlertsCreator {
             builder.setNegativeButton(LocaleController.getString("Default", R.string.Default), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                    final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.remove("color_" + dialog_id);
                     editor.commit();
@@ -546,7 +546,7 @@ public class AlertsCreator {
     }
 
     public static Dialog createVibrationSelectDialog(Activity parentActivity, final BaseFragment parentFragment, final long dialog_id, final String prefKeyPrefix, final Runnable onSelect) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         final int selected[] = new int[1];
         String descriptions[];
         if (dialog_id != 0) {
@@ -595,7 +595,7 @@ public class AlertsCreator {
                 public void onClick(View v) {
                     selected[0] = (Integer) v.getTag();
 
-                    final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                    final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     if (dialog_id != 0) {
                         if (selected[0] == 0) {
@@ -638,7 +638,7 @@ public class AlertsCreator {
     }
 
     public static Dialog createPrioritySelectDialog(Activity parentActivity, final BaseFragment parentFragment, final long dialog_id, final boolean globalGroup, final boolean globalAll, final Runnable onSelect) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         final int selected[] = new int[1];
         String descriptions[];
         if (dialog_id != 0) {
@@ -682,7 +682,7 @@ public class AlertsCreator {
                 public void onClick(View v) {
                     selected[0] = (Integer) v.getTag();
 
-                    final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                    final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     if (dialog_id != 0) {
                         if (selected[0] == 0) {
@@ -712,7 +712,7 @@ public class AlertsCreator {
     }
 
     public static Dialog createPopupSelectDialog(Activity parentActivity, final BaseFragment parentFragment, final boolean globalGroup, final boolean globalAll, final Runnable onSelect) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         final int selected[] = new int[1];
         if (globalAll) {
             selected[0] = preferences.getInt("popupAll", 0);
@@ -741,7 +741,7 @@ public class AlertsCreator {
                 public void onClick(View v) {
                     selected[0] = (Integer) v.getTag();
 
-                    final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                    final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putInt(globalGroup ? "popupGroup" : "popupAll", selected[0]);
                     editor.commit();

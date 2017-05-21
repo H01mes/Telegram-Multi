@@ -629,7 +629,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                         }
                         String functionCode = null;
                         String functionName = null;
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("youtubecode"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("youtubecode"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                         if (playerId != null) {
                             functionCode = preferences.getString(playerId, null);
                             functionName = preferences.getString(playerId + "n", null);

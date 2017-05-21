@@ -519,7 +519,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     if (layoutManager.findLastVisibleItemPosition() > 1) {
                         hideHint();
                         hintShowed = false;
-                        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE).edit().putBoolean("bothint", true).commit();
+                        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).edit().putBoolean("bothint", true).commit();
                     }
                 }
                 updateLayout();
@@ -1514,7 +1514,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         if (SearchQuery.inlineBots.isEmpty()) {
             return;
         }
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         if (preferences.getBoolean("bothint", false)) {
             return;
         }

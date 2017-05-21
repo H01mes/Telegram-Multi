@@ -58,7 +58,7 @@ public class ShareActivity extends Activity {
             return;
         }
 
-        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         String message = sharedPreferences.getString(hash + "_m", null);
         if (TextUtils.isEmpty(message)) {
             finish();

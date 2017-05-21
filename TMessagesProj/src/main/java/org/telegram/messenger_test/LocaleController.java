@@ -255,7 +255,7 @@ public class LocaleController {
         boolean override = false;
 
         try {
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.userTag, Activity.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
             String lang = preferences.getString("language", null);
             if (lang != null) {
                 currentInfo = languagesDict.get(lang);
@@ -382,7 +382,7 @@ public class LocaleController {
                     return false;
                 }
 
-                File finalFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, languageCode + ".xml");
+                File finalFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.getUserTag(), languageCode + ".xml");
                 if (!AndroidUtilities.copyFile(file, finalFile)) {
                     return false;
                 }
@@ -423,7 +423,7 @@ public class LocaleController {
     }
 
     private void saveOtherLanguages() {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("langconfig"+Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("langconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         String locales = "";
         for (LocaleInfo localeInfo : otherLanguages) {
@@ -457,7 +457,7 @@ public class LocaleController {
     }
 
     private void loadOtherLanguages() {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("langconfig"+Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("langconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         String locales = preferences.getString("locales", null);
         if (locales == null || locales.length() == 0) {
             return;
@@ -547,7 +547,7 @@ public class LocaleController {
                     if (override) {
                         languageOverride = localeInfo.shortName;
 
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("language", localeInfo.shortName);
                         editor.commit();
@@ -556,7 +556,7 @@ public class LocaleController {
             } else {
                 newLocale = systemDefaultLocale;
                 languageOverride = null;
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.remove("language");
                 editor.commit();

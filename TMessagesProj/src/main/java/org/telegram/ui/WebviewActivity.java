@@ -238,7 +238,7 @@ public class WebviewActivity extends BaseFragment {
     public static void openGameInBrowser(String urlStr, MessageObject messageObject, Activity parentActivity, String short_name, String username) {
         try {
             String url = urlStr;
-            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
             String existing = sharedPreferences.getString("" + messageObject.getId(), null);
             StringBuilder hash = new StringBuilder(existing != null ? existing : "");
             StringBuilder addHash = new StringBuilder("tgShareScoreUrl=" + URLEncoder.encode("tgb://share_game_score?hash=", "UTF-8"));

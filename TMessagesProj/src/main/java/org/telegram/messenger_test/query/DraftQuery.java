@@ -44,7 +44,7 @@ public class DraftQuery {
     private static boolean loadingDrafts;
 
     static {
-        preferences = ApplicationLoader.applicationContext.getSharedPreferences("drafts"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        preferences = ApplicationLoader.applicationContext.getSharedPreferences("drafts"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         Map<String, ?> values = preferences.getAll();
         for (Map.Entry<String, ?> entry : values.entrySet()) {
             try {

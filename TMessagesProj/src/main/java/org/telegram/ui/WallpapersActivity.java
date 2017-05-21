@@ -89,7 +89,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.wallpapersDidLoaded);
 
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
         selectedBackground = preferences.getInt("selectedBackground", 1000001);
         overrideThemeWallpaper = preferences.getBoolean("overrideThemeWallpaper", false);
         selectedColor = preferences.getInt("selectedColor", 0);
@@ -148,7 +148,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                         TLRPC.PhotoSize size = FileLoader.getClosestPhotoSizeWithSize(wallPaper.sizes, Math.min(width, height));
                         String fileName = size.location.volume_id + "_" + size.location.local_id + ".jpg";
                         File f = new File(FileLoader.getInstance().getDirectory(FileLoader.MEDIA_DIR_CACHE), fileName);
-                        File toFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, "wallpaper.jpg");
+                        File toFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.getUserTag(), "wallpaper.jpg");
                         try {
                             done = AndroidUtilities.copyFile(f, toFile);
                         } catch (Exception e) {
@@ -158,7 +158,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                     } else {
                         if (selectedBackground == -1) {
                             File fromFile = updater.getCurrentWallpaperPath();
-                            File toFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, "wallpaper.jpg");
+                            File toFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.getUserTag(), "wallpaper.jpg");
                             try {
                                 done = AndroidUtilities.copyFile(fromFile, toFile);
                             } catch (Exception e) {
@@ -171,7 +171,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                     }
 
                     if (done) {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.userTag, Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putInt("selectedBackground", selectedBackground);
                         editor.putInt("selectedColor", selectedColor);
@@ -335,7 +335,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                     if (wallpaperFile != null) {
                         toFile = wallpaperFile;
                     } else {
-                        toFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.userTag, "wallpaper.jpg");
+                        toFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.getUserTag(), "wallpaper.jpg");
                     }
                     if (toFile.exists()) {
                         backgroundImage.setImageURI(Uri.fromFile(toFile));
