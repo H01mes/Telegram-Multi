@@ -43,7 +43,7 @@
             </intent-filter>
         </receiver>
         <service
-            android:name="org.telegram.messenger..GcmPushListenerService"
+            android:name="org.telegram.messenger.GcmPushListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />

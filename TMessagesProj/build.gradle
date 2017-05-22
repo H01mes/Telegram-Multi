@@ -21,6 +21,7 @@ dependencies {
     compile 'com.googlecode.mp4parser:isoparser:1.0.6'
     compile 'com.stripe:stripe-android:2.0.2'
     compile 'commons-io:commons-io:2.4'
+    compile 'com.android.support:design:25.3.0'
 }
 
 android {
@@ -47,6 +48,7 @@ android {
 
     dexOptions {
         jumboMode = true
+        javaMaxHeapSize "2g"
     }
 
     compileOptions {

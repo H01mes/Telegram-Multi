@@ -35,7 +35,7 @@ import android.widget.Toast;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.SecretChatHelper;
@@ -319,7 +319,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                 if (!MessagesController.isFeatureEnabled("broadcast_create", ContactsActivity.this)) {
                                     return;
                                 }
-                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                                 if (!BuildVars.DEBUG_VERSION && preferences.getBoolean("channel_intro", false)) {
                                     Bundle args = new Bundle();
                                     args.putInt("step", 0);

@@ -88,7 +88,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         super.onCreate();
         ApplicationLoader.postInitApplication();
 
-        lastSelectedDialog = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).getInt("auto_lastSelectedDialog", 0);
+        lastSelectedDialog = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).getInt("auto_lastSelectedDialog", 0);
 
         mediaSession = new MediaSession(this, "MusicService");
         setSessionToken(mediaSession.getSessionToken());
@@ -396,7 +396,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                     return;
                 }
                 lastSelectedDialog = did;
-                ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).edit().putInt("auto_lastSelectedDialog", did).commit();
+                ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit().putInt("auto_lastSelectedDialog", did).commit();
                 MediaController.getInstance().setPlaylist(arrayList, arrayList.get(id), false);
                 mediaSession.setQueue(arrayList1);
                 if (did > 0) {

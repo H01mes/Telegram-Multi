@@ -29,7 +29,7 @@ public class ClearCacheService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         ApplicationLoader.postInitApplication();
 
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         final int keepMedia = preferences.getInt("keep_media", 2);
         if (keepMedia == 2) {
             return;

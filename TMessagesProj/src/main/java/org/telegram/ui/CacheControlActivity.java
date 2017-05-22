@@ -25,7 +25,7 @@ import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.ClearCacheService;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -93,7 +93,7 @@ public class CacheControlActivity extends BaseFragment {
         databaseRow = rowCount++;
         databaseInfoRow = rowCount++;
 
-        File file = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.getUserTag(), "cache4.db");
+        File file = new File(ApplicationLoader.getFilesDirFixed()+ ChangeUserHelper.getUserTag(), "cache4.db");
         databaseSize = file.length();
 
         Utilities.globalQueue.postRunnable(new Runnable() {
@@ -320,7 +320,7 @@ public class CacheControlActivity extends BaseFragment {
                     builder.setItems(new CharSequence[]{LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever)}, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, final int which) {
-                            SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).edit();
+                            SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
                             editor.putInt("keep_media", which).commit();
                             if (listAdapter != null) {
                                 listAdapter.notifyDataSetChanged();
@@ -433,7 +433,7 @@ public class CacheControlActivity extends BaseFragment {
                                                     FileLog.e(e);
                                                 }
                                                 if (listAdapter != null) {
-                                                    File file = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.getUserTag(), "cache4.db");
+                                                    File file = new File(ApplicationLoader.getFilesDirFixed()+ ChangeUserHelper.getUserTag(), "cache4.db");
                                                     databaseSize = file.length();
                                                     listAdapter.notifyDataSetChanged();
                                                 }
@@ -581,7 +581,7 @@ public class CacheControlActivity extends BaseFragment {
                             textCell.setTextAndValue(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), totalSize == 0 ? LocaleController.getString("CacheEmpty", R.string.CacheEmpty) : AndroidUtilities.formatFileSize(totalSize), false);
                         }
                     } else if (position == keepMediaRow) {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                         int keepMedia = preferences.getInt("keep_media", 2);
                         String value;
                         if (keepMedia == 0) {

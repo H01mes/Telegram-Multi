@@ -34,7 +34,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.R;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -652,7 +652,7 @@ public class ActionBarLayout extends FrameLayout {
         if (parentActivity.getCurrentFocus() != null) {
             AndroidUtilities.hideKeyboard(parentActivity.getCurrentFocus());
         }
-        boolean needAnimation = !forceWithoutAnimation && parentActivity.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("view_animations", true);
+        boolean needAnimation = !forceWithoutAnimation && parentActivity.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("view_animations", true);
 
         final BaseFragment currentFragment = !fragmentsStack.isEmpty() ? fragmentsStack.get(fragmentsStack.size() - 1) : null;
 
@@ -861,7 +861,7 @@ public class ActionBarLayout extends FrameLayout {
             AndroidUtilities.hideKeyboard(parentActivity.getCurrentFocus());
         }
         setInnerTranslationX(0);
-        boolean needAnimation = animated && parentActivity.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("view_animations", true);
+        boolean needAnimation = animated && parentActivity.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("view_animations", true);
         final BaseFragment currentFragment = fragmentsStack.get(fragmentsStack.size() - 1);
         BaseFragment previousFragment = null;
         if (fragmentsStack.size() > 1) {

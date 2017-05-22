@@ -97,7 +97,7 @@ public class FileUploadOperation {
         Utilities.stageQueue.postRunnable(new Runnable() {
             @Override
             public void run() {
-                preferences = ApplicationLoader.applicationContext.getSharedPreferences("uploadinfo"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                preferences = ApplicationLoader.applicationContext.getSharedPreferences("uploadinfo"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                 for (int a = 0; a < maxRequestsCount; a++) {
                     startUploadRequest();
                 }
@@ -119,7 +119,7 @@ public class FileUploadOperation {
 
     private void cleanup() {
         if (preferences == null) {
-            preferences = ApplicationLoader.applicationContext.getSharedPreferences("uploadinfo"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+            preferences = ApplicationLoader.applicationContext.getSharedPreferences("uploadinfo"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         }
         preferences.edit().remove(fileKey + "_time").
                 remove(fileKey + "_size").

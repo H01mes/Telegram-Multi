@@ -843,7 +843,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                     final TLRPC.TL_messages_forwardMessages req = new TLRPC.TL_messages_forwardMessages();
                     req.to_peer = inputPeer;
                     if (req.to_peer instanceof TLRPC.TL_inputPeerChannel) {
-                        req.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("silent_" + peer, false);
+                        req.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("silent_" + peer, false);
                     }
                     if (msgObj.messageOwner.to_id instanceof TLRPC.TL_peerChannel) {
                         TLRPC.Chat chat = MessagesController.getInstance().getChat(msgObj.messageOwner.to_id.channel_id);
@@ -1147,7 +1147,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                                         if (game == null) {
                                             return;
                                         }
-                                        parentFragment.showOpenGameAlert(game, messageObject, res.url, !verified && ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("askgame_" + uid, true), uid);
+                                        parentFragment.showOpenGameAlert(game, messageObject, res.url, !verified && ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("askgame_" + uid, true), uid);
                                     } else {
                                         parentFragment.showOpenUrlAlert(res.url, false);
                                     }
@@ -1208,7 +1208,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
         TLRPC.TL_messages_sendMedia request = new TLRPC.TL_messages_sendMedia();
         request.peer = peer;
         if (request.peer instanceof TLRPC.TL_inputPeerChannel) {
-            request.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("silent_" + peer.channel_id, false);
+            request.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("silent_" + peer.channel_id, false);
         }
         request.random_id = random_id != 0 ? random_id : getNextRandomId();
         request.media = game;
@@ -1670,7 +1670,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                         reqSend.message = message;
                         reqSend.clear_draft = retryMessageObject == null;
                         if (newMsg.to_id instanceof TLRPC.TL_peerChannel) {
-                            reqSend.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("silent_" + peer, false);
+                            reqSend.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("silent_" + peer, false);
                         }
                         reqSend.peer = sendToPeer;
                         reqSend.random_id = newMsg.random_id;
@@ -1875,7 +1875,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                         TLRPC.TL_messages_sendMedia request = new TLRPC.TL_messages_sendMedia();
                         request.peer = sendToPeer;
                         if (newMsg.to_id instanceof TLRPC.TL_peerChannel) {
-                            request.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("silent_" + peer, false);
+                            request.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("silent_" + peer, false);
                         }
                         request.random_id = newMsg.random_id;
                         request.media = inputMedia;
@@ -2142,7 +2142,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                     reqSend.from_peer = new TLRPC.TL_inputPeerEmpty();
                 }
                 if (retryMessageObject.messageOwner.to_id instanceof TLRPC.TL_peerChannel) {
-                    reqSend.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("silent_" + peer, false);
+                    reqSend.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("silent_" + peer, false);
                 }
                 reqSend.random_id.add(newMsg.random_id);
                 if (retryMessageObject.getId() >= 0) {
@@ -2160,7 +2160,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                     reqSend.reply_to_msg_id = reply_to_msg.getId();
                 }
                 if (newMsg.to_id instanceof TLRPC.TL_peerChannel) {
-                    reqSend.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("silent_" + peer, false);
+                    reqSend.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).getBoolean("silent_" + peer, false);
                 }
                 reqSend.query_id = Utilities.parseLong(params.get("query_id"));
                 reqSend.id = params.get("id");

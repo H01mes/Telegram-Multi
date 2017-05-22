@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -167,7 +167,7 @@ public class ThemeActivity extends BaseFragment {
                             listAdapter.notifyDataSetChanged();
                             alertDialog.dismiss();
 
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                             if (preferences.getBoolean("themehint", false)) {
                                 return;
                             }
@@ -260,7 +260,7 @@ public class ThemeActivity extends BaseFragment {
                                             for (HashMap.Entry<String, Integer> entry : Theme.getDefaultColors().entrySet()) {
                                                 result.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
                                             }
-                                            currentFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.getUserTag(), "default_theme.attheme");
+                                            currentFile = new File(ApplicationLoader.getFilesDirFixed()+ ChangeUserHelper.getUserTag(), "default_theme.attheme");
                                             FileOutputStream stream = null;
                                             try {
                                                 stream = new FileOutputStream(currentFile);

@@ -27,7 +27,7 @@ import android.widget.FrameLayout;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -143,7 +143,7 @@ public class PipVideoView {
 
         windowManager = (WindowManager) ApplicationLoader.applicationContext.getSystemService(Context.WINDOW_SERVICE);
 
-        preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig"+ Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
+        preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
 
         int sidex = preferences.getInt("sidex", 1);
         int sidey = preferences.getInt("sidey", 0);
@@ -294,7 +294,7 @@ public class PipVideoView {
     }
 
     public static Rect getPipRect(float aspectRatio) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig"+ Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
         int sidex = preferences.getInt("sidex", 1);
         int sidey = preferences.getInt("sidey", 0);
         float px = preferences.getFloat("px", 0);

@@ -49,7 +49,7 @@ import org.json.JSONTokener;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
-import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -629,7 +629,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                         }
                         String functionCode = null;
                         String functionName = null;
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("youtubecode"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("youtubecode"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                         if (playerId != null) {
                             functionCode = preferences.getString(playerId, null);
                             functionName = preferences.getString(playerId + "n", null);

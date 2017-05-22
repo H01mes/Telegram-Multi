@@ -21,7 +21,7 @@ import android.view.Surface;
 import android.view.WindowManager;
 
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.FileLog;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class CameraSession {
         pictureFormat = format;
         cameraInfo = info;
 
-        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("camera"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("camera"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         currentFlashMode = sharedPreferences.getString(cameraInfo.frontCamera != 0 ? "flashMode_front" : "flashMode", Camera.Parameters.FLASH_MODE_OFF);
 
         orientationEventListener = new OrientationEventListener(ApplicationLoader.applicationContext) {
@@ -114,14 +114,14 @@ public class CameraSession {
         }
         currentFlashMode = mode;
         configurePhotoCamera();
-        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("camera"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("camera"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         sharedPreferences.edit().putString(cameraInfo.frontCamera != 0 ? "flashMode_front" : "flashMode", mode).commit();
     }
 
     public void setCurrentFlashMode(String mode) {
         currentFlashMode = mode;
         configurePhotoCamera();
-        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("camera"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("camera"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         sharedPreferences.edit().putString(cameraInfo.frontCamera != 0 ? "flashMode_front" : "flashMode", mode).commit();
     }
 

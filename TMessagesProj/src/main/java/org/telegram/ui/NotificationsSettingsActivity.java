@@ -24,7 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.NotificationCenter;
@@ -210,7 +210,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             public void onItemClick(View view, final int position) {
                 boolean enabled = false;
                 if (position == messageAlertRow || position == groupAlertRow) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     if (position == messageAlertRow) {
                         enabled = preferences.getBoolean("EnableAll", true);
@@ -222,7 +222,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     editor.commit();
                     updateServerNotificationsSettings(position == groupAlertRow);
                 } else if (position == messagePreviewRow || position == groupPreviewRow) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     if (position == messagePreviewRow) {
                         enabled = preferences.getBoolean("EnablePreviewAll", true);
@@ -235,7 +235,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     updateServerNotificationsSettings(position == groupPreviewRow);
                 } else if (position == messageSoundRow || position == groupSoundRow || position == callsRingtoneRow) {
                     try {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                         Intent tmpIntent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                         tmpIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, position == callsRingtoneRow ? RingtoneManager.TYPE_RINGTONE : RingtoneManager.TYPE_NOTIFICATION);
                         tmpIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
@@ -295,7 +295,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                                 public void run() {
                                     MessagesController.getInstance().enableJoined = true;
                                     reseting = false;
-                                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.clear();
                                     editor.commit();
@@ -309,64 +309,64 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         }
                     });
                 } else if (position == inappSoundRow) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     enabled = preferences.getBoolean("EnableInAppSounds", true);
                     editor.putBoolean("EnableInAppSounds", !enabled);
                     editor.commit();
                 } else if (position == inappVibrateRow) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     enabled = preferences.getBoolean("EnableInAppVibrate", true);
                     editor.putBoolean("EnableInAppVibrate", !enabled);
                     editor.commit();
                 } else if (position == inappPreviewRow) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     enabled = preferences.getBoolean("EnableInAppPreview", true);
                     editor.putBoolean("EnableInAppPreview", !enabled);
                     editor.commit();
                 } else if (position == inchatSoundRow) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     enabled = preferences.getBoolean("EnableInChatSound", true);
                     editor.putBoolean("EnableInChatSound", !enabled);
                     editor.commit();
                     NotificationsController.getInstance().setInChatSoundEnabled(!enabled);
                 } else if (position == inappPriorityRow) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     enabled = preferences.getBoolean("EnableInAppPriority", false);
                     editor.putBoolean("EnableInAppPriority", !enabled);
                     editor.commit();
                 } else if (position == contactJoinedRow) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     enabled = preferences.getBoolean("EnableContactJoined", true);
                     MessagesController.getInstance().enableJoined = !enabled;
                     editor.putBoolean("EnableContactJoined", !enabled);
                     editor.commit();
                 } else if (position == pinnedMessageRow) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     enabled = preferences.getBoolean("PinnedMessages", true);
                     editor.putBoolean("PinnedMessages", !enabled);
                     editor.commit();
                 } else if (position == androidAutoAlertRow) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     enabled = preferences.getBoolean("EnableAutoNotifications", false);
                     editor.putBoolean("EnableAutoNotifications", !enabled);
                     editor.commit();
                 } else if (position == badgeNumberRow) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     enabled = preferences.getBoolean("badgeNumber", true);
                     editor.putBoolean("badgeNumber", !enabled);
                     editor.commit();
                     NotificationsController.getInstance().setBadgeEnabled(!enabled);
                 } else if (position == notificationsServiceConnectionRow) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     enabled = preferences.getBoolean("pushConnection", true);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean("pushConnection", !enabled);
@@ -377,7 +377,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         ConnectionsManager.getInstance().setPushConnectionEnabled(false);
                     }
                 } else if (position == notificationsServiceRow) {
-                    final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     enabled = preferences.getBoolean("pushService", true);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean("pushService", !enabled);
@@ -460,7 +460,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                             } else if (which == 6) {
                                 minutes = 60 * 4;
                             }
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                             preferences.edit().putInt("repeat_messages", minutes).commit();
                             adapter.notifyItemChanged(position);
                         }
@@ -526,7 +526,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 }
             }
 
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
 
             if (requestCode == messageSoundRow) {
@@ -645,7 +645,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 }
                 case 1: {
                     TextCheckCell checkCell = (TextCheckCell) holder.itemView;
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     if (position == messageAlertRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("Alert", R.string.Alert), preferences.getBoolean("EnableAll", true), true);
                     } else if (position == groupAlertRow) {
@@ -689,7 +689,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 }
                 case 3: {
                     TextColorCell textColorCell = (TextColorCell) holder.itemView;
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     int color;
                     if (position == messageLedRow) {
                         color = preferences.getInt("MessagesLed", 0xff0000ff);
@@ -707,7 +707,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 }
                 case 5:
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     if (position == messageSoundRow || position == groupSoundRow || position == callsRingtoneRow) {
                         String value = null;
                         if (position == messageSoundRow) {

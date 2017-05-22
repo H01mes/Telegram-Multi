@@ -48,7 +48,7 @@ import android.widget.TextView;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -263,7 +263,7 @@ public class LoginActivity extends BaseFragment {
     private Bundle loadCurrentState() {
         try {
             Bundle bundle = new Bundle();
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2"+ Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
             Map<String, ?> params = preferences.getAll();
             for (Map.Entry<String, ?> entry : params.entrySet()) {
                 String key = entry.getKey();
@@ -296,7 +296,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     private void clearCurrentState() {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2"+ Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.commit();
@@ -515,7 +515,7 @@ public class LoginActivity extends BaseFragment {
                     v.saveStateParams(bundle);
                 }
             }
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2"+ Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo2"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
             putBundleToEditor(bundle, editor, null);
@@ -962,7 +962,7 @@ public class LoginActivity extends BaseFragment {
                     }
                     boolean ok = true;
                     if (!permissionsItems.isEmpty()) {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                         if (!allowCancelCall && allowCall) {
                             getParentActivity().requestPermissions(permissionsItems.toArray(new String[permissionsItems.size()]), 6);
                         } else if (preferences.getBoolean("firstlogin", true) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS)) {
@@ -1038,7 +1038,7 @@ public class LoginActivity extends BaseFragment {
                 params.putString("ephone", "+" + phone);
             }
             params.putString("phoneFormated", phone);
-            SharedPreferences users = ApplicationLoader.applicationContext.getSharedPreferences("users"+ Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
+            SharedPreferences users = ApplicationLoader.applicationContext.getSharedPreferences("users"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
             users.edit().putString("phone_user1", phone).commit();
             nextPressed = true;
             needShowProgress();
@@ -1095,10 +1095,10 @@ public class LoginActivity extends BaseFragment {
                                 permissionsShowItems.add(Manifest.permission.RECEIVE_SMS);
                             }
                             if (!permissionsShowItems.isEmpty()) {
-                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                                 if (preferences.getBoolean("firstloginshow", true) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS)) {
                                     preferences.edit().putBoolean("firstloginshow", false).commit();
-                                    SharedPreferences users = ApplicationLoader.applicationContext.getSharedPreferences("users"+ Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
+                                    SharedPreferences users = ApplicationLoader.applicationContext.getSharedPreferences("users"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
                                     users.edit().putInt("users_count", 1).commit();
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));

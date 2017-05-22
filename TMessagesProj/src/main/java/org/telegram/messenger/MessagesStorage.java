@@ -85,7 +85,7 @@ public class MessagesStorage {
     }
 
     public void openDatabase(boolean first) {
-        cacheFile = new File(ApplicationLoader.getFilesDirFixed()+Change_user_helper.getUserTag(), "cache4.db");
+        cacheFile = new File(ApplicationLoader.getFilesDirFixed()+ ChangeUserHelper.getUserTag(), "cache4.db");
 
         boolean createTable = false;
         //cacheFile.delete();
@@ -606,7 +606,7 @@ public class MessagesStorage {
             public void run() {
                 try {
                     HashMap<Long, Long> ids = new HashMap<>();
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
                     Map<String, ?> values = preferences.getAll();
                     for (Map.Entry<String, ?> entry : values.entrySet()) {
                         String key = entry.getKey();

@@ -118,7 +118,7 @@ public class ContactsController {
     }
 
     public ContactsController() {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         if (preferences.getBoolean("needGetStatuses", false)) {
             reloadContactsStatuses();
         }
@@ -179,7 +179,7 @@ public class ContactsController {
     }
 
     public void checkInviteText() {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         inviteText = preferences.getString("invitetext", null);
         int time = preferences.getInt("invitetexttime", 0);
         if (!updatingInviteText && (inviteText == null || time + 86400 < (int) (System.currentTimeMillis() / 1000))) {
@@ -195,7 +195,7 @@ public class ContactsController {
                                 @Override
                                 public void run() {
                                     updatingInviteText = false;
-                                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.putString("invitetext", res.message);
                                     editor.putInt("invitetexttime", (int) (System.currentTimeMillis() / 1000));
@@ -1196,7 +1196,7 @@ public class ContactsController {
 
     private void reloadContactsStatusesMaybe() {
         try {
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
             long lastReloadStatusTime = preferences.getLong("lastReloadStatusTime", 0);
             if (lastReloadStatusTime < System.currentTimeMillis() - 1000 * 60 * 60 * 24) {
                 reloadContactsStatuses();
@@ -1208,7 +1208,7 @@ public class ContactsController {
 
     private void saveContactsLoadTime() {
         try {
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
             preferences.edit().putLong("lastReloadStatusTime", System.currentTimeMillis()).commit();
         } catch (Exception e) {
             FileLog.e(e);
@@ -1823,7 +1823,7 @@ public class ContactsController {
     public void reloadContactsStatuses() {
         saveContactsLoadTime();
         MessagesController.getInstance().clearFullUsers();
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         final SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("needGetStatuses", true).commit();
         TLRPC.TL_contacts_getStatuses req = new TLRPC.TL_contacts_getStatuses();

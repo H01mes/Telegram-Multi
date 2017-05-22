@@ -22,7 +22,7 @@ import android.view.ViewGroup;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -220,7 +220,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
         if (user != null && user.bot && user.bot_inline_placeholder != null) {
             foundContextBot = user;
             if (foundContextBot.bot_inline_geo) {
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                 boolean allowGeo = preferences.getBoolean("inlinegeo_" + foundContextBot.id, false);
                 if (!allowGeo && parentFragment != null && parentFragment.getParentActivity() != null) {
                     final TLRPC.User foundContextBotFinal = foundContextBot;
@@ -233,7 +233,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             buttonClicked[0] = true;
                             if (foundContextBotFinal != null) {
-                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                                 preferences.edit().putBoolean("inlinegeo_" + foundContextBotFinal.id, true).commit();
                                 checkLocationPermissionsOrStart();
                             }

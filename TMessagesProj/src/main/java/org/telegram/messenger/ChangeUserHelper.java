@@ -6,7 +6,7 @@ import android.util.Log;
  * Created by oleg.svs on 21.05.2017.
  */
 
-public class Change_user_helper {
+public class ChangeUserHelper {
     private static String userTag = "_user_0";
 
     static public void setUserTag(String tag) {

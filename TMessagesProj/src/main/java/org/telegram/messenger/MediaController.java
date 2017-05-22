@@ -617,7 +617,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         playerQueue = new DispatchQueue("playerQueue");
         fileDecodingQueue = new DispatchQueue("fileDecodingQueue");
 
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         mobileDataDownloadMask = preferences.getInt("mobileDataDownloadMask", AUTODOWNLOAD_MASK_PHOTO | AUTODOWNLOAD_MASK_AUDIO | AUTODOWNLOAD_MASK_MUSIC | AUTODOWNLOAD_MASK_GIF);
         wifiDownloadMask = preferences.getInt("wifiDownloadMask", AUTODOWNLOAD_MASK_PHOTO | AUTODOWNLOAD_MASK_AUDIO | AUTODOWNLOAD_MASK_MUSIC | AUTODOWNLOAD_MASK_GIF);
         roamingDownloadMask = preferences.getInt("roamingDownloadMask", 0);
@@ -2486,7 +2486,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public void toggleShuffleMusic() {
         shuffleMusic = !shuffleMusic;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("shuffleMusic", shuffleMusic);
         editor.commit();
@@ -2510,7 +2510,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         if (repeatMode > 2) {
             repeatMode = 0;
         }
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("repeatMode", repeatMode);
         editor.commit();
@@ -3078,7 +3078,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public void toggleSaveToGallery() {
         saveToGallery = !saveToGallery;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("save_gallery", saveToGallery);
         editor.commit();
@@ -3087,7 +3087,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public void toggleAutoplayGifs() {
         autoplayGifs = !autoplayGifs;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("autoplay_gif", autoplayGifs);
         editor.commit();
@@ -3095,7 +3095,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public void toogleRaiseToSpeak() {
         raiseToSpeak = !raiseToSpeak;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("raise_to_speak", raiseToSpeak);
         editor.commit();
@@ -3103,7 +3103,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public void toggleCustomTabs() {
         customTabs = !customTabs;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("custom_tabs", customTabs);
         editor.commit();
@@ -3111,7 +3111,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public void toggleDirectShare() {
         directShare = !directShare;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("direct_share", directShare);
         editor.commit();
@@ -3660,7 +3660,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
         }
 
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("videoconvert"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("videoconvert"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         File inputFile = new File(videoPath);
         if (messageObject.getId() != 0) {
             boolean isPreviousOk = preferences.getBoolean("isPreviousOk", true);

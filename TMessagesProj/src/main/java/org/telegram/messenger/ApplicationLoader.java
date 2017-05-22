@@ -51,7 +51,7 @@ public class ApplicationLoader extends Application {
     public static volatile long mainInterfacePausedStageQueueTime;
 
     private static void convertConfig() {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("dataconfig"+Change_user_helper.getUserTag(), Context.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("dataconfig"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
         if (preferences.contains("currentDatacenterId")) {
             SerializedData buffer = new SerializedData(32 * 1024);
             buffer.writeInt32(2);
@@ -79,7 +79,7 @@ public class ApplicationLoader extends Application {
             }
 
             try {
-                File file = new File(getFilesDirFixed()+Change_user_helper.getUserTag(), "tgnet.dat");
+                File file = new File(getFilesDirFixed()+ ChangeUserHelper.getUserTag(), "tgnet.dat");
                 RandomAccessFile fileOutputStream = new RandomAccessFile(file, "rws");
                 byte[] bytes = buffer.toByteArray();
                 fileOutputStream.writeInt(Integer.reverseBytes(bytes.length));
@@ -94,7 +94,7 @@ public class ApplicationLoader extends Application {
     }
 
     public static File getFilesDirFixed() {
-        new File(String.valueOf(applicationContext.getFilesDir())+Change_user_helper.getUserTag()).mkdir();
+        new File(String.valueOf(applicationContext.getFilesDir())+ ChangeUserHelper.getUserTag()).mkdir();
         for (int a = 0; a < 10; a++) {
             File path = ApplicationLoader.applicationContext.getFilesDir();
             if (path != null) {
@@ -119,8 +119,8 @@ public class ApplicationLoader extends Application {
 
         applicationInited = true;
         SharedPreferences userID = ApplicationLoader.applicationContext.getSharedPreferences("userID", Context.MODE_PRIVATE);
-        Change_user_helper.setUserTag(userID.getString("userID","_user_0"));
-        Log.i("userTAG", "postInitApplication: " + Change_user_helper.getUserTag());
+        ChangeUserHelper.setUserTag(userID.getString("userID","_user_0"));
+        Log.i("userTAG", "postInitApplication: " + ChangeUserHelper.getUserTag());
         convertConfig();
 
         try {
@@ -151,7 +151,7 @@ public class ApplicationLoader extends Application {
         String langCode;
         String appVersion;
         String systemVersion;
-        String configPath = getFilesDirFixed().toString()+Change_user_helper.getUserTag();
+        String configPath = getFilesDirFixed().toString()+ ChangeUserHelper.getUserTag();
 
         try {
             langCode = LocaleController.getLocaleStringIso639();
@@ -178,7 +178,7 @@ public class ApplicationLoader extends Application {
             systemVersion = "SDK Unknown";
         }
 
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         boolean enablePushConnection = preferences.getBoolean("pushConnection", true);
 
         MessagesController.getInstance();
@@ -232,7 +232,7 @@ public class ApplicationLoader extends Application {
     }*/
 
     public static void startPushService() {
-        SharedPreferences preferences = applicationContext.getSharedPreferences("Notifications"+Change_user_helper.getUserTag(), MODE_PRIVATE);
+        SharedPreferences preferences = applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), MODE_PRIVATE);
 
         if (preferences.getBoolean("pushService", true)) {
             applicationContext.startService(new Intent(applicationContext, NotificationsService.class));

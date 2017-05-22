@@ -22,7 +22,7 @@ import android.view.Window;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
@@ -58,7 +58,7 @@ public class ShareActivity extends Activity {
             return;
         }
 
-        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare"+ Change_user_helper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         String message = sharedPreferences.getString(hash + "_m", null);
         if (TextUtils.isEmpty(message)) {
             finish();

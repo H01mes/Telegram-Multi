@@ -31,7 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.Change_user_helper;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
@@ -512,10 +512,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             emojiView.setVisibility(VISIBLE);
 
             if (keyboardHeight <= 0) {
-                keyboardHeight = ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ Change_user_helper.getUserTag(), 0).getInt("kbd_height", AndroidUtilities.dp(200));
+                keyboardHeight = ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ ChangeUserHelper.getUserTag(), 0).getInt("kbd_height", AndroidUtilities.dp(200));
             }
             if (keyboardHeightLand <= 0) {
-                keyboardHeightLand = ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ Change_user_helper.getUserTag(), 0).getInt("kbd_height_land3", AndroidUtilities.dp(200));
+                keyboardHeightLand = ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ ChangeUserHelper.getUserTag(), 0).getInt("kbd_height_land3", AndroidUtilities.dp(200));
             }
             int currentHeight = AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y ? keyboardHeightLand : keyboardHeight;
 
@@ -599,10 +599,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         if (height > AndroidUtilities.dp(50) && keyboardVisible && !AndroidUtilities.isInMultiwindow && !forceFloatingEmoji) {
             if (isWidthGreater) {
                 keyboardHeightLand = height;
-                ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ Change_user_helper.getUserTag(), 0).edit().putInt("kbd_height_land3", keyboardHeightLand).commit();
+                ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ ChangeUserHelper.getUserTag(), 0).edit().putInt("kbd_height_land3", keyboardHeightLand).commit();
             } else {
                 keyboardHeight = height;
-                ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ Change_user_helper.getUserTag(), 0).edit().putInt("kbd_height", keyboardHeight).commit();
+                ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ ChangeUserHelper.getUserTag(), 0).edit().putInt("kbd_height", keyboardHeight).commit();
             }
         }
 
