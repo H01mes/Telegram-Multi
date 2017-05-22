@@ -24,6 +24,13 @@ dependencies {
 }
 
 android {
+    productFlavors {
+        securechat {
+            applicationId "org.telegram.multi"
+            versionCode 1
+        }
+
+    }
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
 

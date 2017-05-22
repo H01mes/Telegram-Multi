@@ -1,14 +1,14 @@
 Executable : C:\Users\user\AppData\Local\Android\Sdk\ndk-bundle\ndk-build.cmd
 arguments : 
 NDK_PROJECT_PATH=null
-APP_BUILD_SCRIPT=C:\Telegram\TMessagesProj\jni\Android.mk
-NDK_APPLICATION_MK=C:\Telegram\TMessagesProj\jni\Application.mk
+APP_BUILD_SCRIPT=C:\Telegram2\TMessagesProj\jni\Android.mk
+NDK_APPLICATION_MK=C:\Telegram2\TMessagesProj\jni\Application.mk
 APP_ABI=x86
 NDK_ALL_ABIS=x86
 NDK_DEBUG=1
 APP_PLATFORM=android-14
-NDK_OUT=C:/Telegram/TMessagesProj/build/intermediates/ndkBuild/fat/debug/obj
-NDK_LIBS_OUT=C:\Telegram\TMessagesProj\build\intermediates\ndkBuild\fat\debug\lib
+NDK_OUT=C:/Telegram2/TMessagesProj/build/intermediates/ndkBuild/fat/debug/obj
+NDK_LIBS_OUT=C:\Telegram2\TMessagesProj\build\intermediates\ndkBuild\fat\debug\lib
 NDK_APPLICATION_MK:=jni/Application.mk
 APP_PLATFORM:=android-14
 APP_SHORT_COMMANDS=false

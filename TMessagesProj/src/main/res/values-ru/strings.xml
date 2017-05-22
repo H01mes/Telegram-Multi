@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources tools:ignore="ExtraTranslation" xmlns:tools="http://schemas.android.com/tools">
-  <string name="AppName">Telegram</string>
-  <string name="AppNameBeta">Telegram Beta</string>
+  <string name="AppName">Telegram Multi</string>
+  <string name="AppNameBeta">Telegram Multi Beta</string>
   <string name="LanguageName">Русский</string>
   <string name="LanguageNameInEnglish">Russian</string>
   <string name="LanguageCode">ru</string>

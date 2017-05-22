@@ -4,6 +4,7 @@
 <resources>
     <string name="AppName">Telegram Multi</string>
     <string name="AppNameBeta">Telegram Multi Beta</string>
+	<string name="ShortAppName">Telegram Multi</string>
     <string name="LanguageName">English</string>
     <string name="LanguageNameInEnglish">English</string>
     <string name="LanguageCode">en</string>
