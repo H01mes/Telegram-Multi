@@ -20,7 +20,7 @@
     <permission android:name="org.telegram.multi.beta.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 
     <application
-        android:allowBackup="false"
+        android:allowBackup="allowBackup"
         android:icon="@drawable/ic_launcher"
         android:label="@string/AppNameBeta"
         android:theme="@style/Theme.TMessages.Start"

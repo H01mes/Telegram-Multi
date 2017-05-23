@@ -119,7 +119,7 @@ public class ApplicationLoader extends Application {
 
         applicationInited = true;
         SharedPreferences userID = ApplicationLoader.applicationContext.getSharedPreferences("userID", Context.MODE_PRIVATE);
-        ChangeUserHelper.setUserTag(userID.getString("userID","_user_0"));
+        ChangeUserHelper.setUserTag(userID.getInt("userID",0));
         Log.i("userTAG", "postInitApplication: " + ChangeUserHelper.getUserTag());
         convertConfig();
 

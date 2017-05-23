@@ -1038,8 +1038,6 @@ public class LoginActivity extends BaseFragment {
                 params.putString("ephone", "+" + phone);
             }
             params.putString("phoneFormated", phone);
-            SharedPreferences users = ApplicationLoader.applicationContext.getSharedPreferences("users"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
-            users.edit().putString("phone_user1", phone).commit();
             nextPressed = true;
             needShowProgress();
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -2796,6 +2794,9 @@ public class LoginActivity extends BaseFragment {
             req.phone_number = requestPhone;
             req.first_name = firstNameField.getText().toString();
             req.last_name = lastNameField.getText().toString();
+            SharedPreferences users = ApplicationLoader.applicationContext.getSharedPreferences("users"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
+            users.edit().putString("phone_user1", req.phone_number).commit();
+            users.edit().putString("name__user1", req.first_name + " " + req.last_name).commit();
             needShowProgress();
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 @Override
@@ -2816,7 +2817,7 @@ public class LoginActivity extends BaseFragment {
                                 ArrayList<TLRPC.User> users = new ArrayList<>();
                                 users.add(res.user);
                                 MessagesStorage.getInstance().putUsersAndChats(users, null, true, true);
-                                //MessagesController.getInstance().uploadAndApplyUserAvatar(avatarPhotoBig);
+//                                MessagesController.getInstance().uploadAndApplyUserAvatar(avatarPhotoBig);
                                 MessagesController.getInstance().putUser(res.user, false);
                                 ContactsController.getInstance().checkAppAccount();
                                 MessagesController.getInstance().getBlockedUsers(true);

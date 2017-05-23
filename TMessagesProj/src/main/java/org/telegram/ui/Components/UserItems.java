@@ -1,5 +1,7 @@
 package org.telegram.ui.Components;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by oleg.svs on 22.05.2017.
  */
@@ -7,7 +9,7 @@ package org.telegram.ui.Components;
 public class UserItems {
     String userName;
     String userPhone;
-    int userPhoto;
+    Bitmap userPhoto;
 
     public String getName() {
         return userName;
@@ -25,11 +27,11 @@ public class UserItems {
         this.userPhone = userPhone;
     }
 
-    public int getPhoto() {
+    public Bitmap getPhoto() {
         return userPhoto;
     }
 
-    public void setPhoto(int image) {
+    public void setPhoto(Bitmap userPhoto) {
         this.userPhoto = userPhoto;
     }
 }

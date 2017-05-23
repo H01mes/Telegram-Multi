@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.telegram.messenger.R;
+import org.telegram.ui.ChangeUserActivity;
 import org.telegram.ui.Components.UserItems;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 
 public class UserItemsAdapter extends BaseAdapter {
 
-    ArrayList<Object> itemList;
+    ArrayList<Object> itemList = null; //fixed crash on restart activity
 
     public Activity context;
     public LayoutInflater inflater;
@@ -37,7 +38,9 @@ public class UserItemsAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return itemList.size();
+        if (itemList != null)
+            return itemList.size();
+        else return 0;
     }
 
     @Override
@@ -57,6 +60,10 @@ public class UserItemsAdapter extends BaseAdapter {
         ImageView imgViewPhoto;
         TextView txtViewName;
         TextView txtViewPhone;
+    }
+
+    public void remove(int position){
+        itemList.remove(itemList.get(position));;
     }
 
     @Override
@@ -79,12 +86,13 @@ public class UserItemsAdapter extends BaseAdapter {
             holder=(ViewHolder)convertView.getTag();
 
         UserItems userItems = (UserItems) itemList.get(position);
-
-        holder.imgViewPhoto.setImageResource(userItems.getPhoto());
+        if(userItems.getPhoto() == null) holder.imgViewPhoto.setImageBitmap(ChangeUserActivity.book_user);
+        else holder.imgViewPhoto.setImageBitmap(userItems.getPhoto());
         holder.txtViewName.setText(userItems.getName());
         holder.txtViewPhone.setText(userItems.getPhone());
 
         return convertView;
     }
+
 
 }

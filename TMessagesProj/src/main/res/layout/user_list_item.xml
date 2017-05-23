@@ -13,7 +13,6 @@
         android:id="@+id/userPhoto"
         android:src="@drawable/book_user"
         android:layout_alignParentLeft="true"
-        android:theme="@style/Theme.AppCompat.Light"
         android:layout_centerInParent="true"
         android:scaleType="center">
     </ImageView>

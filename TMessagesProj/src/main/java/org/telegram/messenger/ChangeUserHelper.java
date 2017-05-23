@@ -7,16 +7,21 @@ import android.util.Log;
  */
 
 public class ChangeUserHelper {
-    private static String userTag = "_user_0";
+    private static String userTag = "_user_";
+    private static int userID = 0;
 
-    static public void setUserTag(String tag) {
-        if(tag != null)
-            userTag = tag;
-        Log.i("userTAG", "getUserTag: " + userTag);
+    static public void setUserTag(int id) {
+        if(id != -1)
+            userID = id;
+        Log.i("userTAG", "getUserTag: " + userTag + userID);
     }
 
     static public String getUserTag() {
-        return userTag;
+        return String.valueOf(userTag + userID);
+    }
+
+    static public int getID() {
+        return userID;
     }
 
 }

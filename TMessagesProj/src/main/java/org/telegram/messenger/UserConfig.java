@@ -11,6 +11,7 @@ package org.telegram.messenger;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+import android.util.Log;
 
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
@@ -167,6 +168,7 @@ public class UserConfig {
                 try {
                     SerializedData data = new SerializedData(configFile);
                     int ver = data.readInt32(false);
+                    Log.i("TGM", "loadConfig: " + String.valueOf(ver));
                     if (ver == 1) {
                         int constructor = data.readInt32(false);
                         currentUser = TLRPC.User.TLdeserialize(data, constructor, false);
@@ -212,16 +214,17 @@ public class UserConfig {
                         lastSendMessageId = -210000;
                     }
                     data.cleanup();
-                    Utilities.stageQueue.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            saveConfig(true, configFile);
-                        }
-                    });
+//                    Utilities.stageQueue.postRunnable(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            saveConfig(true, configFile);
+//                        }
+//                    });
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
             } else {
+                Log.i("TGM", "loadConfig: not exists");
                 SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
                 registeredForPush = preferences.getBoolean("registeredForPush", false);
                 pushString = preferences.getString("pushString2", "");

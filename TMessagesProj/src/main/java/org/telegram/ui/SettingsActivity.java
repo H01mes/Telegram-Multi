@@ -833,10 +833,33 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 object.dialogId = UserConfig.getClientUserId();
                 object.thumb = object.imageReceiver.getBitmap();
                 object.size = -1;
+                avatarImage.getImageReceiver().getThumbLocation();
                 object.radius = avatarImage.getImageReceiver().getRoundRadius();
                 object.scale = avatarImage.getScaleX();
                 return object;
             }
+        }
+        return null;
+    }
+
+    public Bitmap getBitmap(TLRPC.User user) {
+        if (user != null && user.photo != null && user.photo.photo_big != null) {
+            TLRPC.FileLocation photoBig = user.photo.photo_big;
+            int coords[] = new int[2];
+            avatarImage.getLocationInWindow(coords);
+            PhotoViewer.PlaceProviderObject object = new PhotoViewer.PlaceProviderObject();
+            object.viewX = coords[0];
+            object.viewY = coords[1] - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
+            object.parentView = avatarImage;
+            object.imageReceiver = avatarImage.getImageReceiver();
+            object.dialogId = UserConfig.getClientUserId();
+            object.thumb = object.imageReceiver.getBitmap();
+            object.size = -1;
+            avatarImage.getImageReceiver().getBitmap();
+            object.radius = avatarImage.getImageReceiver().getRoundRadius();
+            object.scale = avatarImage.getScaleX();
+            return avatarImage.getImageReceiver().getBitmap();
+
         }
         return null;
     }

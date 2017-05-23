@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.telegram.messenger"
     android:installLocation="auto">
-
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
@@ -77,7 +76,7 @@
 
     <application
         android:name="org.telegram.messenger.ApplicationLoader"
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:hardwareAccelerated="@bool/useHardwareAcceleration"
         android:icon="@drawable/ic_launcher"
         android:largeHeap="true"

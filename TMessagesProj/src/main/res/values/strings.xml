@@ -102,7 +102,7 @@
     <string name="Connecting">Connecting...</string>
     <string name="Updating">Updating...</string>
     <string name="NewSecretChat">New Secret Chat</string>
-    <string name="Change_another_user">Change user</string>
+    <string name="Change_another_user">Multiuser</string>
     <string name="AwaitingEncryption">Waiting for %s to get online...</string>
     <string name="EncryptionRejected">Secret chat cancelled</string>
     <string name="EncryptionProcessing">Exchanging encryption keys...</string>
