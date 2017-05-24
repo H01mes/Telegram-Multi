@@ -2,6 +2,8 @@ package org.telegram.ui.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +12,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.telegram.messenger.ApplicationLoader2;
 import org.telegram.messenger.R;
-import org.telegram.messenger.UserConfig2;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ChangeUserActivity;
-import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.UserItems;
 
 import java.util.ArrayList;
@@ -66,6 +63,7 @@ public class UserItemsAdapter extends BaseAdapter {
         ImageView imgViewPhoto;
         TextView txtViewName;
         TextView txtViewPhone;
+        ImageView imgViewCurrent;
     }
 
     public void remove(int position){
@@ -83,9 +81,10 @@ public class UserItemsAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.user_list_item, null);
 
             holder.imgViewPhoto = (ImageView) convertView.findViewById(R.id.userPhoto);
+            holder.imgViewCurrent = (ImageView) convertView.findViewById(R.id.userCurrent);
             holder.txtViewName = (TextView) convertView.findViewById(R.id.userName);
             holder.txtViewPhone = (TextView) convertView.findViewById(R.id.userPhone);
-
+            holder.imgViewCurrent.setVisibility(View.INVISIBLE);
             convertView.setTag(holder);
         }
         else
@@ -93,6 +92,12 @@ public class UserItemsAdapter extends BaseAdapter {
 
         UserItems userItems = (UserItems) itemList.get(position);
         holder.imgViewPhoto.setImageBitmap(userItems.getPhoto());
+        if ((userItems.getCurrent() != -1) && (userItems.getCurrent() == position)) {
+            holder.imgViewCurrent.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_sentCheck), PorterDuff.Mode.MULTIPLY));
+            holder.imgViewCurrent.setVisibility(View.VISIBLE);
+            Log.i("TGM", "getView: current = " + position);
+        } else holder.imgViewCurrent.setVisibility(View.INVISIBLE);
+
         holder.txtViewName.setText(userItems.getName());
         holder.txtViewPhone.setText(userItems.getPhone());
         return convertView;

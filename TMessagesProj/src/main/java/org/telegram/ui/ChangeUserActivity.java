@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -35,6 +36,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig2;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.UserItemsAdapter;
 import org.telegram.ui.Components.UserItems;
 
@@ -63,6 +65,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_user);
+
         try {
             ctx = this;
             itemList = new ArrayList<Object>();
@@ -76,6 +79,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
                     // TODO deleting user on random position
                     if (position > 0)
                         showAlertDeleteUser(position);
+                    else Toast.makeText(ChangeUserActivity.this, "Impossible delete first user!", Toast.LENGTH_SHORT).show();
                     return true;
                 }
             });
@@ -98,6 +102,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
 //            prepareThread.start();
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setColorNormal(Theme.getColor(Theme.key_chats_actionBackground));
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -105,6 +110,15 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
                         addUser();
                     else
                         Toast.makeText(ChangeUserActivity.this, "Maximum 10 users!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            FloatingActionButton fabBack = (FloatingActionButton) findViewById(R.id.fabBack);
+            fab.setColorNormal(Theme.getColor(Theme.key_chats_actionBackground));
+            fabBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
                 }
             });
         } catch (Throwable th) {
@@ -227,9 +241,9 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
             else first_name = getUserByTag("_user_" + i).first_name + " " + getUserByTag("_user_" + i).last_name;
             String phone = getUserByTag("_user_" + i).phone;
             Bitmap photo = getBitmap(getUserByTag("_user_" + i));
-            if(ChangeUserHelper.getID() == i) first_name += " ---- текущий";
-
-            AddObjectToList(photo, first_name, phone);
+            if(ChangeUserHelper.getID() == i) AddObjectToList(photo, first_name, phone, i);
+            else
+                AddObjectToList(photo, first_name, phone);
         }
         adapter = new UserItemsAdapter(this, itemList);
         lvUserList.setAdapter(adapter);
@@ -260,6 +274,17 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
         userItems = new UserItems();
         userItems.setPhone(desc);
         userItems.setPhoto(image);
+        userItems.setName(title);
+        itemList.add(userItems);
+    }
+
+    public void AddObjectToList(Bitmap image, String title, String desc, int pos)
+    {
+        Log.i("TGM", "AddObjectToList: called");
+        userItems = new UserItems();
+        userItems.setPhone(desc);
+        userItems.setPhoto(image);
+        userItems.setCurrent(pos);
         userItems.setName(title);
         itemList.add(userItems);
     }
@@ -300,5 +325,17 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
         float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return px;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+            onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

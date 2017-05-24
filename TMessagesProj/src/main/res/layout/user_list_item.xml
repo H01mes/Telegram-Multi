@@ -34,7 +34,18 @@
         android:id="@+id/userPhone"
         android:layout_toRightOf="@+id/userPhoto"
         android:layout_below="@+id/userName"
-        android:layout_marginLeft="10dip">
+        android:layout_marginLeft="15dip">
     </TextView>
+
+    <ImageView
+        android:id="@+id/userCurrent"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="2dip"
+        android:scaleType="center"
+        android:src="@drawable/sticker_added"
+        android:visibility="invisible"></ImageView>
 
 </RelativeLayout>
