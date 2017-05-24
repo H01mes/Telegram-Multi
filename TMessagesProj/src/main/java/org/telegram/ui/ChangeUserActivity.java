@@ -8,47 +8,36 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-//import android.support.design.widget.FloatingActionButton;
-//import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ApplicationLoader2;
 import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig2;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.Adapters.UserItemsAdapter;
 import org.telegram.ui.Components.UserItems;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -59,7 +48,6 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     UserItemsAdapter adapter = null;
     private ArrayList<Object> itemList;
     private UserItems userItems ;
-    public static Bitmap book_user = null;
     static ProgressDialog prepareProgress;
     static Context ctx ;
 
@@ -73,7 +61,6 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        book_user = drawableToBitmap(R.drawable.book_user);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_user);
         try {
@@ -92,7 +79,9 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
                     return true;
                 }
             });
+
             prepareArrayLits();
+            Log.i("TGM", "onCreate: prepareArray");
             prepareProgress.dismiss();
             Thread prepareThread = new Thread(
                     new Runnable() {
@@ -136,12 +125,10 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        itemList.clear();
          lvUserList = null;
          adapter = null;
          itemList = null;
          userItems = null;
-         Bitmap book_user = null;
          System.gc();
     }
 
@@ -150,7 +137,6 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
         sharedPref.edit().putInt("usersCount", getUsersCount() -1).commit();
         sharedPref.edit().apply();
         deleteDir(getApplicationInfo().dataDir + "/files_user_" + String.valueOf(position));
-//        Toast.makeText(this, getApplicationInfo().dataDir + "/files_user_" + String.valueOf(position), Toast.LENGTH_SHORT).show();
         adapter.remove(position);
         adapter.notifyDataSetChanged();
     }
@@ -201,6 +187,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     }
 
     public int getUsersCount() {
+        Log.i("TGM", "getUsersCount: called");
         SharedPreferences userPhone = getSharedPreferences("userID", Context.MODE_PRIVATE);
         return userPhone.getInt("usersCount",1);
     }
@@ -234,6 +221,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     {   itemList = new ArrayList<Object>();
         int usersCount = getUsersCount();
         for (int i = 0; i < usersCount ; i++) {
+            Log.i("TGM", "prepareArrayLits: " + i);
             String first_name = "null";
             if (getUserByTag("_user_" + i).last_name == null) first_name = getUserByTag("_user_" + i).first_name;
             else first_name = getUserByTag("_user_" + i).first_name + " " + getUserByTag("_user_" + i).last_name;
@@ -245,63 +233,30 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
         }
         adapter = new UserItemsAdapter(this, itemList);
         lvUserList.setAdapter(adapter);
-//        System.gc();
+        Log.i("TGM", "prepareArrayLits: setAdapters");
     }
 
     private TLRPC.User getUserByTag(String tag) {
         ApplicationLoader2.convertConfig2(tag);
         TLRPC.User user = UserConfig2.getCurrentUser(tag);
+        Log.i("TGM", "getUserByTag: called " + tag.toString());
         return user;
     }
 
     public Bitmap getBitmap(TLRPC.User user) {
-        RectF bitmapRect;
-        TLRPC.FileLocation photo = null;
-        if (user.photo != null) {
-            photo =user.photo.photo_small;
+        Bitmap icon;
+        Log.i("TGM", "getBitmap: called");
+        if (user.photo != null && user.photo.photo_small != null) {
+            Log.i("TGM", "getBitmap: photo != null");
+            icon = createRoundBitmap(FileLoader.getPathToAttach(user.photo.photo_small, true));
+            return icon;
         }
-        Bitmap bitmap = null;
-        if (photo != null) {
-            try {
-                File path = FileLoader.getPathToAttach(photo, true);
-                bitmap = BitmapFactory.decodeFile(path.toString());
-                if (bitmap != null) {
-                    int size = AndroidUtilities.dp(58);
-                    Bitmap result = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-                    result.eraseColor(Color.TRANSPARENT);
-                    Canvas canvas = new Canvas(result);
-                    BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-                    Paint roundPaint =  new Paint(Paint.ANTI_ALIAS_FLAG);
-                    bitmapRect = new RectF();
-                    float scale = size / (float) bitmap.getWidth();
-                    canvas.save();
-                    canvas.scale(scale, scale);
-                    roundPaint.setShader(shader);
-                    bitmapRect.set(0, 0, bitmap.getWidth(), bitmap.getHeight());
-                    canvas.drawRoundRect(bitmapRect, bitmap.getWidth(), bitmap.getHeight(), roundPaint);
-                    canvas.restore();
-                    Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.book_logo);
-                    int w = AndroidUtilities.dp(15);
-                    drawable.setBounds(drawable.getBounds().left, drawable.getBounds().top, drawable.getBounds().right, drawable.getBounds().bottom);
-                    drawable.draw(canvas);
-                    try {
-                        canvas.setBitmap(null);
-                    } catch (Exception e) {
-                        //don't promt, this will crash on 2.x
-                    }
-                    bitmap = result;
-                    return bitmap;
-                }
-            } catch (Throwable e) {
-                Log.i("TGM", "getBitmap: " + e.toString());
-            }
-        }
-        return null;
+        return drawableToBitmap(R.drawable.logo_avatar);
     }
 
-    // Add one item into the Array List
     public void AddObjectToList(Bitmap image, String title, String desc)
     {
+        Log.i("TGM", "AddObjectToList: called");
         userItems = new UserItems();
         userItems.setPhone(desc);
         userItems.setPhoto(image);
@@ -310,11 +265,40 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     }
 
     public Bitmap drawableToBitmap (int drawable) {
+        Log.i("TGM", "drawableToBitmap: called");
         Bitmap b = null;
         Drawable d = getResources().getDrawable(drawable);
         Drawable currentState = d.getCurrent();
         if(currentState instanceof BitmapDrawable)
             b = ((BitmapDrawable)currentState).getBitmap();
         return b;
+    }
+
+    public Bitmap createRoundBitmap(File path) {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(path.toString());
+            if (bitmap != null) {
+                Bitmap circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
+                BitmapShader shader = new BitmapShader (bitmap,  Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+                Paint paint = new Paint();
+                paint.setShader(shader);
+                paint.setAntiAlias(true);
+                Canvas c = new Canvas(circleBitmap);
+                c.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
+                Bitmap resizedBitmap = Bitmap.createScaledBitmap(
+                        circleBitmap, (int) convertDpToPixel(50),(int) convertDpToPixel(50), false);
+                return resizedBitmap;
+            }
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }
+        return null;
+    }
+
+    public static float convertDpToPixel(float dp){
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return px;
     }
 }

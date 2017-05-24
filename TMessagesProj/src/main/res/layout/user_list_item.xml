@@ -8,8 +8,8 @@
     android:padding="5dip">
 
     <ImageView
-        android:layout_width="50dip"
-        android:layout_height="50dip"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/userPhoto"
         android:src="@drawable/book_user"
         android:layout_alignParentLeft="true"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:id="@+id/userName"
         android:layout_toRightOf="@+id/userPhoto"
-        android:layout_marginLeft="2dip">
+        android:layout_marginLeft="10dip">
     </TextView>
 
     <TextView
@@ -34,7 +34,7 @@
         android:id="@+id/userPhone"
         android:layout_toRightOf="@+id/userPhoto"
         android:layout_below="@+id/userName"
-        android:layout_marginLeft="2dip">
+        android:layout_marginLeft="10dip">
     </TextView>
 
 </RelativeLayout>

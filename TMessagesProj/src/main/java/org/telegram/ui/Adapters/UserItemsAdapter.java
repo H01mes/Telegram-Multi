@@ -2,6 +2,7 @@ package org.telegram.ui.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.telegram.messenger.ApplicationLoader2;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig2;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ChangeUserActivity;
+import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.UserItems;
 
 import java.util.ArrayList;
@@ -86,13 +92,9 @@ public class UserItemsAdapter extends BaseAdapter {
             holder=(ViewHolder)convertView.getTag();
 
         UserItems userItems = (UserItems) itemList.get(position);
-        if(userItems.getPhoto() == null) holder.imgViewPhoto.setImageBitmap(ChangeUserActivity.book_user);
-        else holder.imgViewPhoto.setImageBitmap(userItems.getPhoto());
+        holder.imgViewPhoto.setImageBitmap(userItems.getPhoto());
         holder.txtViewName.setText(userItems.getName());
         holder.txtViewPhone.setText(userItems.getPhone());
-
         return convertView;
     }
-
-
 }
