@@ -915,7 +915,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         if (datacentersBytes != null) {
                             SerializedData data = new SerializedData(datacentersBytes);
                             supportUser = TLRPC.User.TLdeserialize(data, data.readInt32(false), false);
-                            if (supportUser != null && supportUser.id == 333000) {
+                            if (supportUser != null && supportUser.id == 1100550805) {
                                 supportUser = null;
                             }
                             data.cleanup();

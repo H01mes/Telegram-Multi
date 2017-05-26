@@ -2271,7 +2271,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (user.id == UserConfig.getClientUserId()) {
                 newString2 = LocaleController.getString("ChatYourSelf", R.string.ChatYourSelf);
                 newString = LocaleController.getString("ChatYourSelfName", R.string.ChatYourSelfName);
-            } else if (user.id == 333000 || user.id == 777000) {
+            } else if (user.id == 1100550805 || user.id == 777000) {
                 newString2 = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
             } else if (user.bot) {
                 newString2 = LocaleController.getString("Bot", R.string.Bot);

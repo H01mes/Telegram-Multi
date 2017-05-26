@@ -32,7 +32,9 @@ import org.telegram.messenger.ApplicationLoader2;
 import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserConfig2;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -66,6 +68,9 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_user);
 
+        Intent intent = getIntent();
+        if (intent != null && intent.getBooleanExtra("fromIntro", false)) backToLastUser();
+
         try {
             ctx = this;
             itemList = new ArrayList<Object>();
@@ -84,13 +89,13 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
                 }
             });
 
-            prepareArrayLits();
+            prepareArrayList();
             Log.i("TGM", "onCreate: prepareArray");
             prepareProgress.dismiss();
             Thread prepareThread = new Thread(
                     new Runnable() {
                         public void run() {
-                            prepareArrayLits();
+                            prepareArrayList();
                             runOnUiThread(new Runnable() {
                                 public void run() {
 //                                    prepareProgress.dismiss();
@@ -114,10 +119,11 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
             });
 
             FloatingActionButton fabBack = (FloatingActionButton) findViewById(R.id.fabBack);
-            fab.setColorNormal(Theme.getColor(Theme.key_chats_actionBackground));
+            fabBack.setColorNormal(Theme.getColor(Theme.key_chats_actionBackground));
             fabBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     onBackPressed();
                 }
             });
@@ -191,12 +197,23 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     }
 
     public void addUser() {
-        ChangeUserHelper.setUserTag(getUsersCount());
         SharedPreferences sharedPref = getSharedPreferences("userID", Context.MODE_PRIVATE);
+        sharedPref.edit().putInt("lastID", ChangeUserHelper.getID()).commit();
+        Log.i("userTAG", "lastUser: tag changed to " + ChangeUserHelper.getID());
+        ChangeUserHelper.setUserTag(getUsersCount());
         sharedPref.edit().putInt("userID", ChangeUserHelper.getID()).commit();
         sharedPref.edit().putInt("usersCount", getUsersCount() + 1).commit();
         sharedPref.edit().apply();
         Log.i("userTAG", "addUser: tag changed to " + ChangeUserHelper.getUserTag());
+        restart();
+    }
+
+    public void backToLastUser() {
+        SharedPreferences sharedPref = getSharedPreferences("userID", Context.MODE_PRIVATE);
+        sharedPref.edit().putInt("userID", sharedPref.getInt("lastID",0)).commit();
+        sharedPref.edit().putInt("usersCount", sharedPref.getInt("lastCount",1)).commit();
+        sharedPref.edit().apply();
+        Log.i("userTAG", "backToLastUser: tag changed to _");
         restart();
     }
 
@@ -231,7 +248,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
         setUser(position);
     }
 
-    public void prepareArrayLits()
+    public void prepareArrayList()
     {   itemList = new ArrayList<Object>();
         int usersCount = getUsersCount();
         for (int i = 0; i < usersCount ; i++) {

@@ -423,17 +423,19 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     }
 
     public static TLRPC.InputUser getInputUser(TLRPC.User user) {
-        if (user == null) {
-            return new TLRPC.TL_inputUserEmpty();
-        }
         TLRPC.InputUser inputUser;
-        if (user.id == UserConfig.getClientUserId()) {
-            inputUser = new TLRPC.TL_inputUserSelf();
-        } else {
-            inputUser = new TLRPC.TL_inputUser();
-            inputUser.user_id = user.id;
-            inputUser.access_hash = user.access_hash;
-        }
+        inputUser = new TLRPC.TL_inputUserSelf();
+//        if (user == null) {
+//            return new TLRPC.TL_inputUserEmpty();
+//        }
+//        TLRPC.InputUser inputUser;
+//        if (user.id == UserConfig.getClientUserId()) {
+//            inputUser = new TLRPC.TL_inputUserSelf();
+//        } else {
+//            inputUser = new TLRPC.TL_inputUser();
+//            inputUser.user_id = user.id;
+//            inputUser.access_hash = user.access_hash;
+//        }
         return inputUser;
     }
 
@@ -832,7 +834,6 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             return;
         }
         TLRPC.Chat oldChat = chats.get(chat.id);
-
         if (chat.min) {
             if (oldChat != null) {
                 if (!fromCache) {

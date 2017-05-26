@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Outline;
@@ -25,6 +26,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -39,7 +41,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.ImageLoader;
@@ -143,6 +147,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
 
+        SharedPreferences userID = ApplicationLoader.applicationContext.getSharedPreferences("userID", Context.MODE_PRIVATE);
+        userID.edit().putInt("!firstLaunch?",1).commit();
+        userID.edit().apply();
+
         if (getArguments() != null) {
             onlySelect = arguments.getBoolean("onlySelect", false);
             cantSendToChannels = arguments.getBoolean("cantSendToChannels", false);
@@ -216,6 +224,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         });
 
+        Log.i("TGM", "createView: call");
         ActionBarMenu menu = actionBar.createMenu();
         if (!onlySelect && searchString == null) {
             passcodeItem = menu.addItem(1, R.drawable.lock_close);

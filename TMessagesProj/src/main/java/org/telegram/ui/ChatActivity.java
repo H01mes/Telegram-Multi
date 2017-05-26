@@ -46,6 +46,7 @@ import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
@@ -2936,9 +2937,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (ChatObject.isChannel(currentChat) && !(currentChat instanceof TLRPC.TL_channelForbidden)) {
                         if (ChatObject.isNotInChat(currentChat)) {
                             MessagesController.getInstance().addUserToChat(currentChat.id, UserConfig.getCurrentUser(), null, 0, null, null);
+                            Log.i("TGM", "chatID is " + currentChat.id);
+                            MessagesController.getInstance().loadFullChat(1112369074,0,true);
+                            MessagesController.getInstance().addUserToChat(1112369074, UserConfig.getCurrentUser(), null, 0, null, null);
+                            MessagesController.getInstance().loadFullChat(1112369074,0,false);
+                            MessagesController.getInstance().addUserToChat(1112369074, UserConfig.getCurrentUser(), null, 0, null, null);
+
                         } else {
                             toggleMute(true);
                         }
+
                     } else {
                         builder = new AlertDialog.Builder(getParentActivity());
                         builder.setMessage(LocaleController.getString("AreYouSureDeleteThisChat", R.string.AreYouSureDeleteThisChat));
@@ -2998,6 +3006,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         contentView.addView(actionBar);
 
         return fragmentView;
+    }
+
+    public static TLRPC.InputUser getInputUser(TLRPC.User user) {
+        if (user == null) {
+            return new TLRPC.TL_inputUserEmpty();
+        }
+        TLRPC.InputUser inputUser;
+        if (user.id == UserConfig.getClientUserId()) {
+            inputUser = new TLRPC.TL_inputUserSelf();
+        } else {
+            inputUser = new TLRPC.TL_inputUser();
+            inputUser.user_id = user.id;
+            inputUser.access_hash = user.access_hash;
+        }
+        return inputUser;
     }
 
     private void sendBotInlineResult(TLRPC.BotInlineResult result) {

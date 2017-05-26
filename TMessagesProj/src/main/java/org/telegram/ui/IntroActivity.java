@@ -11,7 +11,9 @@ package org.telegram.ui;
 import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.DataSetObserver;
 import android.graphics.Shader;
@@ -31,6 +33,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
@@ -131,6 +134,17 @@ public class IntroActivity extends Activity {
             animator.addState(new int[]{}, ObjectAnimator.ofFloat(startMessagingButton, "translationZ", AndroidUtilities.dp(4), AndroidUtilities.dp(2)).setDuration(200));
             startMessagingButton.setStateListAnimator(animator);
         }
+
+        TextView backToLastUserButton = (TextView) findViewById(R.id.back_to_last_user_button);
+        SharedPreferences sharedPref = getSharedPreferences("userID", Context.MODE_PRIVATE);
+        if (sharedPref.getInt("!firstLaunch?",0) != 0)  backToLastUserButton.setVisibility(View.VISIBLE);
+        backToLastUserButton.setText("Я передумал!".toUpperCase());//LocaleController.getString("StartMessaging", R.string.StartMessaging).toUpperCase());
+        if (Build.VERSION.SDK_INT >= 21) {
+            StateListAnimator animator = new StateListAnimator();
+            animator.addState(new int[]{android.R.attr.state_pressed}, ObjectAnimator.ofFloat(backToLastUserButton, "translationZ", AndroidUtilities.dp(2), AndroidUtilities.dp(4)).setDuration(200));
+            animator.addState(new int[]{}, ObjectAnimator.ofFloat(backToLastUserButton, "translationZ", AndroidUtilities.dp(4), AndroidUtilities.dp(2)).setDuration(200));
+            backToLastUserButton.setStateListAnimator(animator);
+        }
         topImage1 = (ImageView) findViewById(R.id.icon_image1);
         topImage2 = (ImageView) findViewById(R.id.icon_image2);
         bottomPages = (ViewGroup) findViewById(R.id.bottom_pages);
@@ -221,6 +235,20 @@ public class IntroActivity extends Activity {
                 }
                 startPressed = true;
                 Intent intent2 = new Intent(IntroActivity.this, LaunchActivity.class);
+                intent2.putExtra("fromIntro", true);
+                startActivity(intent2);
+                finish();
+            }
+        });
+
+        backToLastUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (startPressed) {
+                    return;
+                }
+                startPressed = true;
+                Intent intent2 = new Intent(IntroActivity.this, ChangeUserActivity.class);
                 intent2.putExtra("fromIntro", true);
                 startActivity(intent2);
                 finish();

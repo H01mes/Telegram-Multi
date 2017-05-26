@@ -1382,7 +1382,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                                 }
                                             }
                                         });
-                                        presentFragment(fragment);
+                                            presentFragment(fragment);
                                     } else {
                                         long dialog_id;
                                         boolean isBot = false;
