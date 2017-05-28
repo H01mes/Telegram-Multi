@@ -270,10 +270,10 @@ public class MessagesController implements NotificationCenter.NotificationCenter
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidFailedLoad);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.messageReceivedByServer);
         addSupportUser();
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
         enableJoined = preferences.getBoolean("EnableContactJoined", true);
 
-        preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
         secretWebpagePreview = preferences.getInt("secretWebpage2", 2);
         maxGroupCount = preferences.getInt("maxGroupCount", 200);
         maxMegagroupCount = preferences.getInt("maxMegagroupCount", 1000);
@@ -343,7 +343,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                 callPacketTimeout = config.call_packet_timeout_ms;
                 maxPinnedDialogsCount = config.pinned_dialogs_count_max;
 
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putInt("maxGroupCount", maxGroupCount);
                 //editor.putInt("maxBroadcastCount", maxBroadcastCount);
@@ -423,19 +423,17 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     }
 
     public static TLRPC.InputUser getInputUser(TLRPC.User user) {
+        if (user == null) {
+            return new TLRPC.TL_inputUserEmpty();
+        }
         TLRPC.InputUser inputUser;
-        inputUser = new TLRPC.TL_inputUserSelf();
-//        if (user == null) {
-//            return new TLRPC.TL_inputUserEmpty();
-//        }
-//        TLRPC.InputUser inputUser;
-//        if (user.id == UserConfig.getClientUserId()) {
-//            inputUser = new TLRPC.TL_inputUserSelf();
-//        } else {
-//            inputUser = new TLRPC.TL_inputUser();
-//            inputUser.user_id = user.id;
-//            inputUser.access_hash = user.access_hash;
-//        }
+        if (user.id == UserConfig.getClientUserId()) {
+            inputUser = new TLRPC.TL_inputUserSelf();
+        } else {
+            inputUser = new TLRPC.TL_inputUser();
+            inputUser.user_id = user.id;
+            inputUser.access_hash = user.access_hash;
+        }
         return inputUser;
     }
 
@@ -834,6 +832,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             return;
         }
         TLRPC.Chat oldChat = chats.get(chat.id);
+
         if (chat.min) {
             if (oldChat != null) {
                 if (!fromCache) {
@@ -1289,7 +1288,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
         if (currentUser == null && currentChat == null) {
             return;
         }
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("spam3_" + dialogId, 1);
         editor.commit();
@@ -1313,7 +1312,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
         if (currentUser == null && currentChat == null && currentEncryptedChat == null) {
             return;
         }
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("spam3_" + dialogId, 1);
         editor.commit();
@@ -1361,7 +1360,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             return;
         }
         loadingPeerSettings.put(dialogId, true);
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
         if (preferences.getInt("spam3_" + dialogId, 0) == 1) {
             return;
         }
@@ -1380,7 +1379,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                         @Override
                         public void run() {
                             loadingPeerSettings.remove(dialogId);
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.remove("spam_" + dialogId);
                             editor.putInt("spam3_" + dialogId, 1);
@@ -1406,7 +1405,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                         loadingPeerSettings.remove(dialogId);
                         if (response != null) {
                             TLRPC.TL_peerSettings res = (TLRPC.TL_peerSettings) response;
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
                             if (!res.report_spam) {
                                 editor.putInt("spam3_" + dialogId, 1);
@@ -3395,7 +3394,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     }
 
     private void applyDialogNotificationsSettings(long dialog_id, TLRPC.PeerNotifySettings notify_settings) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
         int currentValue = preferences.getInt("notify2_" + dialog_id, 0);
         int currentValue2 = preferences.getInt("notifyuntil_" + dialog_id, 0);
         SharedPreferences.Editor editor = preferences.edit();
@@ -3450,7 +3449,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             TLRPC.TL_dialog dialog = dialogs.get(a);
             if (dialog.peer != null && dialog.notify_settings instanceof TLRPC.TL_peerNotifySettings) {
                 if (editor == null) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
                     editor = preferences.edit();
                 }
                 int dialog_id;
@@ -4598,11 +4597,11 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     }
 
     public void performLogout(boolean byUser) {
-        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE).edit();
         editor.clear().commit();
-        editor = ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
+        editor = ApplicationLoader.applicationContext.getSharedPreferences("emoji", Activity.MODE_PRIVATE).edit();
         editor.putLong("lastGifLoadTime", 0).putLong("lastStickersLoadTime", 0).commit();
-        editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
+        editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit();
         editor.remove("gifhint").commit();
 
         if (byUser) {
@@ -7295,7 +7294,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                             TLRPC.TL_updateNotifySettings updateNotifySettings = (TLRPC.TL_updateNotifySettings) update;
                             if (update.notify_settings instanceof TLRPC.TL_peerNotifySettings && updateNotifySettings.peer instanceof TLRPC.TL_notifyPeer) {
                                 if (editor == null) {
-                                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+                                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
                                     editor = preferences.edit();
                                 }
                                 long dialog_id;
@@ -7364,10 +7363,10 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                         } else if (update instanceof TLRPC.TL_updateNewStickerSet) {
                             StickersQuery.addNewStickerSet(update.stickerset);
                         } else if (update instanceof TLRPC.TL_updateSavedGifs) {
-                            SharedPreferences.Editor editor2 = ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
+                            SharedPreferences.Editor editor2 = ApplicationLoader.applicationContext.getSharedPreferences("emoji", Activity.MODE_PRIVATE).edit();
                             editor2.putLong("lastGifLoadTime", 0).commit();
                         } else if (update instanceof TLRPC.TL_updateRecentStickers) {
-                            SharedPreferences.Editor editor2 = ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
+                            SharedPreferences.Editor editor2 = ApplicationLoader.applicationContext.getSharedPreferences("emoji", Activity.MODE_PRIVATE).edit();
                             editor2.putLong("lastStickersLoadTime", 0).commit();
                         } else if (update instanceof TLRPC.TL_updateDraftMessage) {
                             hasDraftUpdates = true;
@@ -7664,7 +7663,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     }
 
     public boolean isDialogMuted(long dialog_id) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
         int mute_type = preferences.getInt("notify2_" + dialog_id, 0);
         if (mute_type == 2) {
             return true;

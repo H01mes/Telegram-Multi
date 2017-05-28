@@ -153,9 +153,9 @@ public class FileLog {
     }
 
     public static void d(final String message) {
-        if (!BuildVars.DEBUG_VERSION) {
-            return;
-        }
+//        if (!BuildVars.DEBUG_VERSION) {
+//            return;
+//        }
         Log.d("tmessages", message);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(new Runnable() {
