@@ -4,7 +4,7 @@
 <resources>
     <string name="AppName">Telegram Multi</string>
     <string name="AppNameBeta">Telegram Multi Beta</string>
-	<string name="ShortAppName">Telegram Multi</string>
+    <string name="ShortAppName">Telegram Multi</string>
     <string name="LanguageName">English</string>
     <string name="LanguageNameInEnglish">English</string>
     <string name="LanguageCode">en</string>
@@ -103,6 +103,15 @@
     <string name="Updating">Updating...</string>
     <string name="NewSecretChat">New Secret Chat</string>
     <string name="Change_another_user">Multiuser</string>
+    <string name="ScanningProfiles">Scanning pforiles</string>
+    <string name="DeleteFirstUser">Impossible delete first user!</string>
+    <string name="MaxUsersCount">Maximum 10 users!</string>
+    <string name="DialogSure">You are sure?</string>
+    <string name="DialogDeleteUser">Delete user?</string>
+    <string name="DialogYes">Yes</string>
+    <string name="DialogNo">No</string>
+    <string name="GoBack">Go Back!</string>
+    <string name="AddUser">Add account</string>
     <string name="AwaitingEncryption">Waiting for %s to get online...</string>
     <string name="EncryptionRejected">Secret chat cancelled</string>
     <string name="EncryptionProcessing">Exchanging encryption keys...</string>
@@ -785,7 +794,7 @@
     <string name="Emoji">Emoji</string>
     <string name="EmojiBigSize">Draw single big emoji</string>
     <string name="EmojiUseDefault">Use system default emoji</string>
-    <string name="TelegramVersion">Telegram for Android %1$s</string>
+    <string name="TelegramVersion">Telegram Multi for Android %1$s</string>
     <string name="DebugMenu">Debug Menu</string>
     <string name="DebugMenuImportContacts">Import Contacts</string>
     <string name="DebugMenuReloadContacts">Reload Contacts</string>
@@ -1507,4 +1516,6 @@
     <string name="formatterDay24H">HH:mm</string>
     <string name="formatterDay12H">h:mm a</string>
     <string name="formatDateAtTime">%1$s at %2$s</string>
+    <string name="title_activity_call_log">CallLogActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

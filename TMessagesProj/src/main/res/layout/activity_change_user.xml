@@ -11,7 +11,6 @@ android:layout_height="match_parent">
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:longClickable="true"
-        android:theme="@style/Theme.TMessages.ListView"
         android:layout_centerHorizontal="true" />
 
       <com.github.clans.fab.FloatingActionButton
@@ -21,21 +20,8 @@ android:layout_height="match_parent">
           android:layout_gravity="bottom|right"
           android:layout_marginBottom="8dp"
           android:layout_marginRight="8dp"
-          android:theme="@style/Theme.TMessages.Start"
           android:src="@drawable/ic_add_white_18dp"
           android:layout_alignParentBottom="true"
           android:layout_alignParentRight="true" />
-
-      <com.github.clans.fab.FloatingActionButton
-          android:id="@+id/fabBack"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="bottom|left"
-          android:layout_marginBottom="8dp"
-          android:layout_marginLeft="8dp"
-          android:theme="@style/Theme.TMessages"
-          android:src="@drawable/ic_ab_back"
-          android:layout_alignParentBottom="true"
-          android:layout_alignParentLeft="true" />
 
 </RelativeLayout>

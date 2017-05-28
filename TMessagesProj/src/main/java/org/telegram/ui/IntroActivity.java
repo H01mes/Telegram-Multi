@@ -137,9 +137,12 @@ public class IntroActivity extends Activity {
 
         TextView backToLastUserButton = (TextView) findViewById(R.id.back_to_last_user_button);
         SharedPreferences sharedPref = getSharedPreferences("userID", Context.MODE_PRIVATE);
-        if (sharedPref.getInt("!firstLaunch?",0) != 0)  backToLastUserButton.setVisibility(View.VISIBLE);
-        backToLastUserButton.setText("Я передумал!".toUpperCase());//LocaleController.getString("StartMessaging", R.string.StartMessaging).toUpperCase());
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (sharedPref.getInt("!firstLaunch?",0) != 0) {
+            startMessagingButton.setText(LocaleController.getString("AddUser", R.string.AddUser).toUpperCase());
+            backToLastUserButton.setVisibility(View.VISIBLE);
+            backToLastUserButton.setText(getText(R.string.GoBack).toString().toUpperCase());//LocaleController.getString("StartMessaging", R.string.StartMessaging).toUpperCase());
+        }
+            if (Build.VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{android.R.attr.state_pressed}, ObjectAnimator.ofFloat(backToLastUserButton, "translationZ", AndroidUtilities.dp(2), AndroidUtilities.dp(4)).setDuration(200));
             animator.addState(new int[]{}, ObjectAnimator.ofFloat(backToLastUserButton, "translationZ", AndroidUtilities.dp(4), AndroidUtilities.dp(2)).setDuration(200));

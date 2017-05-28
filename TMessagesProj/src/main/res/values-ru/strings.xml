@@ -104,6 +104,15 @@
   <string name="Updating">Обновление...</string>
   <string name="NewSecretChat">Создать секретный чат</string>
   <string name="Change_another_user">Мультиюзер</string>
+  <string name="ScanningProfiles">Сканирование профилей</string>
+  <string name="DeleteFirstUser">Невозможно удалить первого пользователя!</string>
+  <string name="MaxUsersCount">Можно добавить максимум 10 пользователей!</string>
+  <string name="DialogSure">Вы уверены?</string>
+  <string name="DialogDeleteUser">Удалить пользователя?</string>
+  <string name="DialogYes">Да</string>
+  <string name="DialogNo">Нет</string>
+  <string name="GoBack">Вернуться назад</string>
+  <string name="AddUser">Добавить аккаунт</string>
   <string name="AwaitingEncryption">Ждём, когда %s появится в сети...</string>
   <string name="EncryptionRejected">Секретный чат отменён</string>
   <string name="EncryptionProcessing">Обмен ключами шифрования...</string>
@@ -807,7 +816,7 @@
   <string name="Emoji">Эмодзи</string>
   <string name="EmojiBigSize">Отобажать большие смайлы</string>
   <string name="EmojiUseDefault">Использовать системные смайлы</string>
-  <string name="TelegramVersion">Telegram для Android %1$s</string>
+  <string name="TelegramVersion">Telegram Multi для Android %1$s</string>
   <string name="DebugMenu">Меню отладки</string>
   <string name="DebugMenuImportContacts">Импорт контактов</string>
   <string name="DebugMenuReloadContacts">Перезагрузить контакты</string>

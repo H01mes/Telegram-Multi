@@ -1,5 +1,6 @@
 package org.telegram.ui;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -17,6 +18,7 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -32,13 +34,11 @@ import org.telegram.messenger.ApplicationLoader2;
 import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
-import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.UserConfig2;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.messenger.UserConfig2;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Adapters.UserItemsAdapter;
 import org.telegram.ui.Components.UserItems;
 
@@ -70,7 +70,13 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
 
         Intent intent = getIntent();
         if (intent != null && intent.getBooleanExtra("fromIntro", false)) backToLastUser();
-
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(getText(R.string.Change_another_user));
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_ab_back);
+        }
         try {
             ctx = this;
             itemList = new ArrayList<Object>();
@@ -84,7 +90,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
                     // TODO deleting user on random position
                     if (position > 0)
                         showAlertDeleteUser(position);
-                    else Toast.makeText(ChangeUserActivity.this, "Impossible delete first user!", Toast.LENGTH_SHORT).show();
+                    else Toast.makeText(ChangeUserActivity.this, getText(R.string.DeleteFirstUser), Toast.LENGTH_SHORT).show();
                     return true;
                 }
             });
@@ -115,30 +121,19 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
                     if (lvUserList.getCount() <= 9)
                         addUser();
                     else
-                        Toast.makeText(ChangeUserActivity.this, "Maximum 10 users!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChangeUserActivity.this, getText(R.string.MaxUsersCount), Toast.LENGTH_SHORT).show();
                 }
             });
 
-            FloatingActionButton fabBack = (FloatingActionButton) findViewById(R.id.fabBack);
-            fabBack.setColorNormal(Theme.getColor(Theme.key_chats_actionBackground));
-            fabBack.setColorPressed(Theme.getColor(Theme.key_chats_actionPressedBackground));
-
-            fabBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    onBackPressed();
-                }
-            });
         } catch (Throwable th) {
             Log.i("TGM", "onCreate: " + th.toString());
         }
     }
 
 
-    public static void showPrepareDialog(Context ctx) {
+    public static void showPrepareDialog(Context ctx, String title) {
         prepareProgress= new ProgressDialog(ctx);
-        prepareProgress.setMessage("Сканирование профилей");
+        prepareProgress.setMessage(title);
         prepareProgress.setIndeterminate(false);
         prepareProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         prepareProgress.setCancelable(false);
@@ -165,10 +160,10 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     }
 
     private void showAlertDeleteUser(final int position) {
-        String title = "You are sure?";
-        String message = "Delete user?";
-        String button1String = "Yes";
-        String button2String = "No";
+        String title = getText(R.string.DialogSure).toString();
+        String message = getText(R.string.DialogDeleteUser).toString();
+        String button1String = getText(R.string.DialogYes).toString();
+        String button2String = getText(R.string.DialogNo).toString();
 
         AlertDialog.Builder ad = new AlertDialog.Builder(this);
         ad.setTitle(title);
@@ -216,7 +211,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
         sharedPref.edit().putInt("userID", sharedPref.getInt("lastID",0)).commit();
         sharedPref.edit().putInt("usersCount", sharedPref.getInt("lastCount",1)).commit();
         sharedPref.edit().apply();
-        Log.i("userTAG", "backToLastUser: tag changed to _");
+        Log.i("userTAG", "backToLastUser: tag changed to _" + ChangeUserHelper.getUserTag());
         restart();
     }
 
@@ -247,7 +242,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         UserItems userItems = (UserItems) adapter.getItem(position);
-        Toast.makeText(this, "Name => "+userItems.getName()+" \n Phone => "+userItems.getPhone(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Name => "+userItems.getName()+" \n Phone => "+userItems.getPhone(), Toast.LENGTH_SHORT).show();
         setUser(position);
     }
 

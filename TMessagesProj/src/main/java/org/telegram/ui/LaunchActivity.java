@@ -389,10 +389,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     presentFragment(new CallLogActivity());
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 11) {
-//                    presentFragment(new CallLogActivity());
-                    drawerLayoutContainer.closeDrawer(false);
+//                    presentFragment(new CallLogActivityTest());
+//                    drawerLayoutContainer.closeDrawer(false);
                     Intent changeUser = new Intent(getApplicationContext(), ChangeUserActivity.class);
-                    ChangeUserActivity.showPrepareDialog(LaunchActivity.this);
+                    ChangeUserActivity.showPrepareDialog(LaunchActivity.this, getText(R.string.ScanningProfiles).toString());
                     startActivity(changeUser);
                 }
             }
