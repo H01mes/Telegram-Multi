@@ -34,7 +34,8 @@
         android:id="@+id/userPhone"
         android:layout_toRightOf="@+id/userPhoto"
         android:layout_below="@+id/userName"
-        android:layout_marginLeft="15dip">
+        android:textColor="#808080"
+        android:layout_marginLeft="10dip">
     </TextView>
 
     <ImageView

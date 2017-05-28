@@ -224,7 +224,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         });
 
-        Log.i("TGM", "createView: call");
         ActionBarMenu menu = actionBar.createMenu();
         if (!onlySelect && searchString == null) {
             passcodeItem = menu.addItem(1, R.drawable.lock_close);

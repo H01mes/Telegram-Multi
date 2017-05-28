@@ -19,6 +19,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;

@@ -45,6 +45,7 @@ import org.telegram.ui.Components.UserItems;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChangeUserActivity extends Activity implements AdapterView.OnItemClickListener {
 
@@ -54,6 +55,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     private UserItems userItems ;
     static ProgressDialog prepareProgress;
     static Context ctx ;
+    public int currentUser = 0;
 
     @Override
     public void onBackPressed()
@@ -151,12 +153,14 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     }
 
     private void deleteUser(int position) {
+        int toDelete = -1;
+        if(getUsersEnabled().size() > position) toDelete = getUsersEnabled().get(position); else return;
+
         SharedPreferences sharedPref = getSharedPreferences("userID", Context.MODE_PRIVATE);
-        sharedPref.edit().putInt("usersCount", getUsersCount() -1).commit();
+        sharedPref.edit().putInt("state_user_" + toDelete, 1).commit();
         sharedPref.edit().apply();
-        deleteDir(getApplicationInfo().dataDir + "/files_user_" + String.valueOf(position));
-        adapter.remove(position);
-        adapter.notifyDataSetChanged();
+        deleteDir(getApplicationInfo().dataDir + "/files_user_" + String.valueOf(toDelete));
+        if(currentUser == position) setUser(0); else prepareArrayList();
     }
 
     private void showAlertDeleteUser(final int position) {
@@ -195,12 +199,15 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     }
 
     public void addUser() {
+        int firstDisabledUser = getUsersDisabled();
+        Log.i("TGM", "addUser: firstDisabledUser" + firstDisabledUser);
         SharedPreferences sharedPref = getSharedPreferences("userID", Context.MODE_PRIVATE);
         sharedPref.edit().putInt("lastID", ChangeUserHelper.getID()).commit();
         Log.i("userTAG", "lastUser: tag changed to " + ChangeUserHelper.getID());
-        ChangeUserHelper.setUserTag(getUsersCount());
-        sharedPref.edit().putInt("userID", ChangeUserHelper.getID()).commit();
-        sharedPref.edit().putInt("usersCount", getUsersCount() + 1).commit();
+        ChangeUserHelper.setUserTag(firstDisabledUser);
+        sharedPref.edit().putInt("userID", firstDisabledUser).commit();
+        sharedPref.edit().putInt("state_user_"+firstDisabledUser, 0).commit();
+        sharedPref.edit().putInt("addedUser", firstDisabledUser).commit();
         sharedPref.edit().apply();
         Log.i("userTAG", "addUser: tag changed to " + ChangeUserHelper.getUserTag());
         restart();
@@ -208,21 +215,40 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
 
     public void backToLastUser() {
         SharedPreferences sharedPref = getSharedPreferences("userID", Context.MODE_PRIVATE);
+        sharedPref.edit().putInt("state_user_" + sharedPref.getInt("addedUser",10), 1).commit();
         sharedPref.edit().putInt("userID", sharedPref.getInt("lastID",0)).commit();
-        sharedPref.edit().putInt("usersCount", sharedPref.getInt("lastCount",1)).commit();
         sharedPref.edit().apply();
-        Log.i("userTAG", "backToLastUser: tag changed to _" + ChangeUserHelper.getUserTag());
+        deleteUser(sharedPref.getInt("addedUser",10));
+        Log.i("userTAG", "backToLastUser: tag changed to _" + sharedPref.getInt("lastID",0));
         restart();
     }
 
-    public int getUsersCount() {
-        Log.i("TGM", "getUsersCount: called");
-        SharedPreferences userPhone = getSharedPreferences("userID", Context.MODE_PRIVATE);
-        return userPhone.getInt("usersCount",1);
+    public int getUsersDisabled() {
+        int count = 0;
+        Log.i("TGM", "getUsersDisabled: called");
+        SharedPreferences userDisabled = getSharedPreferences("userID", Context.MODE_PRIVATE);
+        for (int i = 0; i < 9; i++) {
+            if(userDisabled.getInt("state_user_"+i,1) == 1) return i;
+        }
+        return -1;
+    }
+
+    public List<Integer> getUsersEnabled() {
+        List<Integer> users = new ArrayList<Integer>();
+        Log.i("TGM", "getUsersEnabled: called");
+        SharedPreferences userDisabled = getSharedPreferences("userID", Context.MODE_PRIVATE);
+        for (int i = 0; i < 9; i++) {
+            if(userDisabled.getInt("state_user_"+i,1) == 0) {
+                users.add(i);
+            }
+        }
+        return users;
     }
 
     public void setUser(int position) {
-        ChangeUserHelper.setUserTag(position);
+        int toSetUser = -1;
+        if(getUsersEnabled().size() > position) toSetUser = getUsersEnabled().get(position); else return;
+        ChangeUserHelper.setUserTag(toSetUser);
         SharedPreferences sharedPref = getSharedPreferences("userID", Context.MODE_PRIVATE);
         sharedPref.edit().putInt("userID", ChangeUserHelper.getID()).commit();
         sharedPref.edit().apply();
@@ -241,24 +267,24 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        UserItems userItems = (UserItems) adapter.getItem(position);
-//        Toast.makeText(this, "Name => "+userItems.getName()+" \n Phone => "+userItems.getPhone(), Toast.LENGTH_SHORT).show();
+//        UserItems userItems = (UserItems) adapter.getItem(position);
         setUser(position);
     }
 
     public void prepareArrayList()
-    {   itemList = new ArrayList<Object>();
-        int usersCount = getUsersCount();
-        for (int i = 0; i < usersCount ; i++) {
-            Log.i("TGM", "prepareArrayLits: " + i);
+    {   itemList = new ArrayList<>();
+        for (int i = 0; i < getUsersEnabled().size() ; i++) {
+            int k = getUsersEnabled().get(i);
+            Log.i("TGM", "prepareArrayLits: " + k);
+            Log.i("TGM", "prepareArrayList: getUsersEnabled().size " + getUsersEnabled().size());
+            Log.i("TGM", "prepareArrayList: getUsersEnabled().get(i) " + k + " i = " + i);
             String first_name = "null";
-            if (getUserByTag("_user_" + i).last_name == null) first_name = getUserByTag("_user_" + i).first_name;
-            else first_name = getUserByTag("_user_" + i).first_name + " " + getUserByTag("_user_" + i).last_name;
-            String phone = getUserByTag("_user_" + i).phone;
-            Bitmap photo = getBitmap(getUserByTag("_user_" + i));
-            if(ChangeUserHelper.getID() == i) AddObjectToList(photo, first_name, phone, i);
-            else
-                AddObjectToList(photo, first_name, phone);
+            if (getUserByTag("_user_" + k).last_name == null) first_name = getUserByTag("_user_" + k).first_name;
+            else first_name = getUserByTag("_user_" + k).first_name + " " + getUserByTag("_user_" + k).last_name;
+            String phone = getUserByTag("_user_" + k).phone;
+            Bitmap photo = getBitmap(getUserByTag("_user_" + k));
+            if (ChangeUserHelper.getID() == k) AddObjectToList(photo, first_name, phone, i);
+            else AddObjectToList(photo, first_name, phone);
         }
         adapter = new UserItemsAdapter(this, itemList);
         lvUserList.setAdapter(adapter);
@@ -280,7 +306,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
             icon = createRoundBitmap(FileLoader.getPathToAttach(user.photo.photo_small, true));
             return icon;
         }
-        return drawableToBitmap(R.drawable.logo_avatar);
+        return drawableToBitmap(R.drawable.book_user);
     }
 
     public void AddObjectToList(Bitmap image, String title, String desc)
@@ -295,11 +321,12 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
 
     public void AddObjectToList(Bitmap image, String title, String desc, int pos)
     {
-        Log.i("TGM", "AddObjectToList: called");
+        Log.i("TGM", "AddObjectToList with setCurrent: called " + pos);
         userItems = new UserItems();
         userItems.setPhone(desc);
         userItems.setPhoto(image);
         userItems.setCurrent(pos);
+        currentUser = pos;
         userItems.setName(title);
         itemList.add(userItems);
     }
@@ -346,7 +373,6 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // app icon in action bar clicked; go home
             onBackPressed();
                 return true;
             default:

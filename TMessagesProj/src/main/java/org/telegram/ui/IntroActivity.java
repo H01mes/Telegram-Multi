@@ -141,6 +141,10 @@ public class IntroActivity extends Activity {
             startMessagingButton.setText(LocaleController.getString("AddUser", R.string.AddUser).toUpperCase());
             backToLastUserButton.setVisibility(View.VISIBLE);
             backToLastUserButton.setText(getText(R.string.GoBack).toString().toUpperCase());//LocaleController.getString("StartMessaging", R.string.StartMessaging).toUpperCase());
+        } else
+        {
+            sharedPref.edit().putInt("state_user_0",0).apply();
+            sharedPref.edit().putInt("userID", 0).apply();
         }
             if (Build.VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();

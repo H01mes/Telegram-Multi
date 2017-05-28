@@ -168,7 +168,6 @@ public class UserConfig {
                 try {
                     SerializedData data = new SerializedData(configFile);
                     int ver = data.readInt32(false);
-                    Log.i("TGM", "loadConfig: " + String.valueOf(ver));
                     if (ver == 1) {
                         int constructor = data.readInt32(false);
                         currentUser = TLRPC.User.TLdeserialize(data, constructor, false);
@@ -224,7 +223,6 @@ public class UserConfig {
                     FileLog.e(e);
                 }
             } else {
-                Log.i("TGM", "loadConfig: not exists");
                 SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing"+ ChangeUserHelper.getUserTag(), Context.MODE_PRIVATE);
                 registeredForPush = preferences.getBoolean("registeredForPush", false);
                 pushString = preferences.getString("pushString2", "");

@@ -95,7 +95,6 @@ public class UserItemsAdapter extends BaseAdapter {
         if ((userItems.getCurrent() != -1) && (userItems.getCurrent() == position)) {
             holder.imgViewCurrent.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_sentCheck), PorterDuff.Mode.MULTIPLY));
             holder.imgViewCurrent.setVisibility(View.VISIBLE);
-            Log.i("TGM", "getView: current = " + position);
         } else holder.imgViewCurrent.setVisibility(View.INVISIBLE);
 
         holder.txtViewName.setText(userItems.getName());
