@@ -112,6 +112,7 @@
     <string name="DialogNo">No</string>
     <string name="GoBack">Go Back!</string>
     <string name="AddUser">Add account</string>
+    <string name="IsCurrentUser">Is current user!</string>
     <string name="AwaitingEncryption">Waiting for %s to get online...</string>
     <string name="EncryptionRejected">Secret chat cancelled</string>
     <string name="EncryptionProcessing">Exchanging encryption keys...</string>

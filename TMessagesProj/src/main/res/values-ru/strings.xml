@@ -113,6 +113,7 @@
   <string name="DialogNo">Нет</string>
   <string name="GoBack">Вернуться назад</string>
   <string name="AddUser">Добавить аккаунт</string>
+  <string name="IsCurrentUser">Это текущий пользователь!</string>
   <string name="AwaitingEncryption">Ждём, когда %s появится в сети...</string>
   <string name="EncryptionRejected">Секретный чат отменён</string>
   <string name="EncryptionProcessing">Обмен ключами шифрования...</string>

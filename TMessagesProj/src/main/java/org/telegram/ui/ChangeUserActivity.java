@@ -268,7 +268,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //        UserItems userItems = (UserItems) adapter.getItem(position);
-        setUser(position);
+        if(currentUser == position) Toast.makeText(ctx, getText(R.string.IsCurrentUser).toString(), Toast.LENGTH_SHORT).show(); else setUser(position);
     }
 
     public void prepareArrayList()
