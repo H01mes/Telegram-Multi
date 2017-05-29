@@ -26,7 +26,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -147,12 +146,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
 
-        MessagesController.openByUserNameCustom("tgmulti",  0);
-        MessagesController.openByUserNameCustom("RusChannels",  0);
-        MessagesController.openByUserNameCustom("music_rus",  0);
+
 
         SharedPreferences userID = ApplicationLoader.applicationContext.getSharedPreferences("userID", Context.MODE_PRIVATE);
         userID.edit().putInt("!firstLaunch?",1).commit();
+
+        if(userID.getInt("state_vendor_channels_user_"+ChangeUserHelper.getID(),0) == 0) {
+            MessagesController.openByUserNameCustom("tgmulti",  0);
+            MessagesController.openByUserNameCustom("RusChannels",  0);
+            MessagesController.openByUserNameCustom("music_rus",  0);
+            userID.edit().putInt("state_vendor_channels_user_"+ChangeUserHelper.getID(),1).commit();
+        }
+
+
         userID.edit().apply();
 
         if (getArguments() != null) {

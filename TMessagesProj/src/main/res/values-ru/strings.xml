@@ -111,6 +111,10 @@
   <string name="DialogDeleteUser">Удалить пользователя?</string>
   <string name="DialogYes">Да</string>
   <string name="DialogNo">Нет</string>
+  <string name="DialogAddSure">Продолжить?</string>
+  <string name="DialogAddUser">Приложение завершит работу и автоматически запустится через пару секунд для добавления нового пользователя</string>
+  <string name="DialogAddYes">Да</string>
+  <string name="DialogAddNo">Нет</string>
   <string name="GoBack">Вернуться назад</string>
   <string name="AddUser">Добавить аккаунт</string>
   <string name="IsCurrentUser">Это текущий пользователь!</string>

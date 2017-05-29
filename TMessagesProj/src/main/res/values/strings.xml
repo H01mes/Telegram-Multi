@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <resources>
     <string name="AppName">Telegram Multi</string>
     <string name="AppNameBeta">Telegram Multi Beta</string>
-    <string name="ShortAppName">Telegram Multi</string>
+    <string name="ShortAppName" translatable="false">Telegram Multi</string>
     <string name="LanguageName">English</string>
     <string name="LanguageNameInEnglish">English</string>
     <string name="LanguageCode">en</string>
@@ -103,16 +101,20 @@
     <string name="Updating">Updating...</string>
     <string name="NewSecretChat">New Secret Chat</string>
     <string name="Change_another_user">Multiuser</string>
-    <string name="ScanningProfiles">Scanning pforiles</string>
-    <string name="DeleteFirstUser">Impossible delete first user!</string>
-    <string name="MaxUsersCount">Maximum 10 users!</string>
-    <string name="DialogSure">You are sure?</string>
-    <string name="DialogDeleteUser">Delete user?</string>
-    <string name="DialogYes">Yes</string>
-    <string name="DialogNo">No</string>
-    <string name="GoBack">Go Back!</string>
-    <string name="AddUser">Add account</string>
-    <string name="IsCurrentUser">Is current user!</string>
+    <string name="ScanningProfiles" translatable="false">Scanning profiles</string>
+    <string name="DeleteFirstUser" translatable="false">Impossible delete first user!</string>
+    <string name="MaxUsersCount" translatable="false">Maximum 10 users!</string>
+    <string name="DialogSure" translatable="false">You are sure?</string>
+    <string name="DialogDeleteUser" translatable="false">Delete user?</string>
+    <string name="DialogYes" translatable="false">Yes</string>
+    <string name="DialogNo" translatable="false">No</string>
+    <string name="DialogAddSure" translatable="false">Continue?</string>
+    <string name="DialogAddUser" translatable="false">The application will quit and automatically start in a couple of seconds to add a new user</string>
+    <string name="DialogAddYes" translatable="false">Yes</string>
+    <string name="DialogAddNo" translatable="false">No</string>
+    <string name="GoBack" translatable="false">Go Back!</string>
+    <string name="AddUser" translatable="false">Add account</string>
+    <string name="IsCurrentUser" translatable="false">Is current user!</string>
     <string name="AwaitingEncryption">Waiting for %s to get online...</string>
     <string name="EncryptionRejected">Secret chat cancelled</string>
     <string name="EncryptionProcessing">Exchanging encryption keys...</string>
@@ -1517,6 +1519,4 @@
     <string name="formatterDay24H">HH:mm</string>
     <string name="formatterDay12H">h:mm a</string>
     <string name="formatDateAtTime">%1$s at %2$s</string>
-    <string name="title_activity_call_log">CallLogActivity</string>
-    <string name="action_settings">Settings</string>
 </resources>

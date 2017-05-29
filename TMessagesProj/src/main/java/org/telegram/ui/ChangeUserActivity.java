@@ -189,6 +189,28 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
         ad.show();
     }
 
+    private void showAlertAddUser() {
+        String title = getText(R.string.DialogAddSure).toString();
+        String message = getText(R.string.DialogAddUser).toString();
+        String button1String = getText(R.string.DialogAddYes).toString();
+        String button2String = getText(R.string.DialogAddNo).toString();
+
+        AlertDialog.Builder ad = new AlertDialog.Builder(this);
+        ad.setTitle(title);
+        ad.setMessage(message);
+        ad.setPositiveButton(button1String, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                restart();
+            }
+        });
+        ad.setNegativeButton(button2String, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+
+            }
+        });
+        ad.show();
+    }
+
     public void deleteDir(String folder) {
         File dir = new File(folder);
         if (dir.isDirectory())
@@ -214,7 +236,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
         sharedPref.edit().putInt("addedUser", firstDisabledUser).commit();
         sharedPref.edit().apply();
         Log.i("userTAG", "addUser: tag changed to " + ChangeUserHelper.getUserTag());
-        restart();
+        showAlertAddUser();
     }
 
     public void backToLastUser() {
