@@ -1,4 +1,8 @@
-## Telegram messenger for Android
+## Telegram Multi messenger for Android with MultiAccount support
+
+![FIRST](https://raw.githubusercontent.com/olegsvs/Telegram-Multi/master/Images/1.png)
+![SECOND](https://raw.githubusercontent.com/olegsvs/Telegram-Multi/master/Images/2.png)
+![DOUBLE](https://raw.githubusercontent.com/olegsvs/Telegram-Multi/master/Images/3.png)
 
 [Telegram](https://telegram.org) is a messaging app with a focus on speed and security. It’s superfast, simple and free.
 This repo contains the official source code for [Telegram App for Android](https://play.google.com/store/apps/details?id=org.telegram.messenger).
