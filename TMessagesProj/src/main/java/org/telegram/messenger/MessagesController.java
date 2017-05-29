@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.widget.Toast;
@@ -270,10 +271,10 @@ public class MessagesController implements NotificationCenter.NotificationCenter
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidFailedLoad);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.messageReceivedByServer);
         addSupportUser();
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         enableJoined = preferences.getBoolean("EnableContactJoined", true);
 
-        preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         secretWebpagePreview = preferences.getInt("secretWebpage2", 2);
         maxGroupCount = preferences.getInt("maxGroupCount", 200);
         maxMegagroupCount = preferences.getInt("maxMegagroupCount", 1000);
@@ -343,7 +344,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                 callPacketTimeout = config.call_packet_timeout_ms;
                 maxPinnedDialogsCount = config.pinned_dialogs_count_max;
 
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putInt("maxGroupCount", maxGroupCount);
                 //editor.putInt("maxBroadcastCount", maxBroadcastCount);
@@ -758,14 +759,14 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                         oldUser.flags |= 8;
                     } else {
                         oldUser.username = null;
-                        oldUser.flags = oldUser.flags &~ 8;
+                        oldUser.flags = oldUser.flags & ~8;
                     }
                     if (user.photo != null) {
                         oldUser.photo = user.photo;
                         oldUser.flags |= 32;
                     } else {
                         oldUser.photo = null;
-                        oldUser.flags = oldUser.flags &~ 32;
+                        oldUser.flags = oldUser.flags & ~32;
                     }
                 }
             } else {
@@ -790,14 +791,14 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                     user.flags |= 8;
                 } else {
                     user.username = null;
-                    user.flags = user.flags &~ 8;
+                    user.flags = user.flags & ~8;
                 }
                 if (oldUser.photo != null) {
                     user.photo = oldUser.photo;
                     user.flags |= 32;
                 } else {
                     user.photo = null;
-                    user.flags = user.flags &~ 32;
+                    user.flags = user.flags & ~32;
                 }
                 users.put(user.id, user);
             }
@@ -847,7 +848,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                         oldChat.flags |= 64;
                     } else {
                         oldChat.username = null;
-                        oldChat.flags = oldChat.flags &~ 64;
+                        oldChat.flags = oldChat.flags & ~64;
                     }
                 }
             } else {
@@ -874,7 +875,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                     chat.flags |= 64;
                 } else {
                     chat.username = null;
-                    chat.flags = chat.flags &~ 64;
+                    chat.flags = chat.flags & ~64;
                 }
                 chats.put(chat.id, chat);
             }
@@ -898,8 +899,8 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             putChat(chat, true);
 //            MessagesStorage.getInstance().putUsersAndChats(null, chats, true, true);
 
-            Log.i("TGM", "putChats: " + chat.id);
-            Log.i("TGM", "putChats: " + chat.title);
+//            Log.i("TGM", "putChats: " + chat.id);
+//            Log.i("TGM", "putChats: " + chat.title);
         }
     }
 
@@ -1299,7 +1300,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
         if (currentUser == null && currentChat == null) {
             return;
         }
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("spam3_" + dialogId, 1);
         editor.commit();
@@ -1323,7 +1324,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
         if (currentUser == null && currentChat == null && currentEncryptedChat == null) {
             return;
         }
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("spam3_" + dialogId, 1);
         editor.commit();
@@ -1371,7 +1372,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             return;
         }
         loadingPeerSettings.put(dialogId, true);
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         if (preferences.getInt("spam3_" + dialogId, 0) == 1) {
             return;
         }
@@ -1390,7 +1391,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                         @Override
                         public void run() {
                             loadingPeerSettings.remove(dialogId);
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.remove("spam_" + dialogId);
                             editor.putInt("spam3_" + dialogId, 1);
@@ -1416,7 +1417,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                         loadingPeerSettings.remove(dialogId);
                         if (response != null) {
                             TLRPC.TL_peerSettings res = (TLRPC.TL_peerSettings) response;
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
                             if (!res.report_spam) {
                                 editor.putInt("spam3_" + dialogId, 1);
@@ -2115,7 +2116,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             }
             TLRPC.TL_messages_deleteHistory req = new TLRPC.TL_messages_deleteHistory();
             req.peer = peer;
-            req.max_id =  (onlyHistory == 0 ? Integer.MAX_VALUE : max_id_delete);
+            req.max_id = (onlyHistory == 0 ? Integer.MAX_VALUE : max_id_delete);
             req.just_clear = onlyHistory != 0;
             final int max_id_delete_final = max_id_delete;
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -3405,7 +3406,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     }
 
     private void applyDialogNotificationsSettings(long dialog_id, TLRPC.PeerNotifySettings notify_settings) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         int currentValue = preferences.getInt("notify2_" + dialog_id, 0);
         int currentValue2 = preferences.getInt("notifyuntil_" + dialog_id, 0);
         SharedPreferences.Editor editor = preferences.edit();
@@ -3460,7 +3461,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             TLRPC.TL_dialog dialog = dialogs.get(a);
             if (dialog.peer != null && dialog.notify_settings instanceof TLRPC.TL_peerNotifySettings) {
                 if (editor == null) {
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                     editor = preferences.edit();
                 }
                 int dialog_id;
@@ -4608,11 +4609,11 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     }
 
     public void performLogout(boolean byUser) {
-        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
         editor.clear().commit();
-        editor = ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
+        editor = ApplicationLoader.applicationContext.getSharedPreferences("emoji" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
         editor.putLong("lastGifLoadTime", 0).putLong("lastStickersLoadTime", 0).commit();
-        editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
+        editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
         editor.remove("gifhint").commit();
 
         if (byUser) {
@@ -7305,7 +7306,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                             TLRPC.TL_updateNotifySettings updateNotifySettings = (TLRPC.TL_updateNotifySettings) update;
                             if (update.notify_settings instanceof TLRPC.TL_peerNotifySettings && updateNotifySettings.peer instanceof TLRPC.TL_notifyPeer) {
                                 if (editor == null) {
-                                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+                                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
                                     editor = preferences.edit();
                                 }
                                 long dialog_id;
@@ -7374,10 +7375,10 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                         } else if (update instanceof TLRPC.TL_updateNewStickerSet) {
                             StickersQuery.addNewStickerSet(update.stickerset);
                         } else if (update instanceof TLRPC.TL_updateSavedGifs) {
-                            SharedPreferences.Editor editor2 = ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
+                            SharedPreferences.Editor editor2 = ApplicationLoader.applicationContext.getSharedPreferences("emoji" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
                             editor2.putLong("lastGifLoadTime", 0).commit();
                         } else if (update instanceof TLRPC.TL_updateRecentStickers) {
-                            SharedPreferences.Editor editor2 = ApplicationLoader.applicationContext.getSharedPreferences("emoji"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
+                            SharedPreferences.Editor editor2 = ApplicationLoader.applicationContext.getSharedPreferences("emoji" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE).edit();
                             editor2.putLong("lastStickersLoadTime", 0).commit();
                         } else if (update instanceof TLRPC.TL_updateDraftMessage) {
                             hasDraftUpdates = true;
@@ -7398,8 +7399,8 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                             TLRPC.PhoneCall call = upd.phone_call;
                             VoIPService svc = VoIPService.getSharedInstance();
                             if (BuildVars.DEBUG_VERSION) {
-                                FileLog.d("Received call in update: "+call);
-                                FileLog.d("call id "+call.id);
+                                FileLog.d("Received call in update: " + call);
+                                FileLog.d("call id " + call.id);
                             }
                             if (call instanceof TLRPC.TL_phoneCallRequested) {
                                 if (call.date + callRingTimeout / 1000 < ConnectionsManager.getInstance().getCurrentTime()) {
@@ -7408,9 +7409,9 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                                     continue;
                                 }
                                 TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(Context.TELEPHONY_SERVICE);
-                                if (svc != null || VoIPService.callIShouldHavePutIntoIntent!=null || tm.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
+                                if (svc != null || VoIPService.callIShouldHavePutIntoIntent != null || tm.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
                                     if (BuildVars.DEBUG_VERSION) {
-                                        FileLog.d("Auto-declining call "+call.id+" because there's already active one");
+                                        FileLog.d("Auto-declining call " + call.id + " because there's already active one");
                                     }
                                     TLRPC.TL_phone_discardCall req = new TLRPC.TL_phone_discardCall();
                                     req.peer = new TLRPC.TL_inputPhoneCall();
@@ -7429,7 +7430,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                                     continue;
                                 }
                                 if (BuildVars.DEBUG_VERSION) {
-                                    FileLog.d("Starting service for call "+call.id);
+                                    FileLog.d("Starting service for call " + call.id);
                                 }
                                 VoIPService.callIShouldHavePutIntoIntent = call;
                                 Intent intent = new Intent(ApplicationLoader.applicationContext, VoIPService.class);
@@ -7437,12 +7438,12 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                                 intent.putExtra("user_id", call.participant_id == UserConfig.getClientUserId() ? call.admin_id : call.participant_id);
                                 ApplicationLoader.applicationContext.startService(intent);
                             } else {
-                                if (svc != null && call!=null) {
+                                if (svc != null && call != null) {
                                     svc.onCallUpdated(call);
-                                }else if(VoIPService.callIShouldHavePutIntoIntent!=null){
+                                } else if (VoIPService.callIShouldHavePutIntoIntent != null) {
                                     FileLog.d("Updated the call while the service is starting");
-                                    if(call.id==VoIPService.callIShouldHavePutIntoIntent.id){
-                                        VoIPService.callIShouldHavePutIntoIntent=call;
+                                    if (call.id == VoIPService.callIShouldHavePutIntoIntent.id) {
+                                        VoIPService.callIShouldHavePutIntoIntent = call;
                                     }
                                 }
                             }
@@ -7674,7 +7675,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     }
 
     public boolean isDialogMuted(long dialog_id) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications" + ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         int mute_type = preferences.getInt("notify2_" + dialog_id, 0);
         if (mute_type == 2) {
             return true;
@@ -8027,5 +8028,182 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             fragment.setVisibleDialog(progressDialog);
             progressDialog.show();
         }
+    }
+
+    public static void openChatOrProfileWithCustom(TLRPC.User user, TLRPC.Chat chat, int type, boolean closeLast) {
+        if (user == null && chat == null) {
+            return;
+        }
+        String reason = null;
+        if (chat != null) {
+            reason = getRestrictionReason(chat.restriction_reason);
+        } else if (user != null) {
+            reason = getRestrictionReason(user.restriction_reason);
+        }
+        if (reason != null) {
+        } else {
+            addToCustomChats(chat.id);
+        }
+    }
+
+    public static void addToCustomChats(int id) {
+        TLRPC.User currentUser = null;
+        TLRPC.Chat currentChat = null;
+        final TLRPC.EncryptedChat currentEncryptedChat;
+        boolean isBroadcast = false;
+        final int chatId = id;
+        int maxMessageId[] = new int[]{Integer.MAX_VALUE, Integer.MAX_VALUE};
+        int minMessageId[] = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE};
+        TLRPC.ChatFull info = null;
+        final int userId = 0;
+        final int encId = 0;
+        long dialog_id = 0;
+        if (chatId != 0) {
+            currentChat = MessagesController.getInstance().getChat(chatId);
+            if (currentChat == null) {
+                final Semaphore semaphore = new Semaphore(0);
+                MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        TLRPC.Chat currentChat = MessagesStorage.getInstance().getChat(chatId);
+                        semaphore.release();
+                    }
+                });
+                try {
+                    semaphore.acquire();
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+                if (currentChat != null) {
+                    MessagesController.getInstance().putChat(currentChat, true);
+                }
+            }
+            if (chatId > 0) {
+                dialog_id = -chatId;
+            } else {
+                isBroadcast = true;
+                dialog_id = AndroidUtilities.makeBroadcastId(chatId);
+            }
+            if (ChatObject.isChannel(currentChat)) {
+                MessagesController.getInstance().startShortPoll(chatId, false);
+            }
+        } else if (userId != 0) {
+            currentUser = MessagesController.getInstance().getUser(userId);
+            if (currentUser == null) {
+                final Semaphore semaphore = new Semaphore(0);
+                MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        TLRPC.User currentUser = MessagesStorage.getInstance().getUser(userId);
+                        semaphore.release();
+                    }
+                });
+                try {
+                    semaphore.acquire();
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+                if (currentUser != null) {
+                    MessagesController.getInstance().putUser(currentUser, true);
+                }
+            }
+            dialog_id = userId;
+        } else if (encId != 0) {
+            currentEncryptedChat = MessagesController.getInstance().getEncryptedChat(encId);
+            if (currentEncryptedChat == null) {
+                final Semaphore semaphore = new Semaphore(0);
+                MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        TLRPC.EncryptedChat currentEncryptedChat = MessagesStorage.getInstance().getEncryptedChat(encId);
+                        semaphore.release();
+                    }
+                });
+                try {
+                    semaphore.acquire();
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+                if (currentEncryptedChat != null) {
+                    MessagesController.getInstance().putEncryptedChat(currentEncryptedChat, true);
+                }
+            }
+            currentUser = MessagesController.getInstance().getUser(currentEncryptedChat.user_id);
+            if (currentUser == null) {
+                final Semaphore semaphore = new Semaphore(0);
+                MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        TLRPC.User currentUser = MessagesStorage.getInstance().getUser(currentEncryptedChat.user_id);
+                        semaphore.release();
+                    }
+                });
+                try {
+                    semaphore.acquire();
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+                if (currentUser != null) {
+                    MessagesController.getInstance().putUser(currentUser, true);
+                }
+            }
+            dialog_id = ((long) encId) << 32;
+            maxMessageId[0] = maxMessageId[1] = Integer.MIN_VALUE;
+            minMessageId[0] = minMessageId[1] = Integer.MAX_VALUE;
+            MediaController.getInstance().startMediaObserver();
+        }
+        MessagesController.getInstance().loadPeerSettings(currentUser, currentChat);
+        MessagesController.getInstance().setLastCreatedDialogId(dialog_id, true);
+
+        if (currentChat != null) {
+            Semaphore semaphore = null;
+            if (isBroadcast) {
+                semaphore = new Semaphore(0);
+            }
+            MessagesController.getInstance().loadChatInfo(currentChat.id, semaphore, ChatObject.isChannel(currentChat));
+            if (isBroadcast && semaphore != null) {
+                try {
+                    semaphore.acquire();
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+            }
+        }
+
+        if (info instanceof TLRPC.TL_chatFull) {
+            for (int a = 0; a < info.participants.participants.size(); a++) {
+                TLRPC.ChatParticipant participant = info.participants.participants.get(a);
+                TLRPC.User user = MessagesController.getInstance().getUser(participant.user_id);
+            }
+        }
+
+        Log.i("TGM", "onFragmentCreate:  MessagesController.getInstance().addUserToChat(chatId,UserConfig.getCurrentUser() , null, 0, null, null);");
+        MessagesController.getInstance().addUserToChat(chatId, UserConfig.getCurrentUser(), null, 0, null, null);
+    }
+
+    public static void openByUserNameCustom(String username, final int type) {
+        TLRPC.TL_contacts_resolveUsername req = new TLRPC.TL_contacts_resolveUsername();
+        req.username = username;
+        final int reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            @Override
+            public void run(final TLObject response, final TLRPC.TL_error error) {
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (error == null) {
+                            Log.i("TGM", "run: (error == null)");
+                            TLRPC.TL_contacts_resolvedPeer res = (TLRPC.TL_contacts_resolvedPeer) response;
+                            getInstance().putUsers(res.users, false);
+                            getInstance().putChats(res.chats, false);
+                            MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, false, true);
+                            if (!res.chats.isEmpty()) {
+                                Log.i("TGM", "run: !res.chats.isEmpty()");
+                                openChatOrProfileWithCustom(null, res.chats.get(0), 1, false);
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 }

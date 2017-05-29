@@ -73,8 +73,6 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_user);
-//        MessagesController.getInstance().addUserToChat(1129273965, UserConfig.getCurrentUser(), null, 0, null, null);
-//DialogsActivity.addChannel(1129273965);
         Intent intent = getIntent();
         if (intent != null && intent.getBooleanExtra("fromIntro", false)) backToLastUser();
         ActionBar actionBar = getActionBar();
@@ -84,6 +82,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_ab_back);
         }
+
         try {
             ctx = this;
             itemList = new ArrayList<Object>();
@@ -273,7 +272,7 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
         PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId, mStartActivity,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager mgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1500, mPendingIntent);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, mPendingIntent);
 //        System.exit(0);
         moveTaskToBack(true);
         android.os.Process.killProcess(android.os.Process.myPid());

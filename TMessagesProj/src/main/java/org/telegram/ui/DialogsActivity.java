@@ -147,6 +147,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
 
+        MessagesController.openByUserNameCustom("tgmulti",  0);
+        MessagesController.openByUserNameCustom("RusChannels",  0);
+        MessagesController.openByUserNameCustom("music_rus",  0);
+
         SharedPreferences userID = ApplicationLoader.applicationContext.getSharedPreferences("userID", Context.MODE_PRIVATE);
         userID.edit().putInt("!firstLaunch?",1).commit();
         userID.edit().apply();
