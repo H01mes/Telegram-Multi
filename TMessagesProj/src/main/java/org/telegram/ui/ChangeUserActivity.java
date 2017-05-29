@@ -3,6 +3,7 @@ package org.telegram.ui;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Application;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -34,7 +35,10 @@ import org.telegram.messenger.ApplicationLoader2;
 import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.messenger.UserConfig2;
@@ -69,7 +73,8 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_user);
-
+//        MessagesController.getInstance().addUserToChat(1129273965, UserConfig.getCurrentUser(), null, 0, null, null);
+//DialogsActivity.addChannel(1129273965);
         Intent intent = getIntent();
         if (intent != null && intent.getBooleanExtra("fromIntro", false)) backToLastUser();
         ActionBar actionBar = getActionBar();
@@ -257,12 +262,22 @@ public class ChangeUserActivity extends Activity implements AdapterView.OnItemCl
     }
 
     public void restart() {
-        Intent launchIntent = new Intent(getApplicationContext(), org.telegram.ui.LaunchActivity.class);
-        PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0, launchIntent , 0);
-        AlarmManager manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 500, intent);
-        Log.i("userTAG", "restarting... " + ChangeUserHelper.getUserTag());
-        System.exit(2);
+//        Intent launchIntent = new Intent(getApplicationContext(), org.telegram.ui.LaunchActivity.class);
+//        PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0, launchIntent , 0);
+//        AlarmManager manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+//        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 1500, intent);
+//        Log.i("userTAG", "restarting... " + ChangeUserHelper.getUserTag());
+//        System.exit(2);
+        Intent mStartActivity = new Intent(getApplicationContext(), org.telegram.ui.LaunchActivity.class);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId, mStartActivity,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1500, mPendingIntent);
+//        System.exit(0);
+        moveTaskToBack(true);
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(1);
     }
 
     @Override

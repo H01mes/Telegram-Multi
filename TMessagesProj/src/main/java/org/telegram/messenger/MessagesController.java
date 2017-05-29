@@ -885,10 +885,21 @@ public class MessagesController implements NotificationCenter.NotificationCenter
         if (chats == null || chats.isEmpty()) {
             return;
         }
+//        TLRPC.Chat tt = new TLRPC.Chat();
+//        TLRPC.Chat tt = MessagesStorage.getInstance().getChat(1129273965);
+//        tt.id = 1129273965;
+//        tt.title = "fff";
+//        chats.add(chats.get(0));
+//        chats.add(tt);
         int count = chats.size();
         for (int a = 0; a < count; a++) {
             TLRPC.Chat chat = chats.get(a);
-            putChat(chat, fromCache);
+
+            putChat(chat, true);
+//            MessagesStorage.getInstance().putUsersAndChats(null, chats, true, true);
+
+            Log.i("TGM", "putChats: " + chat.id);
+            Log.i("TGM", "putChats: " + chat.title);
         }
     }
 
