@@ -38,10 +38,16 @@ We moved all translations to https://www.transifex.com/projects/p/telegram/. Ple
 ### How to build
 
 Clone this repositorytory
+
 cd to TMessagesProj folder
+
 execute : 
+
 	git submodule init
+
 	git submodule update
+
 	ndk-build
+
 	
 After you can assemble the application in Android Studio
