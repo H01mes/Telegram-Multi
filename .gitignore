@@ -7,5 +7,5 @@ local.properties
 *.keystore
 gradle.properties
 google-services.json
-
+TMessagesProj\.externalNativeBuild
 TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java
