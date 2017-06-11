@@ -1,5 +1,7 @@
 ﻿## Telegram Multi messenger for Android with MultiAccount support
 
+Google play: https://play.google.com/store/apps/details?id=org.telegram.multi&hl=ru
+
 ![FIRST](https://raw.githubusercontent.com/olegsvs/Telegram-Multi/master/Images/1.png)
 ![SECOND](https://raw.githubusercontent.com/olegsvs/Telegram-Multi/master/Images/2.png)
 ![DOUBLE](https://raw.githubusercontent.com/olegsvs/Telegram-Multi/master/Images/3.png)
