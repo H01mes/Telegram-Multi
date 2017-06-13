@@ -39,16 +39,12 @@ We moved all translations to https://www.transifex.com/projects/p/telegram/. Ple
 
 ### How to build
 
-Clone this repository
-
-cd to TMessagesProj folder
-
 execute : 
 
-	git submodule init
-
-	git submodule update
-
+	git clone --recursive https://github.com/olegsvs/Telegram-Multi
+	
+	cd Telegram-Multi\TMessagesProj
+	
 	ndk-build
 
 	
