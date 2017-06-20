@@ -38,6 +38,13 @@ public class HashtagSearchCell extends TextView {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(48) + 1);
     }
 
+    public void setBackgroundColor(int color) {
+        setBackgroundColor(color);
+    }
+
+    public void setDividerColor(int color) {
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);

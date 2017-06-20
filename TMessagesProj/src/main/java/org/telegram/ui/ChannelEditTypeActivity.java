@@ -201,7 +201,15 @@ public class ChannelEditTypeActivity extends BaseFragment implements Notificatio
         menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
 
         fragmentView = new ScrollView(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+//        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+//        View view = this.fragmentView;
+        int i;
+        if (Theme.usePlusTheme) {
+            i = Theme.prefBGColor;
+        } else {
+            i = Theme.getColor(Theme.key_windowBackgroundGray);
+        }
+        fragmentView.setBackgroundColor(i);
         ScrollView scrollView = (ScrollView) fragmentView;
         scrollView.setFillViewport(true);
         linearLayout = new LinearLayout(context);

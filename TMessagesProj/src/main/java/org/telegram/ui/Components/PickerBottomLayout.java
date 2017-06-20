@@ -43,6 +43,7 @@ public class PickerBottomLayout extends FrameLayout {
 
         cancelButton = new TextView(context);
         cancelButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+//        this.cancelButton.setTextColor(this.isDarkTheme ? -1 : Theme.defColor);
         cancelButton.setTextColor(isDarkTheme ? 0xffffffff : Theme.getColor(Theme.key_picker_enabledButton));
         cancelButton.setGravity(Gravity.CENTER);
         cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(isDarkTheme ? Theme.ACTION_BAR_PICKER_SELECTOR_COLOR : Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
@@ -66,13 +67,23 @@ public class PickerBottomLayout extends FrameLayout {
         if (isDarkTheme) {
             drawable = getResources().getDrawable(R.drawable.photobadge);
         } else {
-            drawable = Theme.createRoundRectDrawable(AndroidUtilities.dp(11), Theme.getColor(Theme.key_picker_badge));
+            int i2;
+            int dp = AndroidUtilities.dp(11.0f);
+            if (Theme.usePlusTheme) {
+                i2 = Theme.lightColor;
+            } else {
+                i2 = Theme.getColor(Theme.key_picker_badge);
+            }
+            drawable = Theme.createRoundRectDrawable(dp, i2);
         }
+//            drawable = Theme.createRoundRectDrawable(AndroidUtilities.dp(11), Theme.getColor(Theme.key_picker_badge));
         doneButtonBadgeTextView.setBackgroundDrawable(drawable);
         doneButtonBadgeTextView.setMinWidth(AndroidUtilities.dp(23));
         doneButtonBadgeTextView.setPadding(AndroidUtilities.dp(8), 0, AndroidUtilities.dp(8), AndroidUtilities.dp(1));
         doneButton.addView(doneButtonBadgeTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 23, Gravity.CENTER_VERTICAL, 0, 0, 10, 0));
-
+        if (Theme.usePlusTheme) {
+            this.doneButtonTextView.setTextColor(Theme.prefTitleColor);
+        }
         doneButtonTextView = new TextView(context);
         doneButtonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         doneButtonTextView.setTextColor(isDarkTheme ? 0xffffffff : Theme.getColor(Theme.key_picker_enabledButton));
@@ -94,6 +105,10 @@ public class PickerBottomLayout extends FrameLayout {
             } else {
                 doneButtonTextView.setTag(isDarkTheme ? null : Theme.key_picker_enabledButton);
                 doneButtonTextView.setTextColor(isDarkTheme ? 0xffffffff : Theme.getColor(Theme.key_picker_enabledButton));
+                if (Theme.usePlusTheme) {
+                    this.doneButtonTextView.setTextColor(Theme.prefTitleColor);
+                    return;
+                }
             }
         } else {
             doneButtonBadgeTextView.setVisibility(View.VISIBLE);
@@ -101,8 +116,12 @@ public class PickerBottomLayout extends FrameLayout {
 
             doneButtonTextView.setTag(isDarkTheme ? null : Theme.key_picker_enabledButton);
             doneButtonTextView.setTextColor(isDarkTheme ? 0xffffffff : Theme.getColor(Theme.key_picker_enabledButton));
+
             if (disable) {
                 doneButton.setEnabled(true);
+                if (Theme.usePlusTheme) {
+                    this.doneButtonTextView.setTextColor(Theme.prefTitleColor);
+                }
             }
         }
     }

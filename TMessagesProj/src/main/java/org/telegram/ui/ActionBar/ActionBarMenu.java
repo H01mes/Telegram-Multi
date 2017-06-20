@@ -41,6 +41,11 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
+    //multi
+    public ActionBarMenuItem addItemWithWidth(int id, Drawable icon, int width) {
+        return addItem(id, 0, this.parentActionBar.itemsBackgroundColor, icon, width);
+    }
+
     protected void updateItemsColor() {
         int count = getChildCount();
         for (int a = 0; a < count; a++) {

@@ -10,11 +10,14 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
@@ -22,13 +25,13 @@ import android.view.View;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
@@ -39,8 +42,10 @@ public class BotHelpCell extends View {
 
     private int width;
     private int height;
+    private TextPaint textPaint = new TextPaint(1);
     private int textX;
     private int textY;
+    private Paint urlPaint;
 
     private ClickableSpan pressedLink;
     private LinkPath urlPath = new LinkPath();
@@ -53,6 +58,11 @@ public class BotHelpCell extends View {
 
     public BotHelpCell(Context context) {
         super(context);
+        this.textPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
+        this.urlPaint = new Paint();
+        this.textPaint.setColor(Theme.chatLTextColor);
+        this.textPaint.linkColor = Theme.chatLLinkColor;
+        this.urlPaint.setColor(AndroidUtilities.getIntAlphaColor(Theme.pkey_chatLLinkColor, 858877855, 0.3f));
     }
 
     public void setDelegate(BotHelpCellDelegate botHelpCellDelegate) {
@@ -192,12 +202,15 @@ public class BotHelpCell extends View {
     protected void onDraw(Canvas canvas) {
         int x = (canvas.getWidth() - width) / 2;
         int y = AndroidUtilities.dp(4);
+        if (Theme.usePlusTheme) {
+            Theme.chat_msgInMediaDrawable.setColorFilter(Theme.chatLBubbleColor, PorterDuff.Mode.MULTIPLY);
+        }
         Theme.chat_msgInMediaShadowDrawable.setBounds(x, y, width + x, height + y);
         Theme.chat_msgInMediaShadowDrawable.draw(canvas);
         Theme.chat_msgInMediaDrawable.setBounds(x, y, width + x, height + y);
         Theme.chat_msgInMediaDrawable.draw(canvas);
-        Theme.chat_msgTextPaint.setColor(Theme.getColor(Theme.key_chat_messageTextIn));
-        Theme.chat_msgTextPaint.linkColor = Theme.getColor(Theme.key_chat_messageLinkIn);
+        Theme.chat_msgTextPaint.setColor(Theme.usePlusTheme ? Theme.chatLTextColor : Theme.getColor(Theme.key_chat_messageTextIn));
+        Theme.chat_msgTextPaint.linkColor = Theme.usePlusTheme ? Theme.chatLLinkColor : Theme.getColor(Theme.key_chat_messageLinkIn);
         canvas.save();
         canvas.translate(textX = AndroidUtilities.dp(2 + 9) + x, textY = AndroidUtilities.dp(2 + 9) + y);
         if (pressedLink != null) {

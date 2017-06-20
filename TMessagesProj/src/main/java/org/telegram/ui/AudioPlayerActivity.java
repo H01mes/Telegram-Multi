@@ -22,13 +22,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.audioinfo.AudioInfo;
-import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.R;
+import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -78,7 +78,7 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
 
             outerPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
             outerPaint1.setColor(Theme.getColor(Theme.key_player_progress));
-
+            this.outerPaint1.setColor(Theme.lightColor);
             thumbWidth = AndroidUtilities.dp(24);
             thumbHeight = AndroidUtilities.dp(24);
         }
@@ -219,6 +219,7 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
         timeTextView = new TextView(context);
         timeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         timeTextView.setTextColor(Theme.getColor(Theme.key_player_time));
+        this.timeTextView.setTextColor(Theme.lightColor);
         timeTextView.setGravity(Gravity.CENTER);
         timeTextView.setText("0:00");
         seekBarContainer.addView(timeTextView, LayoutHelper.createFrame(44, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
@@ -226,6 +227,7 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
         durationTextView = new TextView(context);
         durationTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         durationTextView.setTextColor(Theme.getColor(Theme.key_player_duration));
+//        this.durationTextView.setTextColor(-7697782);
         durationTextView.setGravity(Gravity.CENTER);
         durationTextView.setText("3:00");
         seekBarContainer.addView(durationTextView, LayoutHelper.createFrame(44, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.RIGHT));
@@ -237,6 +239,7 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
         progressView.setVisibility(View.INVISIBLE);
         progressView.setBackgroundColor(Theme.getColor(Theme.key_player_progressBackground));
         progressView.setProgressColor(Theme.getColor(Theme.key_player_progress));
+        this.progressView.setProgressColor(Theme.lightColor);
         seekBarContainer.addView(progressView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 2, Gravity.CENTER_VERTICAL | Gravity.LEFT, 44, 0, 44, 0));
 
         bottomView = new FrameLayout(context) {
@@ -368,6 +371,7 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
         if (MediaController.getInstance().isShuffleMusic()) {
             shuffleButton.setTag(Theme.key_player_buttonActive);
             shuffleButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), PorterDuff.Mode.MULTIPLY));
+            this.shuffleButton.setColorFilter(Theme.lightColor, PorterDuff.Mode.SRC_IN);
         } else {
             shuffleButton.setTag(Theme.key_player_button);
             shuffleButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_button), PorterDuff.Mode.MULTIPLY));
@@ -384,10 +388,12 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
             repeatButton.setImageResource(R.drawable.pl_repeat);
             repeatButton.setTag(Theme.key_player_buttonActive);
             repeatButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), PorterDuff.Mode.MULTIPLY));
+            this.repeatButton.setColorFilter(Theme.lightColor, PorterDuff.Mode.SRC_IN);
         } else if (mode == 2) {
             repeatButton.setImageResource(R.drawable.pl_repeat1);
             repeatButton.setTag(Theme.key_player_buttonActive);
             repeatButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), PorterDuff.Mode.MULTIPLY));
+            this.repeatButton.setColorFilter(Theme.lightColor, PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -432,6 +438,7 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
     }
 
     private void updateTitle(boolean shutdown) {
+        int tColor = -1;//Todo Multi
         MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
         if (messageObject == null && shutdown || messageObject != null && !messageObject.isMusic()) {
             if (parentLayout != null && !parentLayout.fragmentsStack.isEmpty() && parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 1) == this) {

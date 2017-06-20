@@ -10,6 +10,8 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -28,10 +30,15 @@ public class CheckBoxCell extends FrameLayout {
     private TextView valueTextView;
     private CheckBoxSquare checkBox;
     private boolean needDivider;
+    private static Paint paint;
 
     public CheckBoxCell(Context context, boolean alert) {
         super(context);
-
+        if (paint == null) {
+            paint = new Paint();
+            paint.setColor(Color.DKGRAY); //TODO Multi
+            paint.setStrokeWidth(1.0f);
+        }
         textView = new TextView(context);
         textView.setTextColor(Theme.getColor(alert ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
@@ -104,5 +111,13 @@ public class CheckBoxCell extends FrameLayout {
         if (needDivider) {
             canvas.drawLine(getPaddingLeft(), getHeight() - 1, getWidth() - getPaddingRight(), getHeight() - 1, Theme.dividerPaint);
         }
+    }
+
+    public void setValueColor(int color) {
+        this.valueTextView.setTextColor(color);
+    }
+
+    public void setCheckColor(int color) {
+        this.checkBox.setColor(color);
     }
 }

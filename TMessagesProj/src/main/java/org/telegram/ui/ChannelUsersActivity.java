@@ -127,7 +127,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         });
 
         fragmentView = new FrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+//        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        this.fragmentView.setBackgroundColor(Theme.usePlusTheme ? Theme.prefBGColor : Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
         emptyView = new EmptyTextProgressView(context);
@@ -544,7 +545,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             switch (viewType) {
                 case 0:
                     view = new UserCell(mContext, 1, 0, false);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+//                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    view.setBackgroundColor(Theme.usePlusTheme ? Theme.profileRowColor : Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(mContext);
@@ -578,6 +580,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             switch (holder.getItemViewType()) {
                 case 0:
                     UserCell userCell = (UserCell) holder.itemView;
+                    holder.itemView.setTag("Profile");
+                    if (Theme.usePlusTheme) {
+                        userCell.setNameColor(Theme.profileRowTitleColor);
+                        userCell.setStatusColor(Theme.profileRowStatusColor);
+                    }
                     TLRPC.ChannelParticipant participant = participants.get(position - participantsStartRow);
                     TLRPC.User user = MessagesController.getInstance().getUser(participant.user_id);
                     if (user != null) {
@@ -626,11 +633,24 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         } else {
                             privacyCell.setText("");
                             privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                            privacyCell.setTag("Profile");
+                            if (Theme.usePlusTheme) {
+                                privacyCell.setTextColor(Theme.profileRowStatusColor);
+                                if (Theme.profileRowColor != -1) {
+                                    privacyCell.setBackgroundColor(Theme.profileRowColor);
+                                }}
                         }
                     }
                     break;
                 case 2:
                     TextSettingsCell actionCell = (TextSettingsCell) holder.itemView;
+                    if (Theme.usePlusTheme) {
+                        actionCell.setBackgroundColor(Theme.profileRowColor);
+                    }
+                    actionCell.setTag("Profile");
+                    if (Theme.usePlusTheme) {
+                        actionCell.setTextColor(Theme.profileRowTitleColor);
+                    }
                     if (type == 2) {
                         if (position == 0) {
                             actionCell.setText(LocaleController.getString("AddMember", R.string.AddMember), true);
@@ -643,12 +663,29 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     break;
                 case 4:
                     ((TextCell) holder.itemView).setTextAndIcon(LocaleController.getString("ChannelAddAdmin", R.string.ChannelAddAdmin), R.drawable.managers);
+                    if (Theme.usePlusTheme) {
+                        if (Theme.profileRowColor != -1) {
+                            holder.itemView.setBackgroundColor(Theme.profileRowColor);
+                        }
+                        ((TextCell) holder.itemView).setTextColor(Theme.profileRowTitleColor);
+                        return;
+                    }
                     break;
                 case 5:
                     ((HeaderCell) holder.itemView).setText(LocaleController.getString("WhoCanAddMembers", R.string.WhoCanAddMembers));
+                    if (Theme.usePlusTheme && Theme.profileRowColor != -1) {
+                        holder.itemView.setBackgroundColor(Theme.profileRowColor);
+                        return;
+                    }
                     break;
                 case 6:
                     RadioCell radioCell = (RadioCell) holder.itemView;
+                    if (Theme.usePlusTheme) {
+                        radioCell.setTextColor(Theme.profileRowTitleColor);
+                        if (Theme.profileRowColor != -1) {
+                            radioCell.setBackgroundColor(Theme.profileRowColor);
+                        }
+                    }
                     TLRPC.Chat chat = MessagesController.getInstance().getChat(chatId);
                     if (position == 1) {
                         radioCell.setTag(0);

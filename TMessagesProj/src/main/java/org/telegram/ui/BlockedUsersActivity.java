@@ -10,6 +10,8 @@ package org.telegram.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -17,21 +19,23 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.TextInfoCell;
 import org.telegram.ui.Cells.UserCell;
-import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarMenu;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -83,9 +87,13 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
             }
         });
 
-        ActionBarMenu menu = actionBar.createMenu();
-        menu.addItem(block_user, R.drawable.plus);
-
+//        ActionBarMenu menu = actionBar.createMenu();
+//        menu.addItem(block_user, R.drawable.plus);
+        ActionBarMenu menu = this.actionBar.createMenu();
+        SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+        Drawable plus = getParentActivity().getResources().getDrawable(R.drawable.plus);
+        plus.setColorFilter(Theme.prefActionbarIconsColor, PorterDuff.Mode.SRC_IN);
+        menu.addItem(1, plus);
         fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
@@ -179,6 +187,17 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         if (listViewAdapter != null) {
             listViewAdapter.notifyDataSetChanged();
         }
+        if (Theme.usePlusTheme) {
+            updateTheme();
+        }
+    }
+
+    private void updateTheme() {
+        this.actionBar.setBackgroundColor(Theme.prefActionbarColor);
+        this.actionBar.setTitleColor(Theme.prefActionbarTitleColor);
+        Drawable back = getParentActivity().getResources().getDrawable(R.drawable.ic_ab_back);
+        back.setColorFilter(Theme.prefActionbarIconsColor, PorterDuff.Mode.MULTIPLY);
+        this.actionBar.setBackButtonDrawable(back);
     }
 
     @Override
@@ -240,6 +259,11 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                         number = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
                     }
                     ((UserCell) holder.itemView).setData(user, null, number, 0);
+                    holder.itemView.setTag("Pref");
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+                    ((UserCell) holder.itemView).setNameColor(preferences.getInt("prefTitleColor", -14606047)); //TODO Multi color
+                    ((UserCell) holder.itemView).setStatusColor(preferences.getInt("prefSummaryColor", -7697782));
+
                 }
             }
         }

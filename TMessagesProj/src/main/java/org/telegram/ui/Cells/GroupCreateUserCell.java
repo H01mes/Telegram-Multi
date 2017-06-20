@@ -9,10 +9,12 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.view.Gravity;
+import android.content.SharedPreferences;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
@@ -30,42 +32,80 @@ import org.telegram.ui.Components.LayoutHelper;
 public class GroupCreateUserCell extends FrameLayout {
 
     private BackupImageView avatarImageView;
-    private SimpleTextView nameTextView;
-    private SimpleTextView statusTextView;
     private GroupCreateCheckBox checkBox;
     private AvatarDrawable avatarDrawable;
     private TLRPC.User currentUser;
     private CharSequence currentName;
     private CharSequence currentStatus;
+    private int nameColor = this.themePrefs.getInt("contactsNameColor", -14606047);
+    private SimpleTextView nameTextView;
+    private int onlineColor = this.themePrefs.getInt("contactsOnlineColor", Theme.darkColor);
+    private int statusColor = this.themePrefs.getInt("contactsStatusColor", -5723992);
+    private SimpleTextView statusTextView;
+    private SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+
 
     private String lastName;
     private int lastStatus;
     private TLRPC.FileLocation lastAvatar;
 
     public GroupCreateUserCell(Context context, boolean needCheck) {
+
         super(context);
-        avatarDrawable = new AvatarDrawable();
-
-        avatarImageView = new BackupImageView(context);
-        avatarImageView.setRoundRadius(AndroidUtilities.dp(24));
-        addView(avatarImageView, LayoutHelper.createFrame(50, 50, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 11, 11, LocaleController.isRTL ? 11 : 0, 0));
-
-        nameTextView = new SimpleTextView(context);
-        nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        nameTextView.setTextSize(17);
-        nameTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-        addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 28 : 72, 14, LocaleController.isRTL ? 72 : 28, 0));
-
-        statusTextView = new SimpleTextView(context);
-        statusTextView.setTextSize(16);
-        statusTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-        addView(statusTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 28 : 72, 39, LocaleController.isRTL ? 72 : 28, 0));
-
+        int i;
+        int i2;
+        int i3 = 5;
+        this.avatarImageView = new BackupImageView(context);
+        this.avatarImageView.setRoundRadius(AndroidUtilities.dp(Theme.usePlusTheme ? (float) this.themePrefs.getInt("contactsAvatarRadius", 32) : 24.0f));
+        View view = this.avatarImageView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        addView(view, LayoutHelper.createFrame(50, 50.0f, i | 48, LocaleController.isRTL ? 0.0f : 11.0f, 11.0f, LocaleController.isRTL ? 11.0f : 0.0f, 0.0f));
+        this.nameTextView = new SimpleTextView(context);
+        this.nameTextView.setTextColor(Theme.usePlusTheme ? this.nameColor : Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.nameTextView.setTextSize(Theme.usePlusTheme ? this.themePrefs.getInt("contactsNameSize", 17) : 17);
+        SimpleTextView simpleTextView = this.nameTextView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        } else {
+            i2 = 3;
+        }
+        simpleTextView.setGravity(i2 | 48);
+        view = this.nameTextView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, 20.0f, i | 48, LocaleController.isRTL ? 28.0f : 72.0f, 14.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
+        this.statusTextView = new SimpleTextView(context);
+        this.statusTextView.setTextSize(Theme.usePlusTheme ? this.themePrefs.getInt("contactsStatusSize", 16) : 16);
+        simpleTextView = this.statusTextView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        } else {
+            i2 = 3;
+        }
+        simpleTextView.setGravity(i2 | 48);
+        view = this.statusTextView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, 20.0f, i | 48, LocaleController.isRTL ? 28.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
         if (needCheck) {
-            checkBox = new GroupCreateCheckBox(context);
-            checkBox.setVisibility(VISIBLE);
-            addView(checkBox, LayoutHelper.createFrame(24, 24, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 41, 41, LocaleController.isRTL ? 41 : 0, 0));
+            this.checkBox = new GroupCreateCheckBox(context);
+            this.checkBox.setVisibility(0);
+            View view2 = this.checkBox;
+            if (!LocaleController.isRTL) {
+                i3 = 3;
+            }
+            addView(view2, LayoutHelper.createFrame(24, 24.0f, i3 | 48, LocaleController.isRTL ? 0.0f : 41.0f, 41.0f, LocaleController.isRTL ? 41.0f : 0.0f, 0.0f));
         }
     }
 
@@ -140,24 +180,30 @@ public class GroupCreateUserCell extends FrameLayout {
             lastName = newName == null ? UserObject.getUserName(currentUser) : newName;
             nameTextView.setText(lastName);
         }
-
+        int i;
         if (currentStatus != null) {
             statusTextView.setText(currentStatus, true);
             statusTextView.setTag(Theme.key_groupcreate_offlineText);
-            statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
+            SimpleTextView simpleTextView = this.statusTextView;
+            if (Theme.usePlusTheme) {
+                i = this.statusColor;
+            } else {
+                i = Theme.getColor(Theme.key_groupcreate_offlineText);
+            }
+            simpleTextView.setTextColor(i);
         } else {
             if (currentUser.bot) {
                 statusTextView.setTag(Theme.key_groupcreate_offlineText);
-                statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
+                this.statusTextView.setTextColor(Theme.usePlusTheme ? this.statusColor : Theme.getColor(Theme.key_groupcreate_offlineText));
                 statusTextView.setText(LocaleController.getString("Bot", R.string.Bot));
             } else {
                 if (currentUser.id == UserConfig.getClientUserId() || currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance().getCurrentTime() || MessagesController.getInstance().onlinePrivacy.containsKey(currentUser.id)) {
                     statusTextView.setTag(Theme.key_groupcreate_offlineText);
-                    statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_onlineText));
+                    this.statusTextView.setTextColor(Theme.usePlusTheme ? this.onlineColor : Theme.getColor(Theme.key_groupcreate_onlineText));
                     statusTextView.setText(LocaleController.getString("Online", R.string.Online));
                 } else {
                     statusTextView.setTag(Theme.key_groupcreate_offlineText);
-                    statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
+                    this.statusTextView.setTextColor(Theme.usePlusTheme ? this.statusColor : Theme.getColor(Theme.key_groupcreate_offlineText));
                     statusTextView.setText(LocaleController.formatUserStatus(currentUser));
                 }
             }

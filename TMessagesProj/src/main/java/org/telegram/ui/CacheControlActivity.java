@@ -15,6 +15,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -75,7 +77,8 @@ public class CacheControlActivity extends BaseFragment {
     private long photoSize = -1;
     private long videoSize = -1;
     private long totalSize = -1;
-    private boolean clear[] = new boolean[6];
+    private long themesSize = -1;
+    private boolean clear[] = new boolean[7];
     private boolean calculating = true;
 
     private volatile boolean canceled = false;
@@ -119,8 +122,12 @@ public class CacheControlActivity extends BaseFragment {
                 if (canceled) {
                     return;
                 }
+                musicSize = getDirectorySize(FileLoader.getInstance().checkDirectory(5), 0);
+                if (canceled) {
+                    return;
+                }
                 audioSize = getDirectorySize(FileLoader.getInstance().checkDirectory(FileLoader.MEDIA_DIR_AUDIO), 0);
-                totalSize = cacheSize + videoSize + audioSize + photoSize + documentsSize + musicSize;
+                totalSize = cacheSize + videoSize + audioSize + photoSize + documentsSize + musicSize  + themesSize; //TODO Multi
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     @Override
                     public void run() {
@@ -192,7 +199,7 @@ public class CacheControlActivity extends BaseFragment {
             @Override
             public void run() {
                 boolean imagesCleared = false;
-                for (int a = 0; a < 6; a++) {
+                for (int a = 0; a < 7; a++) {
                     if (!clear[a]) {
                         continue;
                     }
@@ -211,6 +218,8 @@ public class CacheControlActivity extends BaseFragment {
                     } else if (a == 4) {
                         type = FileLoader.MEDIA_DIR_AUDIO;
                     } else if (a == 5) {
+                        type = 5;
+                    } else if (a == 6) {
                         type = FileLoader.MEDIA_DIR_CACHE;
                     }
                     if (type == -1) {
@@ -260,10 +269,13 @@ public class CacheControlActivity extends BaseFragment {
                         photoSize = getDirectorySize(FileLoader.getInstance().checkDirectory(FileLoader.MEDIA_DIR_IMAGE), documentsMusicType);
                     } else if (type == FileLoader.MEDIA_DIR_VIDEO) {
                         videoSize = getDirectorySize(FileLoader.getInstance().checkDirectory(FileLoader.MEDIA_DIR_VIDEO), documentsMusicType);
+                    } else if (type == 5) {
+                        CacheControlActivity.this.themesSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(5), documentsMusicType);
                     }
                 }
                 final boolean imagesClearedFinal = imagesCleared;
-                totalSize = cacheSize + videoSize + audioSize + photoSize + documentsSize + musicSize;
+//                totalSize = cacheSize + videoSize + audioSize + photoSize + documentsSize + musicSize;
+                CacheControlActivity.this.totalSize = (((((CacheControlActivity.this.cacheSize + CacheControlActivity.this.videoSize) + CacheControlActivity.this.audioSize) + CacheControlActivity.this.photoSize) + CacheControlActivity.this.documentsSize) + CacheControlActivity.this.musicSize) + CacheControlActivity.this.themesSize;
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     @Override
                     public void run() {
@@ -302,7 +314,8 @@ public class CacheControlActivity extends BaseFragment {
 
         fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = (FrameLayout) fragmentView;
-        frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+//        frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        frameLayout.setBackgroundColor(Theme.usePlusTheme ? Theme.prefBGColor : Theme.getColor(Theme.key_windowBackgroundGray));
 
         listView = new RecyclerListView(context);
         listView.setVerticalScrollBarEnabled(false);
@@ -454,7 +467,7 @@ public class CacheControlActivity extends BaseFragment {
                     builder.setApplyBottomPadding(false);
                     LinearLayout linearLayout = new LinearLayout(getParentActivity());
                     linearLayout.setOrientation(LinearLayout.VERTICAL);
-                    for (int a = 0; a < 6; a++) {
+                    for (int a = 0; a < 7; a++) {
                         long size = 0;
                         String name = null;
                         if (a == 0) {
@@ -473,6 +486,9 @@ public class CacheControlActivity extends BaseFragment {
                             size = audioSize;
                             name = LocaleController.getString("LocalAudioCache", R.string.LocalAudioCache);
                         } else if (a == 5) {
+                            size = CacheControlActivity.this.themesSize;
+                            name = LocaleController.getString("Themes", R.string.Themes);
+                        } else if (a == 6) {
                             size = cacheSize;
                             name = LocaleController.getString("LocalCache", R.string.LocalCache);
                         }
@@ -481,6 +497,8 @@ public class CacheControlActivity extends BaseFragment {
                             CheckBoxCell checkBoxCell = new CheckBoxCell(getParentActivity(), true);
                             checkBoxCell.setTag(a);
                             checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                            checkBoxCell.setValueColor(Theme.prefSectionColor);
+                            checkBoxCell.setCheckColor(Theme.prefSectionColor);
                             linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
                             checkBoxCell.setText(name, AndroidUtilities.formatFileSize(size), true, true);
                             checkBoxCell.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
@@ -522,6 +540,15 @@ public class CacheControlActivity extends BaseFragment {
         });
 
         return fragmentView;
+    }
+
+    private void updateTheme() {
+        this.actionBar.setBackgroundColor(Theme.prefActionbarColor);
+        this.actionBar.setTitleColor(Theme.prefActionbarTitleColor);
+        Drawable back = getParentActivity().getResources().getDrawable(R.drawable.ic_ab_back);
+        back.setColorFilter(Theme.prefActionbarIconsColor, PorterDuff.Mode.MULTIPLY);
+        this.actionBar.setBackButtonDrawable(back);
+        getParentActivity().getResources().getDrawable(R.drawable.ic_ab_other).setColorFilter(Theme.prefActionbarIconsColor, PorterDuff.Mode.MULTIPLY);
     }
 
     @Override

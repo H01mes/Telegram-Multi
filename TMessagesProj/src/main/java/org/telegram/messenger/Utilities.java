@@ -8,15 +8,33 @@
 
 package org.telegram.messenger;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.os.Environment;
+import android.util.Log;
+import android.util.Xml;
+import android.widget.Toast;
+
+import org.telegram.ui.Components.Favorite;
+import org.telegram.ui.LaunchActivity;
+import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -263,4 +281,378 @@ public class Utilities {
         }
         return null;
     }
+
+    //Multi
+    public static void restartApp() {
+        ((AlarmManager) ApplicationLoader.applicationContext.getSystemService(Context.ALARM_SERVICE)).set(1, System.currentTimeMillis() + 1000, PendingIntent.getActivity(ApplicationLoader.applicationContext, 123456, new Intent(ApplicationLoader.applicationContext, LaunchActivity.class), 0));//TODO Multi 0?
+        System.exit(0);
+    }
+
+    public static void savePreferencesToSD(Context context, String folder, String prefName, String tName, boolean toast) {
+        File dataF = new File(findPrefFolder(context), prefName);
+        if (checkSDStatus() > 1) {
+            File f = new File(Environment.getExternalStorageDirectory(), folder);
+            f.mkdirs();
+            File sdF = new File(f, tName);
+            String s = getError(copyFile(dataF, sdF, true));
+            if (s.equalsIgnoreCase("4")) {
+                if (toast && sdF.getName() != "") {
+                    Toast.makeText(context, context.getString(R.string.SavedTo, new Object[]{sdF.getName(), folder}), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                return;
+            } else if (s.contains("0")) {
+                Toast.makeText(context, "ERROR: " + context.getString(R.string.SaveErrorMsg0), Toast.LENGTH_SHORT).show();
+                return;
+            } else {
+                Toast.makeText(context, "ERROR: " + s, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, dataF.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        Toast.makeText(context, "ERROR: " + context.getString(R.string.NoMediaMessage), Toast.LENGTH_SHORT).show();
+    }
+
+    public static void copyWallpaperToSD(Context context, String tName, boolean toast) {
+        String folder = "/Telegram/Themes";
+        String nFile = "wallpaper.jpg";
+        if (checkSDStatus() > 0) {
+            File f1 = new File(context.getFilesDir().getAbsolutePath(), nFile);
+            File f2 = new File(Environment.getExternalStorageDirectory(), folder);
+            f2.mkdirs();
+            File f22 = new File(f2, tName + "_" + nFile);
+            if (f1.length() > 1) {
+                String s = getError(copyFile(f1, f22, true));
+                if (s.contains("4")) {
+                    if (!(!toast || f22.getName() == "" || folder == "")) {
+                        Toast.makeText(context, context.getString(R.string.SavedTo, new Object[]{f22.getName(), folder}), Toast.LENGTH_SHORT).show();
+                    }
+                    if (f22.getName() == "" || folder == "") {
+                        Toast.makeText(context, "ERROR: " + s, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    return;
+                }
+                Toast.makeText(context, "ERROR: " + s + "\n" + f1.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public static void saveDBToSD(Context context, String folder, String prefName, String tName, boolean toast) {
+        File dataF = context.getDatabasePath(prefName);
+        if (checkSDStatus() > 1) {
+            File f = new File(Environment.getExternalStorageDirectory(), folder);
+            f.mkdirs();
+            File sdF = new File(f, tName);
+            String s = getError(copyFile(dataF, sdF, true));
+            if (s.equalsIgnoreCase("4")) {
+                if (toast && sdF.getName() != "") {
+                    Toast.makeText(context, context.getString(R.string.SavedTo, new Object[]{sdF.getName(), folder}), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                return;
+            } else if (s.contains("0")) {
+                Toast.makeText(context, "ERROR: " + context.getString(R.string.SaveErrorMsg0), Toast.LENGTH_SHORT).show();
+                return;
+            } else {
+                Toast.makeText(context, "ERROR: " + s, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, dataF.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        Toast.makeText(context, "ERROR: " + context.getString(R.string.NoMediaMessage), Toast.LENGTH_SHORT).show();
+    }
+
+    public static String findPrefFolder(Context context) {
+        String appDir = context.getFilesDir().getAbsolutePath();
+        File SPDir = new File(appDir.substring(0, appDir.lastIndexOf(47) + 1) + "shared_prefs/");
+        if (!SPDir.exists()) {
+            SPDir = new File("/dbdata/databases/" + context.getPackageName() + "/shared_prefs/");
+        }
+        return SPDir.getAbsolutePath();
+    }
+
+    private static int checkSDStatus() {
+        String s = Environment.getExternalStorageState();
+        if (s.equals("mounted")) {
+            return 2;
+        }
+        if (s.equals("mounted_ro")) {
+            return 1;
+        }
+        return 0;
+    }
+
+    private static String getError(int i) {
+        String s = "-1";
+        if (i == 0) {
+            s = "0: SOURCE FILE DOESN'T EXIST";
+        }
+        if (i == 1) {
+            s = "1: DESTINATION FILE DOESN'T EXIST";
+        }
+        if (i == 2) {
+            s = "2: NULL SOURCE & DESTINATION FILES";
+        }
+        if (i == 3) {
+            s = "3: NULL SOURCE FILE";
+        }
+        if (i == 4) {
+            return "4";
+        }
+        return s;
+    }
+
+    private static int copyFile(File sourceFile, File destFile, boolean save) {
+        int i = -1;
+        try {
+            if (!sourceFile.exists()) {
+                return 0;
+            }
+            if (!destFile.exists()) {
+                if (save) {
+                    i = -1 + 2;
+                }
+                destFile.createNewFile();
+            }
+            FileInputStream fileInputStream = new FileInputStream(sourceFile);
+            FileChannel source = fileInputStream.getChannel();
+            FileOutputStream fileOutputStream = new FileOutputStream(destFile);
+            FileChannel destination = fileOutputStream.getChannel();
+            if (!(destination == null || source == null)) {
+                destination.transferFrom(source, 0, source.size());
+                i = 2;
+            }
+            if (source != null) {
+                source.close();
+                i = 3;
+            }
+            if (destination != null) {
+                destination.close();
+                i = 4;
+            }
+            fileInputStream.close();
+            fileOutputStream.close();
+            return i;
+        } catch (Exception e) {
+            System.err.println("Error saving preferences: " + e.getMessage());
+            Log.e(e.getMessage(), e.toString());
+        }
+        return i;
+    }
+
+    public static void applyWallpaper(String wPath) throws IOException {
+        Throwable e;
+        Throwable th;
+        String nFile = "wallpaper.jpg";
+        if (new File(wPath).exists()) {
+            FileOutputStream stream = null;
+            try {
+                Point screenSize = AndroidUtilities.getRealScreenSize();
+                Bitmap bitmap = ImageLoader.loadBitmap(wPath, null, (float) screenSize.x, (float) screenSize.y, true);
+                FileOutputStream stream2 = new FileOutputStream(new File(ApplicationLoader.applicationContext.getFilesDir(), nFile));
+                try {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 87, stream2);
+                    if (stream2 != null) {
+                        try {
+                            stream2.close();
+                        } catch (Throwable e2) {
+                            FileLog.e(e2);
+                        }
+                    }
+                } catch (Exception e3) {
+//                    e2 = e3;
+                    stream = stream2;
+                    try {
+                        FileLog.e(e3.toString());
+                        if (stream != null) {
+                            try {
+                                stream.close();
+                            } catch (Throwable e22) {
+                                FileLog.e(e22);
+                            }
+                        }
+                    } catch (Throwable th2) {
+                        th = th2;
+                        if (stream != null) {
+                            try {
+                                stream.close();
+                            } catch (Throwable e222) {
+                                FileLog.e(e222);
+                            }
+                        }
+//                        throw th;
+                    }
+                } catch (Throwable th3) {
+                    th = th3;
+                    stream = stream2;
+                    if (stream != null) {
+                        stream.close();
+                    }
+//                    throw th;
+                }
+            } catch (Exception e4) {
+//                e222 = e4;
+                FileLog.e(e4.toString());
+                if (stream != null) {
+                    stream.close();
+                }
+            }
+        }
+    }
+
+    public static int loadPrefFromSD(Context context, String prefPath) {
+        File dataF = new File(findPrefFolder(context), "theme.xml");
+        String s = getError(copyFile(new File(prefPath), dataF, false));
+        if (!s.contains("4")) {
+            Toast.makeText(context, "ERROR: " + s + "\n" + context.getString(R.string.restoreErrorMsg, new Object[]{dataF.getAbsolutePath()}), Toast.LENGTH_SHORT).show();
+        }
+        return Integer.parseInt(s);
+    }
+
+    public static int loadPrefFromSD(Context context, String prefPath, String name) {
+        File dataF = new File(findPrefFolder(context), name + ".xml");
+        String s = getError(copyFile(new File(prefPath), dataF, false));
+        if (!s.contains("4")) {
+            Toast.makeText(context, "ERROR: " + s + "\n" + context.getString(R.string.restoreErrorMsg, new Object[]{dataF.getAbsolutePath()}), Toast.LENGTH_SHORT).show();
+        }
+        return Integer.parseInt(s);
+    }
+
+    public static int loadDBFromSD(Context context, String prefPath, String name) {
+        if (Favorite.getInstance().getCount() == 0) {
+            Favorite.getInstance().addFavorite(Long.valueOf(-1));
+            Favorite.getInstance().deleteFavorite(Long.valueOf(-1));
+        }
+        File dataF = new File(context.getDatabasePath(name).getAbsolutePath());
+        String s = getError(copyFile(new File(prefPath), dataF, false));
+        if (!s.contains("4")) {
+            Toast.makeText(context, "ERROR: " + s + "\n" + context.getString(R.string.restoreErrorMsg, new Object[]{dataF.getAbsolutePath()}), Toast.LENGTH_SHORT).show();
+        }
+        return Integer.parseInt(s);
+    }
+
+    public static String applyThemeFile(File file) {
+        try {
+            HashMap<String, String> stringMap = getXmlFileStrings(file);
+            String xmlFile = file.getAbsolutePath();
+            String themeName = (String) stringMap.get("themeName");
+            if (themeName != null && themeName.length() > 0) {
+                if (themeName.contains("&") || themeName.contains("|")) {
+                    return "";
+                }
+                if (loadPrefFromSD(ApplicationLoader.applicationContext, xmlFile) != 4) {
+                    return "";
+                }
+                String wName = xmlFile.substring(0, xmlFile.lastIndexOf(".")) + "_wallpaper.jpg";
+                if (!new File(wName).exists()) {
+                    return themeName;
+                }
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                if (preferences.getInt("selectedBackground", 1000001) == 1000001) {
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt("selectedBackground", 113);
+                    editor.putInt("selectedColor", 0);
+                    editor.commit();
+                }
+                applyWallpaper(wName);
+                return themeName;
+            }
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }
+        return "";
+    }
+
+    private static HashMap<String, String> getXmlFileStrings(File file) throws IOException {
+        Throwable e;
+        Throwable th;
+        FileInputStream stream = null;
+        try {
+            HashMap<String, String> stringMap = new HashMap();
+            XmlPullParser parser = Xml.newPullParser();
+            FileInputStream stream2 = new FileInputStream(file);
+            try {
+                parser.setInput(stream2, "UTF-8");
+                String name = null;
+                String value = null;
+                String attrName = null;
+                for (int eventType = parser.getEventType(); eventType != 1; eventType = parser.next()) {
+                    if (eventType == 2) {
+                        name = parser.getName();
+                        if (parser.getAttributeCount() > 0) {
+                            attrName = parser.getAttributeValue(0);
+                        }
+                    } else if (eventType == 4) {
+                        if (attrName != null) {
+                            value = parser.getText();
+                            if (value != null) {
+                                value = value.trim().replace("\\n", "\n").replace("\\", "");
+                            }
+                        }
+                    } else if (eventType == 3) {
+                        value = null;
+                        attrName = null;
+                        name = null;
+                    }
+                    if (!(name == null || !name.equals("string") || value == null || attrName == null || value.length() == 0 || attrName.length() == 0)) {
+                        stringMap.put(attrName, value);
+                        name = null;
+                        value = null;
+                        attrName = null;
+                    }
+                }
+                if (stream2 != null) {
+                    try {
+                        stream2.close();
+                        return stringMap;
+                    } catch (Throwable e2) {
+                        FileLog.e(e2);
+                    }
+                }
+                stream = stream2;
+                return stringMap;
+            } catch (Exception e3) {
+//                e2 = e3;
+                stream = stream2;
+                try {
+                    FileLog.e(e3);
+                    if (stream != null) {
+                        try {
+                            stream.close();
+                        } catch (Throwable e22) {
+                            FileLog.e(e22);
+                        }
+                    }
+                    return null;
+                } catch (Throwable th2) {
+                    th = th2;
+                    if (stream != null) {
+                        try {
+                            stream.close();
+                        } catch (Throwable e222) {
+                            FileLog.e(e222);
+                        }
+                    }
+//                    throw th;
+                }
+            } catch (Throwable th3) {
+                th = th3;
+                stream = stream2;
+                if (stream != null) {
+                    stream.close();
+                }
+//                throw th;
+            }
+        } catch (Exception e4) {
+//            e222 = e4;
+            FileLog.e(e4);
+            if (stream != null) {
+                stream.close();
+            }
+            return null;
+        }
+        return null;
+    }
+    //
 }

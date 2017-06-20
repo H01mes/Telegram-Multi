@@ -24,6 +24,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -55,27 +56,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.Emoji;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.NotificationsController;
-import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.query.MessagesQuery;
 import org.telegram.messenger.query.StickersQuery;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
@@ -159,6 +160,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
+//    private boolean hasRecordVideo = true;
+    private boolean hideBotKeyboard;
     private EditTextCaption messageEditText;
     private ImageView sendButton;
     private ImageView cancelBotButton;
@@ -487,7 +490,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         sizeNotifierLayout.setDelegate(this);
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         sendByEnter = preferences.getBoolean("send_by_enter", false);
-
+        this.hideBotKeyboard = ApplicationLoader.applicationContext.getSharedPreferences("plusconfig", 0).getBoolean("hideBotKeyboard", false);
         textFieldContainer = new LinearLayout(context);
         textFieldContainer.setOrientation(LinearLayout.HORIZONTAL);
         addView(textFieldContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 2, 0, 0));
@@ -506,6 +509,22 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             }
         };
+        if (Build.VERSION.SDK_INT >= 19) {
+            this.emojiButton.setOnLongClickListener(new OnLongClickListener() {
+                public boolean onLongClick(View view) {
+                    boolean z;
+                    if (ApplicationLoader.SHOW_ANDROID_EMOJI) {
+                        z = false;
+                    } else {
+                        z = true;
+                    }
+                    ApplicationLoader.SHOW_ANDROID_EMOJI = z;
+                    ApplicationLoader.applicationContext.getSharedPreferences("plusconfig", 0).edit().putBoolean("showAndroidEmoji", ApplicationLoader.SHOW_ANDROID_EMOJI).apply();
+                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.emojiDidLoaded, new Object[0]);
+                    return true;
+                }
+            });
+        }
         emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
         emojiButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         emojiButton.setPadding(0, AndroidUtilities.dp(1), 0, 0);
@@ -692,7 +711,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             }
         });
-
+        try {
+            AndroidUtilities.clearCursorDrawable(this.messageEditText);
+        } catch (Exception e) {
+        }
         if (isChat) {
             attachLayout = new LinearLayout(context);
             attachLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -783,10 +805,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             });
         }
+        SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+        int bgColor = themePrefs.getInt(Theme.pkey_chatEditTextBGColor, -1);
+        int iColor = themePrefs.getInt(Theme.pkey_chatEditTextIconsColor, bgColor == -1 ? Theme.defColor : -5395027);
 
         recordedAudioPanel = new FrameLayout(context);
         recordedAudioPanel.setVisibility(audioToSend == null ? GONE : VISIBLE);
-        recordedAudioPanel.setBackgroundColor(Theme.getColor(Theme.key_chat_messagePanelBackground));
+        if (!Theme.usePlusTheme) {
+            bgColor = Theme.getColor(Theme.key_chat_messagePanelBackground);
+        }
+        recordedAudioPanel.setBackgroundColor(bgColor);
+//        recordedAudioPanel.setBackgroundColor(Theme.getColor(Theme.key_chat_messagePanelBackground));
         recordedAudioPanel.setFocusable(true);
         recordedAudioPanel.setFocusableInTouchMode(true);
         recordedAudioPanel.setClickable(true);
@@ -893,6 +922,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (Theme.usePlusTheme) {
+                        ChatActivityEnterView.this.audioSendButton.setColorFilter(-2468275, PorterDuff.Mode.SRC_IN);
+                    }
                     if (hasRecordVideo) {
                         recordAudioVideoRunnableStarted = true;
                         AndroidUtilities.runOnUIThread(recordAudioVideoRunnable, 150);
@@ -900,6 +932,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         recordAudioVideoRunnable.run();
                     }
                 } else if (motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+                    if (Theme.usePlusTheme) {
+                        ChatActivityEnterView.this.audioSendButton.setColorFilter(Theme.chatEditTextIconsColor, PorterDuff.Mode.SRC_IN);
+                    }
                     if (recordAudioVideoRunnableStarted) {
                         AndroidUtilities.cancelRunOnUIThread(recordAudioVideoRunnable);
                         setRecordVideoButtonVisible(videoSendButton.getTag() == null, true);
@@ -1040,7 +1075,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         doneButtonImage = new ImageView(context);
         doneButtonImage.setScaleType(ImageView.ScaleType.CENTER);
         doneButtonImage.setImageResource(R.drawable.edit_done);
-        doneButtonImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_editDoneIcon), PorterDuff.Mode.MULTIPLY));
+//        imageView = this.doneButtonImage;
+        if (!Theme.usePlusTheme) {
+            iColor = Theme.getColor(Theme.key_chat_editDoneIcon);
+        }
+        doneButtonImage.setColorFilter(new PorterDuffColorFilter(iColor, PorterDuff.Mode.MULTIPLY));
+
+//        doneButtonImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_editDoneIcon), PorterDuff.Mode.MULTIPLY));
         doneButtonContainer.addView(doneButtonImage, LayoutHelper.createFrame(48, 48));
 
         doneButtonProgress = new ContextProgressView(context, 0);
@@ -1053,6 +1094,42 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         setRecordVideoButtonVisible(false, false);
         checkSendButton(false);
+        if (Theme.usePlusTheme) {
+            updateTheme();
+        }
+    }
+
+    private void updateTheme() {
+        SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+        this.sendButton.setColorFilter(themePrefs.getInt(Theme.pkey_chatSendIconColor, themePrefs.getInt(Theme.pkey_chatEditTextIconsColor, themePrefs.getInt(Theme.pkey_themeColor, AndroidUtilities.defColor))), Mode.SRC_IN);
+        this.messageEditText.setTextColor(themePrefs.getInt(Theme.pkey_chatEditTextColor, -16777216));
+        this.messageEditText.setHintTextColor(AndroidUtilities.getIntAlphaColor(Theme.pkey_chatEditTextColor, -16777216, 0.35f));
+        this.messageEditText.setTextSize((float) themePrefs.getInt(Theme.pkey_chatEditTextSize, 18));
+        int color = themePrefs.getInt(Theme.pkey_chatEditTextBGColor, -1);
+        setBackgroundColor(color);
+        this.textFieldContainer.setBackgroundColor(color);
+        int val = themePrefs.getInt(Theme.pkey_chatEditTextBGGradient, 0);
+        if (val > 0) {
+            GradientDrawable.Orientation go;
+            switch (val) {
+                case 2:
+                    go = GradientDrawable.Orientation.LEFT_RIGHT;
+                    break;
+                case 3:
+                    go = GradientDrawable.Orientation.TL_BR;
+                    break;
+                case 4:
+                    go = GradientDrawable.Orientation.BL_TR;
+                    break;
+                default:
+                    go = GradientDrawable.Orientation.TOP_BOTTOM;
+                    break;
+            }
+            int gradColor = themePrefs.getInt(Theme.pkey_chatEditTextBGGradientColor, -1);
+            GradientDrawable gd = new GradientDrawable(go, new int[]{color, gradColor});
+            setBackgroundDrawable(gd);
+            this.textFieldContainer.setBackgroundDrawable(gd);
+        }
     }
 
     @Override
@@ -2222,11 +2299,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (botButton.getVisibility() != VISIBLE) {
                 botButton.setVisibility(VISIBLE);
             }
+            int color = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0).getInt(Theme.pkey_chatEditTextIconsColor, -5395027);
             if (botReplyMarkup != null) {
                 if (isPopupShowing() && currentPopupContentType == 1) {
                     botButton.setImageResource(R.drawable.ic_msg_panel_kb);
                 } else {
                     botButton.setImageResource(R.drawable.bot_keyboard2);
+                }
+                if (Theme.usePlusTheme) {
+                    this.botButton.setColorFilter(color, PorterDuff.Mode.SRC_IN);
                 }
             } else {
                 botButton.setImageResource(R.drawable.bot_keyboard);
@@ -2294,7 +2375,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     return;
                 }
             }
-            if (!keyboardHidden && messageEditText.length() == 0 && !isPopupShowing()) {
+            if (!(keyboardHidden || this.messageEditText.length() != 0 || isPopupShowing() || this.hideBotKeyboard)) {
                 showPopup(1, 1);
             }
         } else {
@@ -2550,6 +2631,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     private void showPopup(int show, int contentType) {
+        int color = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0).getInt(Theme.pkey_chatEditTextIconsColor, -5395027);
         if (show == 1) {
             if (contentType == 0 && emojiView == null) {
                 if (parentActivity == null) {
@@ -2602,6 +2684,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 } else if (contentType == 1) {
                     setEmojiButtonImage();
                 }
+                if (Theme.usePlusTheme) {
+                    this.emojiButton.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+                }
                 updateBotButton();
                 onWindowSizeChanged();
             }
@@ -2640,6 +2725,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             emojiButton.setImageResource(R.drawable.ic_msg_panel_stickers);
         } else if (currentPage == 2) {
             emojiButton.setImageResource(R.drawable.ic_msg_panel_gif);
+        }
+        if (Theme.usePlusTheme) {
+            this.emojiButton.setColorFilter(ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0).getInt(Theme.pkey_chatEditTextIconsColor, -5395027), PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -2728,6 +2816,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         if (isPopupShowing()) {
             int newHeight = isWidthGreater ? keyboardHeightLand : keyboardHeight;
+            int popupSize = AndroidUtilities.dp((float) ((ApplicationLoader.applicationContext.getSharedPreferences("plusconfig", 0).getInt("emojiPopupSize", 60) - 40) * 10));
+            if (popupSize >= newHeight) {
+                newHeight = popupSize;
+            }
             if (currentPopupContentType == 1 && !botKeyboardView.isFullSize()) {
                 newHeight = Math.min(botKeyboardView.getKeyboardHeight(), newHeight);
             }

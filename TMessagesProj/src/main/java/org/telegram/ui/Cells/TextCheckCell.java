@@ -20,6 +20,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LetterDrawable;
 import org.telegram.ui.Components.Switch;
 
 public class TextCheckCell extends FrameLayout {
@@ -29,6 +30,7 @@ public class TextCheckCell extends FrameLayout {
     private Switch checkBox;
     private boolean needDivider;
     private boolean isMultiline;
+    private boolean disabled;
 
     public TextCheckCell(Context context) {
         super(context);
@@ -64,11 +66,21 @@ public class TextCheckCell extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (isMultiline) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+        if (this.isMultiline) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), 1073741824), MeasureSpec.makeMeasureSpec(0, 0));
         } else {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(valueTextView.getVisibility() == VISIBLE ? 64 : 48) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), 1073741824), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(this.valueTextView.getVisibility() == 0 ? 64.0f : 48.0f), 1073741824));
         }
+        if (Theme.usePlusTheme) {
+            setTheme();
+        }
+    }
+
+    private void setTheme() {
+        setBackgroundColor(Theme.prefBGColor);
+        this.textView.setTextColor(Theme.prefTitleColor);
+        this.valueTextView.setTextColor(Theme.prefSummaryColor);
+        LetterDrawable.paint.setColor(Theme.prefDividerColor);
     }
 
     public void setTextAndCheck(String text, boolean checked, boolean divider) {

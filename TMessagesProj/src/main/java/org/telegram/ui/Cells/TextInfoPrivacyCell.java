@@ -19,8 +19,9 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
@@ -44,6 +45,27 @@ public class TextInfoPrivacyCell extends FrameLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+        if (Theme.usePlusTheme) {
+            setTheme();
+        }
+    }
+
+    public void setTextSize(int size) {
+        this.textView.setTextSize(1, (float) size);
+    }
+
+    private void setTheme() {
+        int summaryColor = Theme.prefSummaryColor;
+        int shadowColor = Theme.prefShadowColor;
+        if ((getTag() != null ? getTag().toString() : "").contains("Profile")) {
+            summaryColor = Theme.profileRowStatusColor;
+        } else if (shadowColor != -986896) {
+            setBackgroundColor(shadowColor);
+        } else {
+            setBackgroundResource(R.drawable.greydivider);
+        }
+        this.textView.setTextColor(summaryColor);
+        this.textView.setLinkTextColor(AndroidUtilities.setDarkColor(summaryColor, -64));
     }
 
     public void setText(CharSequence text) {

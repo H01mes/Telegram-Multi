@@ -123,7 +123,9 @@ public class NumberPicker extends LinearLayout {
         mSolidColor = 0;
         mSelectionDivider = new Paint();
         mSelectionDivider.setColor(Theme.getColor(Theme.key_dialogButton));
-
+        if (Theme.usePlusTheme) {
+            this.mSelectionDivider.setColor(Theme.defColor);
+        }
         mSelectionDividerHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, UNSCALED_DEFAULT_SELECTION_DIVIDER_HEIGHT, getResources().getDisplayMetrics());
         mSelectionDividersDistance = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, UNSCALED_DEFAULT_SELECTION_DIVIDERS_DISTANCE, getResources().getDisplayMetrics());
 

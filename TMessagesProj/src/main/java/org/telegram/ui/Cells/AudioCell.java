@@ -78,7 +78,8 @@ public class AudioCell extends FrameLayout {
         });
 
         titleTextView = new TextView(context);
-        titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+//        titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        titleTextView.setTextColor(Theme.usePlusTheme ? Theme.prefTitleColor : Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         titleTextView.setLines(1);
@@ -89,7 +90,8 @@ public class AudioCell extends FrameLayout {
         addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 50 : 72, 7, LocaleController.isRTL ? 72 : 50, 0));
 
         genreTextView = new TextView(context);
-        genreTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+//        genreTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+        genreTextView.setTextColor(Theme.usePlusTheme ? Theme.prefSummaryColor : Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         genreTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         genreTextView.setLines(1);
         genreTextView.setMaxLines(1);
@@ -99,7 +101,8 @@ public class AudioCell extends FrameLayout {
         addView(genreTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 50 : 72, 28, LocaleController.isRTL ? 72 : 50, 0));
 
         authorTextView = new TextView(context);
-        authorTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+//        authorTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+        authorTextView.setTextColor(Theme.usePlusTheme ? Theme.prefSummaryColor : Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         authorTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         authorTextView.setLines(1);
         authorTextView.setMaxLines(1);
@@ -109,7 +112,8 @@ public class AudioCell extends FrameLayout {
         addView(authorTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 50 : 72, 44, LocaleController.isRTL ? 72 : 50, 0));
 
         timeTextView = new TextView(context);
-        timeTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+//        timeTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+        timeTextView.setTextColor(Theme.usePlusTheme ? Theme.prefSummaryColor : Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         timeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         timeTextView.setLines(1);
         timeTextView.setMaxLines(1);
@@ -120,7 +124,8 @@ public class AudioCell extends FrameLayout {
 
         checkBox = new CheckBox(context, R.drawable.round_check2);
         checkBox.setVisibility(VISIBLE);
-        checkBox.setColor(Theme.getColor(Theme.key_musicPicker_checkbox), Theme.getColor(Theme.key_musicPicker_checkboxCheck));
+        checkBox.setColor(Theme.usePlusTheme ? Theme.lightColor : Theme.getColor(Theme.key_musicPicker_checkbox), Theme.getColor(Theme.key_musicPicker_checkboxCheck));
+//        checkBox.setColor(Theme.getColor(Theme.key_musicPicker_checkbox), Theme.getColor(Theme.key_musicPicker_checkboxCheck));
         addView(checkBox, LayoutHelper.createFrame(22, 22, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, LocaleController.isRTL ? 18 : 0, 39, LocaleController.isRTL ? 0 : 18, 0));
     }
 

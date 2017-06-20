@@ -27,6 +27,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.os.Build;
@@ -50,18 +51,19 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChangeUserHelper;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.VideoEditedInfo;
-import org.telegram.messenger.camera.*;
+import org.telegram.messenger.camera.CameraController;
+import org.telegram.messenger.camera.CameraView;
 import org.telegram.messenger.query.SearchQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.R;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -180,7 +182,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             textView.setSingleLine(true);
             textView.setGravity(Gravity.CENTER_HORIZONTAL);
             textView.setEllipsize(TextUtils.TruncateAt.END);
-            textView.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
+            this.textView.setTextColor(Theme.usePlusTheme ? ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0).getInt(Theme.pkey_chatAttachTextColor, -9079435) : Theme.getColor(Theme.key_dialogTextGray2));
+//            textView.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
             addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 64, 0, 0));
         }
@@ -353,7 +356,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         }
     }
 
-    public ChatAttachAlert(Context context, final ChatActivity parentFragment) {
+    public ChatAttachAlert(Context context, ChatActivity parentFragment) {
         super(context, false);
         baseFragment = parentFragment;
         ciclePaint.setColor(Theme.getColor(Theme.key_dialogBackground));
@@ -614,14 +617,40 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         }
         attachView.addView(progressView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 80));
         attachPhotoRecyclerView.setEmptyView(progressView);
-
+        SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+        if (Theme.usePlusTheme) {
+            this.attachView.setBackgroundColor(Theme.chatAttachBGColor);
+            this.shadowDrawable.setColorFilter(Theme.chatAttachBGColor, PorterDuff.Mode.MULTIPLY);
+            int val = themePrefs.getInt(Theme.pkey_chatAttachBGGradient, 0);
+            if (val > 0) {
+                GradientDrawable.Orientation go;
+                switch (val) {
+                    case 2:
+                        go = GradientDrawable.Orientation.LEFT_RIGHT;
+                        break;
+                    case 3:
+                        go = GradientDrawable.Orientation.TL_BR;
+                        break;
+                    case 4:
+                        go = GradientDrawable.Orientation.BL_TR;
+                        break;
+                    default:
+                        go = GradientDrawable.Orientation.TOP_BOTTOM;
+                        break;
+                }
+                int gradColor = themePrefs.getInt(Theme.pkey_chatAttachBGGradientColor, -1);
+                GradientDrawable gd = new GradientDrawable(go, new int[]{Theme.chatAttachBGColor, gradColor});
+                this.shadowDrawable = gd;
+                this.attachView.setBackgroundDrawable(gd);
+            }
+        }
         views[10] = lineView = new View(getContext()) {
             @Override
             public boolean hasOverlappingRendering() {
                 return false;
             }
         };
-        lineView.setBackgroundColor(Theme.getColor(Theme.key_dialogGrayLine));
+        lineView.setBackgroundColor(Theme.getColor(Theme.key_dialogGrayLine)); //TODO Multi (this stock)
         attachView.addView(lineView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1, Gravity.TOP | Gravity.LEFT));
         CharSequence[] items = new CharSequence[]{
                 LocaleController.getString("ChatCamera", R.string.ChatCamera),
@@ -1608,6 +1637,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         } else {
             sendPhotosButton.imageView.setPadding(AndroidUtilities.dp(2), 0, 0, 0);
             sendPhotosButton.imageView.setBackgroundResource(R.drawable.attach_send_states);
+            this.sendPhotosButton.getContext().getResources().getDrawable(R.drawable.attach_send1).setColorFilter(Theme.defColor, PorterDuff.Mode.SRC_IN);
+            this.sendPhotosButton.imageView.setBackgroundDrawable(this.sendPhotosButton.getContext().getResources().getDrawable(R.drawable.attach_send_states));
             sendPhotosButton.imageView.setImageResource(R.drawable.attach_send2);
             sendPhotosButton.textView.setText(LocaleController.formatString("SendItems", R.string.SendItems, String.format("(%d)", count)));
         }
@@ -1830,7 +1861,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     public void checkCamera(boolean request) {
-        if (baseFragment == null) {
+//        if (baseFragment == null) {
+        if (this.baseFragment != null && !Theme.plusHideInstantCamera) {
             return;
         }
         boolean old = deviceHasGoodCamera;
@@ -1878,11 +1910,32 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
-
+        GradientDrawable gd = null;
         private Context mContext;
 
         public ListAdapter(Context context) {
             mContext = context;
+            SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+            int val = themePrefs.getInt(Theme.pkey_chatAttachBGGradient, 0);
+            if (val > 0) {
+                GradientDrawable.Orientation go;
+                switch (val) {
+                    case 2:
+                        go = GradientDrawable.Orientation.LEFT_RIGHT;
+                        break;
+                    case 3:
+                        go = GradientDrawable.Orientation.TL_BR;
+                        break;
+                    case 4:
+                        go = GradientDrawable.Orientation.BL_TR;
+                        break;
+                    default:
+                        go = GradientDrawable.Orientation.TOP_BOTTOM;
+                        break;
+                }
+                int gradColor = themePrefs.getInt(Theme.pkey_chatAttachBGGradientColor, -1);
+                this.gd = new GradientDrawable(go, new int[]{Theme.chatAttachBGColor, gradColor});
+            }
         }
 
         @Override
@@ -1913,6 +1966,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     view = frameLayout;
                     frameLayout.setLayoutParams(new RecyclerView.LayoutParams(LayoutHelper.MATCH_PARENT, AndroidUtilities.dp(100)));
                     break;
+            }
+            if (this.gd == null) {
+                view.setBackgroundColor(Theme.chatAttachBGColor);
+            } else {
+                view.setBackgroundDrawable(this.gd);
             }
             return new RecyclerListView.Holder(view);
         }

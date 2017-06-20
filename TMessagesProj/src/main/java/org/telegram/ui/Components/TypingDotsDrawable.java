@@ -89,6 +89,9 @@ public class TypingDotsDrawable extends Drawable {
         } else {
             y = AndroidUtilities.dp(9.3f) + getBounds().top;
         }
+        if (Theme.usePlusTheme) {
+            Theme.chat_statusPaint.setColor(Theme.chatTypingColor);
+        }
         canvas.drawCircle(AndroidUtilities.dp(3), y, scales[0] * AndroidUtilities.density, Theme.chat_statusPaint);
         canvas.drawCircle(AndroidUtilities.dp(9), y, scales[1] * AndroidUtilities.density, Theme.chat_statusPaint);
         canvas.drawCircle(AndroidUtilities.dp(15), y, scales[2] * AndroidUtilities.density, Theme.chat_statusPaint);

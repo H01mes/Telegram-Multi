@@ -69,6 +69,9 @@ public class ChatAvatarContainer extends FrameLayout {
         subtitleTextView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubtitle));
         subtitleTextView.setTextSize(14);
         subtitleTextView.setGravity(Gravity.LEFT);
+        if (Theme.usePlusTheme) {
+            this.subtitleTextView.setTextColor(Theme.chatStatusColor);
+        }
         addView(subtitleTextView);
 
         if (needTime) {
@@ -105,6 +108,7 @@ public class ChatAvatarContainer extends FrameLayout {
                     ProfileActivity fragment = new ProfileActivity(args);
                     fragment.setChatInfo(parentFragment.getCurrentChatInfo());
                     fragment.setPlayProfileAnimation(true);
+                    fragment.setParentChatActivity(ChatAvatarContainer.this.parentFragment);
                     parentFragment.presentFragment(fragment);
                 }
             }
@@ -119,6 +123,22 @@ public class ChatAvatarContainer extends FrameLayout {
         sendingFileDrawable.setIsChat(chat != null);
         playingGameDrawable = new PlayingGameDrawable();
         playingGameDrawable.setIsChat(chat != null);
+    }
+
+    public void setTitleColor(int color) {
+        this.titleTextView.setTextColor(color);
+    }
+
+    public void setTitleSize(int size) {
+        this.titleTextView.setTextSize(size);
+    }
+
+    public void setSubtitleColor(int color) {
+        this.subtitleTextView.setTextColor(color);
+    }
+
+    public void setSubtitleSize(int size) {
+        this.subtitleTextView.setTextSize(size);
     }
 
     @Override
@@ -303,10 +323,23 @@ public class ChatAvatarContainer extends FrameLayout {
                     newStatus = LocaleController.formatUserStatus(user);
                 }
                 subtitleTextView.setText(newStatus);
+                if (!Theme.usePlusTheme) {
+                    return;
+                }
+                if (newStatus.equals(LocaleController.getString("Online", R.string.Online))) {
+                    this.subtitleTextView.setTextColor(Theme.chatOnlineColor);
+                    return;
+                } else {
+                    this.subtitleTextView.setTextColor(Theme.chatStatusColor);
+                    return;
+                }
             }
         } else {
             subtitleTextView.setText(printString);
             setTypingAnimation(true);
+            if (Theme.usePlusTheme) {
+                this.subtitleTextView.setTextColor(Theme.chatTypingColor);
+            }
         }
     }
 
@@ -325,8 +358,13 @@ public class ChatAvatarContainer extends FrameLayout {
             }
             avatarDrawable.setInfo(chat);
         }
+        int radius = AndroidUtilities.dp((float) AndroidUtilities.getIntDef(Theme.pkey_chatHeaderAvatarRadius, 32));
         if (avatarImageView != null) {
             avatarImageView.setImage(newPhoto, "50_50", avatarDrawable);
+            this.avatarImageView.setRoundRadius(radius);
+        }
+        if (this.avatarDrawable != null) {
+            this.avatarDrawable.setRadius(radius);
         }
     }
 

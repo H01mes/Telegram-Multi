@@ -14,12 +14,12 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
@@ -39,6 +40,8 @@ import org.telegram.messenger.voip.VoIPService;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.AudioPlayerActivity;
+import org.telegram.ui.ChatActivity;
+import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.VoIPActivity;
 
 public class FragmentContextView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -54,6 +57,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private FrameLayout frameLayout;
     private ImageView closeButton;
     private int currentStyle = -1;
+    private int hColor;
+    private int iconColor;
+    private int tColor;
+    private SharedPreferences themePrefs;
 
     public FragmentContextView(Context context, BaseFragment parentFragment) {
         super(context);
@@ -121,6 +128,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }
             }
         });
+        this.themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+        this.hColor = Theme.defColor;
+        this.iconColor = -1;
+        this.tColor = -1;
     }
 
     public float getTopPadding() {
@@ -142,9 +153,29 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             return;
         }
         currentStyle = style;
+        if (this.fragment instanceof DialogsActivity) {
+            this.hColor = Theme.chatsHeaderColor;
+            this.iconColor = Theme.chatsHeaderIconsColor;
+            this.tColor = this.themePrefs.getInt(Theme.pkey_chatsHeaderTitleColor, this.tColor);
+        } else if (this.fragment instanceof ChatActivity) {
+            this.hColor = Theme.chatHeaderColor;
+            this.iconColor = Theme.chatHeaderIconsColor;
+            this.tColor = this.themePrefs.getInt(Theme.pkey_chatNameColor, this.tColor);
+        }
+        if (Theme.usePlusTheme) {
+            setBackgroundColor(0);
+            if (getChildAt(0) != null) {
+                getChildAt(0).setBackgroundColor(this.hColor);
+            }
+            this.playButton.setColorFilter(new PorterDuffColorFilter(this.iconColor, PorterDuff.Mode.MULTIPLY));
+            this.closeButton.setColorFilter(new PorterDuffColorFilter(this.iconColor, PorterDuff.Mode.MULTIPLY));
+            if (getChildAt(4) != null) {
+                ((ImageView) getChildAt(4)).setColorFilter(new PorterDuffColorFilter(this.iconColor, PorterDuff.Mode.MULTIPLY));
+            }
+        }
         if (style == 0) {
-            frameLayout.setBackgroundColor(Theme.getColor(Theme.key_inappPlayerBackground));
-            titleTextView.setTextColor(Theme.getColor(Theme.key_inappPlayerTitle));
+            this.frameLayout.setBackgroundColor(Theme.usePlusTheme ? this.hColor : Theme.getColor(Theme.key_inappPlayerBackground));
+            this.titleTextView.setTextColor(Theme.usePlusTheme ? this.tColor : Theme.getColor(Theme.key_inappPlayerTitle));
             closeButton.setVisibility(VISIBLE);
             playButton.setVisibility(VISIBLE);
             titleTextView.setTypeface(Typeface.DEFAULT);
@@ -152,8 +183,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             titleTextView.setLayoutParams(LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.LEFT | Gravity.TOP, 35, 0, 36, 0));
         } else if (style == 1) {
             titleTextView.setText(LocaleController.getString("ReturnToCall", R.string.ReturnToCall));
-            frameLayout.setBackgroundColor(Theme.getColor(Theme.key_returnToCallBackground));
-            titleTextView.setTextColor(Theme.getColor(Theme.key_returnToCallText));
+            this.frameLayout.setBackgroundColor(Theme.usePlusTheme ? this.hColor : Theme.getColor(Theme.key_returnToCallBackground));
+            this.titleTextView.setTextColor(Theme.usePlusTheme ? this.tColor : Theme.getColor(Theme.key_returnToCallText));
             closeButton.setVisibility(GONE);
             playButton.setVisibility(GONE);
             titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -290,7 +321,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     titleTextView.setEllipsize(TextUtils.TruncateAt.END);
                 }
                 TypefaceSpan span = new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf"), 0, Theme.getColor(Theme.key_inappPlayerPerformer));
-                stringBuilder.setSpan(span, 0, messageObject.getMusicAuthor().length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf"), 0, Theme.usePlusTheme ? this.tColor : Theme.getColor(Theme.key_inappPlayerPerformer)), 0, messageObject.getMusicAuthor().length(), 18);
                 titleTextView.setText(stringBuilder);
             }
         }

@@ -22,6 +22,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Vibrator;
 import android.support.v4.os.CancellationSignal;
@@ -47,11 +48,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChangeUserHelper;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
@@ -974,11 +975,39 @@ public class PasscodeView extends FrameLayout {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
         int selectedBackground = preferences.getInt("selectedBackground", 1000001);
         if (selectedBackground == 1000001) {
-            backgroundFrameLayout.setBackgroundColor(0xff517c9e);
+//            backgroundFrameLayout.setBackgroundColor(0xff517c9e);
+            this.backgroundFrameLayout.setBackgroundColor(Theme.darkColor);
         } else {
             backgroundDrawable = Theme.getCachedWallpaper();
             if (backgroundDrawable != null) {
-                backgroundFrameLayout.setBackgroundColor(0xbf000000);
+                SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+                if (Theme.chatSolidBGColorCheck) {
+                    int mainColor = themePrefs.getInt(Theme.pkey_chatSolidBGColor, -1);
+                    int orientation = themePrefs.getInt(Theme.pkey_chatGradientBG, 0);
+                    if (orientation == 0) {
+                        this.backgroundFrameLayout.setBackgroundColor(mainColor);
+                    } else {
+                        GradientDrawable.Orientation go;
+                        switch (orientation) {
+                            case 2:
+                                go = GradientDrawable.Orientation.LEFT_RIGHT;
+                                break;
+                            case 3:
+                                go = GradientDrawable.Orientation.TL_BR;
+                                break;
+                            case 4:
+                                go = GradientDrawable.Orientation.BL_TR;
+                                break;
+                            default:
+                                go = GradientDrawable.Orientation.TOP_BOTTOM;
+                                break;
+                        }
+                        int gradColor = themePrefs.getInt(Theme.pkey_chatGradientBGColor, -1);
+                        this.backgroundFrameLayout.setBackgroundDrawable(new GradientDrawable(go, new int[]{mainColor, gradColor}));
+                    }
+                }
+//                backgroundFrameLayout.setBackgroundColor(0xbf000000);
+                this.backgroundFrameLayout.setBackgroundColor(Theme.darkColor);
             } else {
                 backgroundFrameLayout.setBackgroundColor(0xff517c9e);
             }

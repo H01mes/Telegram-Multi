@@ -17,6 +17,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.LocationCell;
@@ -88,6 +89,11 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
                 break;
             case 2:
                 view = new GraySectionCell(mContext);
+                if (Theme.usePlusTheme) {
+                    view.setBackgroundColor(Theme.prefShadowColor);
+                    ((GraySectionCell) view).setTextColor(Theme.prefSectionColor);
+                    break;
+                }
                 break;
             case 3:
                 view = new LocationCell(mContext);

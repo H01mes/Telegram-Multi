@@ -20,6 +20,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -402,7 +403,7 @@ public class Switch extends CompoundButton {
     @Override
     public void setChecked(boolean checked) {
         super.setChecked(checked);
-
+        int checkColor;
         checked = isChecked();
 
         if (attachedToWindow && wasLayout) {
@@ -411,12 +412,28 @@ public class Switch extends CompoundButton {
             cancelPositionAnimator();
             setThumbPosition(checked ? 1 : 0);
         }
-
+        int sDarkColor = AndroidUtilities.getIntAlphaColor("prefSectionColor", Theme.prefSectionColor, 0.5f);
+        int darkColor = AndroidUtilities.getIntAlphaColor(Theme.pkey_themeColor, Theme.defColor, 0.5f);
+        if (Theme.prefSectionColor == Theme.defColor) {
+            checkColor = darkColor;
+        } else {
+            checkColor = sDarkColor;
+        }
         if (mTrackDrawable != null) {
             mTrackDrawable.setColorFilter(new PorterDuffColorFilter(checked ? Theme.getColor(Theme.key_switchTrackChecked) : Theme.getColor(Theme.key_switchTrack), PorterDuff.Mode.MULTIPLY));
+            if (Theme.usePlusTheme) {
+                Drawable drawable = this.mTrackDrawable;
+                if (!checked) {
+                    checkColor = Color.RED; //TODO Multi color
+                }
+                drawable.setColorFilter(new PorterDuffColorFilter(checkColor, PorterDuff.Mode.MULTIPLY));
+            }
         }
         if (mThumbDrawable != null) {
             mThumbDrawable.setColorFilter(new PorterDuffColorFilter(checked ? Theme.getColor(Theme.key_switchThumbChecked) : Theme.getColor(Theme.key_switchThumb), PorterDuff.Mode.MULTIPLY));
+            if (Theme.usePlusTheme) {
+                this.mThumbDrawable.setColorFilter(new PorterDuffColorFilter(checked ? Theme.prefSectionColor : Color.RED, PorterDuff.Mode.MULTIPLY)); //TODO Multi color
+            }
         }
     }
 
@@ -426,6 +443,25 @@ public class Switch extends CompoundButton {
         }
         if (mThumbDrawable != null) {
             mThumbDrawable.setColorFilter(new PorterDuffColorFilter(isChecked() ? Theme.getColor(Theme.key_switchThumbChecked) : Theme.getColor(Theme.key_switchThumb), PorterDuff.Mode.MULTIPLY));
+        }
+    }
+
+    public void setColor(int color) {
+        boolean checked = isChecked();
+        int lightColor = AndroidUtilities.getIntAlphaColor(color, 0.5f);
+        if (this.mTrackDrawable != null) {
+            Drawable drawable = this.mTrackDrawable;
+            if (!checked) {
+                lightColor = Color.RED; //TODO Multi color
+            }
+            drawable.setColorFilter(new PorterDuffColorFilter(lightColor, PorterDuff.Mode.MULTIPLY));
+        }
+        if (this.mThumbDrawable != null) {
+            Drawable drawable = this.mThumbDrawable;
+            if (!checked) {
+                color = Color.RED;
+            }
+            drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
         }
     }
 

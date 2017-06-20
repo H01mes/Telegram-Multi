@@ -79,7 +79,14 @@ public class CommonGroupsActivity extends BaseFragment {
         });
 
         fragmentView = new FrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        int i;
+//        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        if (Theme.usePlusTheme) {
+            i = Theme.prefBGColor;
+        } else {
+            i = Theme.getColor(Theme.key_windowBackgroundGray);
+        }
+        fragmentView.setBackgroundColor(i);
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
         emptyView = new EmptyTextProgressView(context);

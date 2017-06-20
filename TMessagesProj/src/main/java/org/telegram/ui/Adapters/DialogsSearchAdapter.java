@@ -9,6 +9,7 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -20,17 +21,18 @@ import android.view.ViewGroup;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.R;
 import org.telegram.messenger.query.SearchQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.RequestDelegate;
@@ -116,7 +118,6 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             HintDialogCell cell = (HintDialogCell) holder.itemView;
-
             TLRPC.TL_topPeer peer = SearchQuery.hints.get(position);
             TLRPC.TL_dialog dialog = new TLRPC.TL_dialog();
             TLRPC.Chat chat = null;
@@ -1035,10 +1036,12 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
         switch (holder.getItemViewType()) {
             case 0: {
                 ProfileSearchCell cell = (ProfileSearchCell) holder.itemView;
-
+                int hColor = themePrefs.getInt("chatsHighlightSearchColor", Theme.lightColor);
+                String hexDarkColor = String.format("#%08X", new Object[]{Integer.valueOf(hColor & -1)});
                 TLRPC.User user = null;
                 TLRPC.Chat chat = null;
                 TLRPC.EncryptedChat encryptedChat = null;
@@ -1086,7 +1089,11 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                         }
                         try {
                             username = new SpannableStringBuilder(un);
-                            ((SpannableStringBuilder) username).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            if (!Theme.usePlusTheme) {
+                                hColor = Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4);
+                            }
+                            ((SpannableStringBuilder) username).setSpan(new ForegroundColorSpan(hColor), 0, foundUserName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
                         } catch (Exception e) {
                             username = un;
                             FileLog.e(e);
@@ -1098,6 +1105,10 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             }
             case 1: {
                 GraySectionCell cell = (GraySectionCell) holder.itemView;
+                if (Theme.usePlusTheme) {
+                    cell.setBackgroundColor(themePrefs.getInt("chatsRowColor", -855310));
+                    cell.setTextColor(themePrefs.getInt(Theme.pkey_chatsNameColor, -7697782));
+                }
                 if (isRecentSearchDisplayed()) {
                     int offset = (!SearchQuery.hints.isEmpty() ? 2 : 0);
                     if (position < offset) {
@@ -1116,6 +1127,9 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             }
             case 2: {
                 DialogCell cell = (DialogCell) holder.itemView;
+                if (Theme.usePlusTheme) {
+                    cell.setBackgroundColor(themePrefs.getInt("chatsRowColor", -855310));
+                }
                 cell.useSeparator = (position != getItemCount() - 1);
                 MessageObject messageObject = (MessageObject)getItem(position);
                 cell.setDialog(messageObject.getDialogId(), messageObject, messageObject.messageOwner.date);
@@ -1126,6 +1140,9 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             }
             case 4: {
                 HashtagSearchCell cell = (HashtagSearchCell) holder.itemView;
+                if (Theme.usePlusTheme) {
+                    cell.setTextColor(themePrefs.getInt(Theme.pkey_chatsMessageColor, -16777216));
+                }
                 cell.setText(searchResultHashtags.get(position - 1));
                 cell.setNeedDivider(position != searchResultHashtags.size());
                 break;

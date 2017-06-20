@@ -30,9 +30,9 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkPath;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
 public class AboutLinkCell extends FrameLayout {
@@ -77,6 +77,10 @@ public class AboutLinkCell extends FrameLayout {
             pressedLink = null;
         }
         invalidate();
+    }
+
+    public void setIconColor(int color) {
+        this.imageView.setColorFilter(color, PorterDuff.Mode.SRC_IN);
     }
 
     public void setTextAndIcon(String text, int resId) {

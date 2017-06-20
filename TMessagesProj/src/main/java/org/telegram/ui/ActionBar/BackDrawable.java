@@ -21,6 +21,7 @@ import org.telegram.messenger.AndroidUtilities;
 public class BackDrawable extends Drawable {
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint paintB = new Paint(Paint.ANTI_ALIAS_FLAG);
     private boolean reverseAngle = false;
     private long lastFrameTime;
     private boolean animationInProgress;

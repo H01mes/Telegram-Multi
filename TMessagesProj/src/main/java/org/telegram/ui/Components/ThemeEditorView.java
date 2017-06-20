@@ -1005,7 +1005,7 @@ public class ThemeEditorView {
             windowLayoutParams.y = getSideCoord(false, sidey, py, editorHeight);
             windowLayoutParams.format = PixelFormat.TRANSLUCENT;
             windowLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-            windowLayoutParams.type = WindowManager.LayoutParams.LAST_APPLICATION_WINDOW;
+            windowLayoutParams.type = WindowManager.LayoutParams.LAST_APPLICATION_WINDOW;//WTF //TODO Multi
             windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
             windowManager.addView(windowView, windowLayoutParams);
         } catch (Exception e) {

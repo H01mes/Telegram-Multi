@@ -18,7 +18,9 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
@@ -31,6 +33,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -38,6 +41,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -61,8 +65,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
+import android.widget.AbsListView;
 import android.widget.EdgeEffect;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -108,6 +114,16 @@ public class AndroidUtilities {
     private static final Object smsLock = new Object();
     private static final Object callLock = new Object();
 
+    //multi
+    public static final String THEME_PREFS = "theme";
+    public static final int THEME_PREFS_MODE = 0;
+    public static final int defColor = -16738680; //TODO multi
+    static long lastCheck = -1;
+    public static boolean needRestart = false;
+    public static boolean playingAGame = false;
+    public static int themeColor = getIntColor(Theme.pkey_themeColor);
+    public static boolean themeUpdated = false;
+    //
     public static int statusBarHeight = 0;
     public static float density = 1;
     public static Point displaySize = new Point();
@@ -381,18 +397,21 @@ public class AndroidUtilities {
     }
 
     public static Typeface getTypeface(String assetPath) {
+        Typeface typeface = null;
         synchronized (typefaceCache) {
             if (!typefaceCache.containsKey(assetPath)) {
                 try {
-                    Typeface t = Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), assetPath);
-                    typefaceCache.put(assetPath, t);
+                    typefaceCache.put(assetPath, Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), assetPath));
                 } catch (Exception e) {
                     FileLog.e("Could not get typeface '" + assetPath + "' because " + e.getMessage());
-                    return null;
                 }
             }
-            return typefaceCache.get(assetPath);
+            if (ApplicationLoader.USE_DEVICE_FONT) {
+            } else {
+                typeface = (Typeface) typefaceCache.get(assetPath);
+            }
         }
+        return typeface;
     }
 
     public static boolean isWaitingForSms() {
@@ -1383,6 +1402,7 @@ public class AndroidUtilities {
         }
         wholeString = wholeString.trim();
         String lower = " " + wholeString.toLowerCase();
+        int hColor = ApplicationLoader.applicationContext.getSharedPreferences(THEME_PREFS, 0).getInt("chatsHighlightSearchColor", Theme.lightColor);
 
         int index;
         int lastIndex = 0;
@@ -1404,7 +1424,8 @@ public class AndroidUtilities {
 
             int start = builder.length();
             builder.append(query);
-            builder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), start, start + query.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //Multi
+            builder.setSpan(new ForegroundColorSpan(Theme.usePlusTheme ? hColor : Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), start, query.length() + start, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             lastIndex = end;
         }
@@ -1641,4 +1662,193 @@ public class AndroidUtilities {
         matrix.preScale(sx, sy);
         matrix.preTranslate(tx, ty);
     }
+
+    //Multi
+    public static void setListViewEdgeEffectColor(AbsListView listView, int color) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            try {
+                Field field = AbsListView.class.getDeclaredField("mEdgeGlowTop");
+                field.setAccessible(true);
+                EdgeEffect mEdgeGlowTop = (EdgeEffect) field.get(listView);
+                if (mEdgeGlowTop != null) {
+                    mEdgeGlowTop.setColor(color);
+                }
+                field = AbsListView.class.getDeclaredField("mEdgeGlowBottom");
+                field.setAccessible(true);
+                EdgeEffect mEdgeGlowBottom = (EdgeEffect) field.get(listView);
+                if (mEdgeGlowBottom != null) {
+                    mEdgeGlowBottom.setColor(color);
+                }
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
+        }
+    }
+
+    public static void brandGlowEffect(Context context, int brandColor) {
+        context.getResources().getDrawable(context.getResources().getIdentifier("overscroll_glow", "drawable", "android")).setColorFilter(brandColor, Mode.SRC_IN);
+        context.getResources().getDrawable(context.getResources().getIdentifier("overscroll_edge", "drawable", "android")).setColorFilter(brandColor, Mode.SRC_IN);
+    }
+
+    public static int getIntColor(String key) {
+        return ApplicationLoader.applicationContext.getSharedPreferences(THEME_PREFS, 0).getInt(key, defColor);
+    }
+
+    public static int getIntTColor(String key) {
+        SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(THEME_PREFS, 0);
+        return themePrefs.getInt(key, themePrefs.getInt(Theme.pkey_themeColor, defColor));
+    }
+
+    public static int getIntDef(String key, int def) {
+        return ApplicationLoader.applicationContext.getSharedPreferences(THEME_PREFS, 0).getInt(key, def);
+    }
+
+    public static int getIntAlphaColor(String key, int def, float factor) {
+        int color = ApplicationLoader.applicationContext.getSharedPreferences(THEME_PREFS, 0).getInt(key, def);
+        return Color.argb(Math.round(((float) Color.alpha(color)) * factor), Color.red(color), Color.green(color), Color.blue(color));
+    }
+
+    public static int getIntAlphaColor(int color, float factor) {
+        return Color.argb(Math.round(((float) Color.alpha(color)) * factor), Color.red(color), Color.green(color), Color.blue(color));
+    }
+
+    public static int getIntDarkerColor(String key, int factor) {
+        return setDarkColor(ApplicationLoader.applicationContext.getSharedPreferences(THEME_PREFS, 0).getInt(key, defColor), factor);
+    }
+
+    public static int setDarkColor(int color, int factor) {
+        int alpha = Color.alpha(color);
+        int red = Color.red(color) - factor;
+        int green = Color.green(color) - factor;
+        int blue = Color.blue(color) - factor;
+        if (factor < 0) {
+            if (red > 255) {
+                red = 255;
+            }
+            if (green > 255) {
+                green = 255;
+            }
+            if (blue > 255) {
+                blue = 255;
+            }
+            if (red == 255 && green == 255 && blue == 255) {
+                red = factor;
+                green = factor;
+                blue = factor;
+            }
+        }
+        if (factor > 0) {
+            if (red < 0) {
+                red = 0;
+            }
+            if (green < 0) {
+                green = 0;
+            }
+            if (blue < 0) {
+                blue = 0;
+            }
+            if (red == 0 && green == 0 && blue == 0) {
+                red = factor;
+                green = factor;
+                blue = factor;
+            }
+        }
+        return Color.argb(alpha, red, green, blue);
+    }
+
+    public static void setStringPref(Context context, String key, String s) {
+        SharedPreferences.Editor e = context.getSharedPreferences(THEME_PREFS, 0).edit();
+        e.putString(key, s);
+        e.commit();
+    }
+
+    public static boolean getBoolPref(String key) {
+        if (ApplicationLoader.applicationContext.getSharedPreferences(THEME_PREFS, 0).getBoolean(key, false)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean getBoolMain(String key) {
+        if (ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean(key, false)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static String getVersion() {
+        try {
+            PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
+            return String.format(Locale.US, "Plus v%s-%d", new Object[]{pInfo.versionName, Integer.valueOf(pInfo.versionCode)});
+        } catch (Throwable e) {
+            FileLog.e(e);
+            return null;
+        }
+    }
+
+    public static int getDefBubbleColor() {
+        if (getIntColor(Theme.pkey_themeColor) != defColor) {
+            return getIntDarkerColor(Theme.pkey_themeColor, -80);
+        }
+        return -5054501;
+    }
+
+    public static void checkForThemes(final Activity context) {
+        try {
+            String packageName = "es.rafalense.themes";
+            if (context.getPackageManager().getLaunchIntentForPackage(packageName) == null) {
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                if (lastCheck < 0 || (System.currentTimeMillis() - lastCheck < 2592000000L && lastCheck > 0)) {
+                    lastCheck = preferences.getLong("lastTime", 0);
+                    return;
+                }
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong("lastTime", System.currentTimeMillis());
+                editor.apply();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(LocaleController.getString("Themes", R.string.Themes));
+                builder.setMessage(LocaleController.getString("ThemesAppMsg", R.string.ThemesAppMsg));
+                final String pck = packageName;
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                try {
+                                    context.startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=" + pck)), 503);
+                                } catch (Throwable e) {
+                                    context.startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id=es.rafalense.themes")), 503);
+                                    FileLog.e(e);
+                                }
+                            }
+                        });
+                    }
+                });
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.create().show();
+                lastCheck = preferences.getLong("lastTime", 0);
+            }
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }
+    }
+
+    public static void setDrawableStatesColor(Context context, ImageView imageView, int pressed, int normal, int color) {
+        StateListDrawable states = new StateListDrawable();
+        Drawable drawable = context.getResources().getDrawable(pressed);
+        drawable.setColorFilter(Theme.lightColor, PorterDuff.Mode.SRC_IN);
+        states.addState(new int[]{16842919}, drawable);
+        states.addState(new int[]{16842908}, drawable);
+        states.addState(new int[0], context.getResources().getDrawable(normal));
+        imageView.setImageDrawable(states);
+    }
+
+    public static boolean isAppInstalled(Context ctx, String packageName) {
+        try {
+            ctx.getPackageManager().getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+    //
 }

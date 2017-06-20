@@ -36,6 +36,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PopupNotificationActivity;
 
@@ -1355,6 +1356,9 @@ public class NotificationsController {
     }
 
     private int getNotifyOverride(SharedPreferences preferences, long dialog_id) {
+        if (AndroidUtilities.playingAGame) {
+            return 2;
+        }
         int notifyOverride = preferences.getInt("notify2_" + dialog_id, 0);
         if (notifyOverride == 3) {
             int muteUntil = preferences.getInt("notifyuntil_" + dialog_id, 0);
@@ -2047,7 +2051,8 @@ public class NotificationsController {
                     .setContentText(text)
                     .setAutoCancel(true)
                     .setNumber(messageObjects.size())
-                    .setColor(0xff2ca5e0)
+//                    .setColor(0xff2ca5e0)
+                    .setColor(Theme.defColor)
                     .setGroupSummary(false)
                     .setWhen(((long) messageObjects.get(0).messageOwner.date) * 1000)
                     .setStyle(messagingStyle)
@@ -2074,6 +2079,7 @@ public class NotificationsController {
                 }
             }
 
+//            Builder mBuilder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(this.total_unread_count).setContentIntent(contentIntent).setGroup("messages").setGroupSummary(true).setColor(Theme.defColor);
             if (chat == null && user != null && user.phone != null && user.phone.length() > 0) {
                 builder.addPerson("tel:+" + user.phone);
             }

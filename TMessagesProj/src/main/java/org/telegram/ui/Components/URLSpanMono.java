@@ -43,13 +43,13 @@ public class URLSpanMono extends MetricAffectingSpan {
 
     @Override
     public void updateDrawState(TextPaint ds) {
-        ds.setTextSize(AndroidUtilities.dp(MessagesController.getInstance().fontSize - 1));
+        ds.setTextSize((float) AndroidUtilities.dp((float) (MessagesController.getInstance().fontSize - 1)));
         ds.setTypeface(Typeface.MONOSPACE);
         ds.setUnderlineText(false);
-        if (isOut) {
-            ds.setColor(Theme.getColor(Theme.key_chat_messageTextOut));
+        if (this.isOut) {
+            ds.setColor(Theme.usePlusTheme ? Theme.chatRTextColor : Theme.getColor(Theme.key_chat_messageTextOut));
         } else {
-            ds.setColor(Theme.getColor(Theme.key_chat_messageTextIn));
+            ds.setColor(Theme.usePlusTheme ? Theme.chatLTextColor : Theme.getColor(Theme.key_chat_messageTextIn));
         }
     }
 }

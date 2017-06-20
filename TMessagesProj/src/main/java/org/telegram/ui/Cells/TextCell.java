@@ -53,6 +53,19 @@ public class TextCell extends FrameLayout {
         addView(valueImageView);
     }
 
+
+    public void setTextSize(int size) {
+        this.textView.setTextSize(size);
+    }
+
+    public void setIconColor(int color) {
+        this.imageView.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+    }
+
+    public void setValueColor(int color) {
+        this.valueTextView.setTextColor(color);
+    }
+
     public SimpleTextView getTextView() {
         return textView;
     }

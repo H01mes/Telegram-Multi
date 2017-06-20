@@ -19,7 +19,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -46,7 +45,7 @@ public class MessageObject {
     public static final int MESSAGE_SEND_STATE_SENDING = 1;
     public static final int MESSAGE_SEND_STATE_SENT = 0;
     public static final int MESSAGE_SEND_STATE_SEND_ERROR = 2;
-
+    protected int leftBound;
     public TLRPC.Message messageOwner;
     public CharSequence messageText;
     public CharSequence linkDescription;
@@ -108,7 +107,7 @@ public class MessageObject {
 
     public MessageObject(TLRPC.Message message, AbstractMap<Integer, TLRPC.User> users, AbstractMap<Integer, TLRPC.Chat> chats, boolean generateLayout) {
         Theme.createChatResources(null, true);
-
+        this.leftBound = 52;
         messageOwner = message;
 
         if (message.replyMessage != null) {
@@ -1253,9 +1252,9 @@ public class MessageObject {
         }
 
         int maxWidth;
-        boolean needShare = messageOwner.from_id > 0 && (messageOwner.to_id.channel_id != 0 || messageOwner.to_id.chat_id != 0 || messageOwner.media instanceof TLRPC.TL_messageMediaGame || messageOwner.media instanceof TLRPC.TL_messageMediaInvoice) && !isOut();
-        generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
-        maxWidth = generatedWithMinSize - AndroidUtilities.dp(needShare ? 122 : 80);
+        boolean needShare = (this.messageOwner.from_id > 0 && ((this.messageOwner.to_id.channel_id != 0 || this.messageOwner.to_id.chat_id != 0 || (this.messageOwner.media instanceof TLRPC.TL_messageMediaGame) || (this.messageOwner.media instanceof TLRPC.TL_messageMediaInvoice)) && !isOut())) || ((this.messageOwner.from_id > 0 && Theme.chatShowOwnAvatar && isOut()) || (((this.messageOwner.to_id.chat_id > 0 || this.messageOwner.to_id.channel_id > 0) && Theme.chatShowOwnAvatarGroup && isOut()) || (this.messageOwner.from_id > 0 && Theme.chatShowContactAvatar && !isOutOwner())));
+        this.generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
+        maxWidth = this.generatedWithMinSize - AndroidUtilities.dp(needShare ? (float) (this.leftBound + 70) : 80.0f);
         if (fromUser != null && fromUser.bot || (isMegagroup() || messageOwner.fwd_from != null && messageOwner.fwd_from.channel_id != 0) && !isOut()) {
             maxWidth -= AndroidUtilities.dp(20);
         }

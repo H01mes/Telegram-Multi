@@ -1366,6 +1366,16 @@ public class ImageLoader {
             } else {
                 FileLog.e("this Android can't rename files");
             }
+            try {
+                File themesPath = new File(this.telegramPath, "Themes");
+                themesPath.mkdir();
+                if (themesPath.isDirectory() && canMoveFiles(cachePath, themesPath, 5)) {
+                    new File(themesPath, ".nomedia").createNewFile();
+                    mediaDirs.put(Integer.valueOf(5), themesPath);
+                }
+            } catch (Throwable e22222) {
+                FileLog.e(e22222);
+            }
             MediaController.getInstance().checkSaveToGalleryFiles();
         } catch (Exception e) {
             FileLog.e(e);
@@ -1391,6 +1401,9 @@ public class ImageLoader {
             } else if (type == FileLoader.MEDIA_DIR_VIDEO) {
                 srcFile = new File(from, "000000000_999999_temp.mp4");
                 dstFile = new File(to, "000000000_999999.mp4");
+            } else if (type == 5) {
+                srcFile = new File(from, "000000000_999999_temp.xml");
+                dstFile = new File(to, "000000000_999999.xml");
             }
             byte[] buffer = new byte[1024];
             srcFile.createNewFile();

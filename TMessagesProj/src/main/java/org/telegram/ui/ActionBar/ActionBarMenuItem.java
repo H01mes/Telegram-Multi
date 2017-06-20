@@ -12,6 +12,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -358,6 +359,15 @@ public class ActionBarMenuItem extends FrameLayout {
             updateOrShowPopup(true, false);
         }
         popupWindow.startAnimation();
+    }
+
+    //multi
+    public void setIcon(Drawable drawable) {
+        this.iconView.setImageDrawable(drawable);
+    }
+
+    public ImageView getClearButton() {
+        return this.clearButton;
     }
 
     public void openSearch(boolean openKeyboard) {

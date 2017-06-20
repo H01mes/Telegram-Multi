@@ -93,7 +93,8 @@ public class SharedPhotoVideoCell extends FrameLayout {
 
             checkBox = new CheckBox(context, R.drawable.round_check2);
             checkBox.setVisibility(INVISIBLE);
-            checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
+            this.checkBox.setColor(Theme.usePlusTheme ? Theme.defColor : Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
+//            checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
             addView(checkBox, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
         }
 
@@ -193,7 +194,8 @@ public class SharedPhotoVideoCell extends FrameLayout {
 
     public void updateCheckboxColor() {
         for (int a = 0; a < 6; a++) {
-            photoVideoViews[a].checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
+            this.photoVideoViews[a].checkBox.setColor(Theme.usePlusTheme ? Theme.defColor : Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
+//            photoVideoViews[a].checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
         }
     }
 

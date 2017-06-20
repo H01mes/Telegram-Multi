@@ -150,6 +150,11 @@ public class ActionBar extends FrameLayout {
         }
     }
 
+    //multi
+    public void setBackButtonColor(int color) {
+        this.backButtonImageView.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+    }
+
     private void createTitleTextView() {
         if (titleTextView != null) {
             return;

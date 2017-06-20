@@ -9,6 +9,8 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -16,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
@@ -30,6 +33,8 @@ public class MentionCell extends LinearLayout {
     private TextView nameTextView;
     private TextView usernameTextView;
     private AvatarDrawable avatarDrawable;
+    private int editTextColor;
+    private SharedPreferences themePrefs;
 
     public MentionCell(Context context) {
         super(context);
@@ -41,19 +46,19 @@ public class MentionCell extends LinearLayout {
 
         imageView = new BackupImageView(context);
         imageView.setRoundRadius(AndroidUtilities.dp(14));
+        this.themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+        this.editTextColor = this.themePrefs.getInt(Theme.pkey_chatEditTextColor, -16777216);
         addView(imageView, LayoutHelper.createLinear(28, 28, 12, 4, 0, 0));
 
         nameTextView = new TextView(context);
-        nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        this.nameTextView.setTextColor(Theme.usePlusTheme ? this.editTextColor : Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));        nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         nameTextView.setSingleLine(true);
         nameTextView.setGravity(Gravity.LEFT);
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(nameTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 12, 0, 0, 0));
 
         usernameTextView = new TextView(context);
-        usernameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
-        usernameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        this.usernameTextView.setTextColor(Theme.usePlusTheme ? Theme.chatEditTextIconsColor : Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));        usernameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         usernameTextView.setSingleLine(true);
         usernameTextView.setGravity(Gravity.LEFT);
         usernameTextView.setEllipsize(TextUtils.TruncateAt.END);
@@ -113,11 +118,11 @@ public class MentionCell extends LinearLayout {
 
     public void setIsDarkTheme(boolean isDarkTheme) {
         if (isDarkTheme) {
-            nameTextView.setTextColor(0xffffffff);
-            usernameTextView.setTextColor(0xff999999);
-        } else {
-            nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            usernameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+            this.nameTextView.setTextColor(Theme.usePlusTheme ? this.editTextColor : -1);
+            this.usernameTextView.setTextColor(Theme.usePlusTheme ? Theme.chatEditTextIconsColor : Color.CYAN); //TODO Multi color
+            return;
         }
+        this.nameTextView.setTextColor(Theme.usePlusTheme ? this.editTextColor : Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.usernameTextView.setTextColor(Theme.usePlusTheme ? Theme.chatEditTextIconsColor : Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
     }
 }

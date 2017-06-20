@@ -9,6 +9,8 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -26,6 +28,8 @@ public class RadioButtonCell extends FrameLayout {
     private TextView textView;
     private TextView valueTextView;
     private RadioButton radioButton;
+    private static Paint paint;
+    private boolean needDivider;
 
     public RadioButtonCell(Context context) {
         super(context);
@@ -33,6 +37,7 @@ public class RadioButtonCell extends FrameLayout {
         radioButton = new RadioButton(context);
         radioButton.setSize(AndroidUtilities.dp(20));
         radioButton.setColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_radioBackgroundChecked));
+//        this.radioButton.setColor(-5000269, Theme.prefActionbarColor);
         addView(radioButton, LayoutHelper.createFrame(22, 22, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 0 : 18), 10, (LocaleController.isRTL ? 18 : 0), 0));
 
         textView = new TextView(context);
@@ -68,5 +73,23 @@ public class RadioButtonCell extends FrameLayout {
 
     public void setChecked(boolean checked, boolean animated) {
         radioButton.setChecked(checked, animated);
+    }
+
+    public void setTextAndValue(String text, String value, boolean checked, boolean divider) {
+        boolean z = false;
+        this.textView.setText(text);
+        this.valueTextView.setText(value);
+        this.needDivider = divider;
+        this.radioButton.setChecked(checked, false);
+        if (!divider) {
+            z = true;
+        }
+        setWillNotDraw(z);
+    }
+
+    protected void onDraw(Canvas canvas) {
+        if (this.needDivider) {
+            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), paint);
+        }
     }
 }

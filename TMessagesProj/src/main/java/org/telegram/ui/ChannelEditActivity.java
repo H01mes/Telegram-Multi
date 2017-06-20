@@ -11,6 +11,8 @@ package org.telegram.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -80,7 +82,7 @@ public class ChannelEditActivity extends BaseFragment implements AvatarUpdater.A
     private TextInfoPrivacyCell infoCell;
     private TextSettingsCell textCell;
     private TextInfoPrivacyCell infoCell2;
-
+    private TextView checkTextView;
     private TLRPC.FileLocation avatar;
     private TLRPC.Chat currentChat;
     private TLRPC.ChatFull info;
@@ -228,11 +230,16 @@ public class ChannelEditActivity extends BaseFragment implements AvatarUpdater.A
 
         ActionBarMenu menu = actionBar.createMenu();
         doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, (int) R.drawable.ic_done, AndroidUtilities.dp(56.0f));
 
         LinearLayout linearLayout;
 
         fragmentView = new ScrollView(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+//        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+//        this.fragmentView = new ScrollView(context);
+//        View view = this.fragmentView;
+        int color = Theme.usePlusTheme ? Theme.profileRowColor != -1 ? Theme.profileRowColor : Color.RED : Theme.getColor(Theme.key_windowBackgroundGray); //TODO Multi color
+        fragmentView.setBackgroundColor(color);
         ScrollView scrollView = (ScrollView) fragmentView;
         scrollView.setFillViewport(true);
         linearLayout = new LinearLayout(context);
@@ -244,7 +251,9 @@ public class ChannelEditActivity extends BaseFragment implements AvatarUpdater.A
 
         linearLayout2 = new LinearLayout(context);
         linearLayout2.setOrientation(LinearLayout.VERTICAL);
-        linearLayout2.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+//        linearLayout2.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        this.linearLayout2.setBackgroundColor(Theme.profileRowColor);
+
         linearLayout.addView(linearLayout2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         FrameLayout frameLayout = new FrameLayout(context);
@@ -300,6 +309,9 @@ public class ChannelEditActivity extends BaseFragment implements AvatarUpdater.A
         nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         nameTextView.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         nameTextView.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+        this.nameTextView.getBackground().setColorFilter(Theme.defColor, PorterDuff.Mode.SRC_IN);
+        this.nameTextView.setTextColor(Theme.profileRowTitleColor);
+
         nameTextView.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         nameTextView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         nameTextView.setPadding(0, 0, 0, AndroidUtilities.dp(8));
@@ -307,7 +319,7 @@ public class ChannelEditActivity extends BaseFragment implements AvatarUpdater.A
         inputFilters[0] = new InputFilter.LengthFilter(100);
         nameTextView.setFilters(inputFilters);
         AndroidUtilities.clearCursorDrawable(nameTextView);
-        nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+//        nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         frameLayout.addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, LocaleController.isRTL ? 16 : 96, 0, LocaleController.isRTL ? 96 : 16, 0));
         nameTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -333,13 +345,17 @@ public class ChannelEditActivity extends BaseFragment implements AvatarUpdater.A
 
         linearLayout3 = new LinearLayout(context);
         linearLayout3.setOrientation(LinearLayout.VERTICAL);
-        linearLayout3.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+//        linearLayout3.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        this.linearLayout2.setBackgroundColor(Theme.profileRowColor);
+//        this.linearLayout3.setBackgroundColor(Theme.profileRowColor);
+
         linearLayout.addView(linearLayout3, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         descriptionTextView = new EditText(context);
         descriptionTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         descriptionTextView.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-        descriptionTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+//        descriptionTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.descriptionTextView.setTextColor(Theme.profileRowColor != -1 ? Theme.profileRowTitleColor : Color.RED); //TODO Multi color
         descriptionTextView.setPadding(0, 0, 0, AndroidUtilities.dp(6));
         descriptionTextView.setBackgroundDrawable(null);
         descriptionTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);

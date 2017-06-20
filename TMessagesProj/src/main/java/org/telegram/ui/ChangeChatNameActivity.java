@@ -11,6 +11,8 @@ package org.telegram.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.TypedValue;
@@ -25,12 +27,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -78,7 +80,12 @@ public class ChangeChatNameActivity extends BaseFragment {
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
+//        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
+//        ActionBarMenu menu = this.actionBar.createMenu();
+        Drawable done = getParentActivity().getResources().getDrawable(R.drawable.ic_done);
+        SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+        done.setColorFilter(Theme.prefActionbarIconsColor, PorterDuff.Mode.MULTIPLY);
+        this.doneButton = menu.addItemWithWidth(1, done, AndroidUtilities.dp(56.0f));
 
         TLRPC.Chat currentChat = MessagesController.getInstance().getChat(chat_id);
 
@@ -99,6 +106,7 @@ public class ChangeChatNameActivity extends BaseFragment {
         firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+        this.firstNameField.getBackground().setColorFilter(Theme.defColor, PorterDuff.Mode.SRC_IN);
         firstNameField.setMaxLines(3);
         firstNameField.setPadding(0, 0, 0, 0);
         firstNameField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
@@ -138,6 +146,18 @@ public class ChangeChatNameActivity extends BaseFragment {
             firstNameField.requestFocus();
             AndroidUtilities.showKeyboard(firstNameField);
         }
+        if (Theme.usePlusTheme) {
+            updateTheme();
+        }
+    }
+
+    private void updateTheme() {
+        this.actionBar.setBackgroundColor(Theme.prefActionbarColor);
+        this.actionBar.setTitleColor(Theme.prefActionbarTitleColor);
+        Drawable back = getParentActivity().getResources().getDrawable(R.drawable.ic_ab_back);
+        back.setColorFilter(Theme.prefActionbarIconsColor, PorterDuff.Mode.MULTIPLY);
+        this.actionBar.setBackButtonDrawable(back);
+        getParentActivity().getResources().getDrawable(R.drawable.ic_done).setColorFilter(Theme.prefActionbarIconsColor, PorterDuff.Mode.MULTIPLY);
     }
 
     @Override

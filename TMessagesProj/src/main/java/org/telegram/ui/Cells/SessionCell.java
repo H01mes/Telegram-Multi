@@ -23,6 +23,7 @@ import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LetterDrawable;
 
 import java.util.Locale;
 
@@ -88,6 +89,9 @@ public class SessionCell extends FrameLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(90) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY));
+        if (Theme.usePlusTheme) {
+            setTheme();
+        }
     }
 
     public void setSession(TLRPC.TL_authorization session, boolean divider) {
@@ -147,6 +151,14 @@ public class SessionCell extends FrameLayout {
         }
 
         detailTextView.setText(stringBuilder);
+    }
+
+    private void setTheme() {
+        setBackgroundColor(Theme.prefBGColor);
+        this.nameTextView.setTextColor(Theme.prefTitleColor);
+        this.detailTextView.setTextColor(Theme.prefTitleColor);
+        this.detailExTextView.setTextColor(Theme.prefSummaryColor);
+        LetterDrawable.paint.setColor(Theme.prefDividerColor);
     }
 
     @Override

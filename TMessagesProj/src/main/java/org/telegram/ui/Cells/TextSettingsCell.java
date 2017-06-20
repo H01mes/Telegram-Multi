@@ -14,6 +14,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -22,9 +23,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LetterDrawable;
 
 import java.util.ArrayList;
 
@@ -67,6 +70,9 @@ public class TextSettingsCell extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (Theme.usePlusTheme) {
+            setTheme();
+        }
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(48) + (needDivider ? 1 : 0));
 
         int availableWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight() - AndroidUtilities.dp(34);
@@ -81,6 +87,50 @@ public class TextSettingsCell extends FrameLayout {
             width = availableWidth;
         }
         textView.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY));
+    }
+
+    public void setDividerColor(int color) {
+        LetterDrawable.paint.setColor(color);
+    }
+
+    private void setTheme() {
+        int bgColor = Theme.prefBGColor;
+        int divColor = Theme.prefDividerColor;
+        int titleColor = Theme.prefTitleColor;
+        int sColor = Theme.prefSectionColor;
+        if ((getTag() != null ? getTag().toString() : "").contains("Profile")) {
+            setBackgroundColor(Theme.profileRowColor);
+            if (Theme.profileRowColor != -1) {
+                LetterDrawable.paint.setColor(Theme.profileRowColor);
+            }
+            this.textView.setTextColor(ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0).getInt("profileTitleColor", -14606047));
+            if (bgColor != -1) {
+                this.valueTextView.setTextColor(0);
+                return;
+            }
+            return;
+        }
+        setBackgroundColor(bgColor);
+        this.textView.setTextColor(titleColor);
+        LetterDrawable.paint.setColor(divColor);
+        this.valueTextView.setTextColor(sColor);
+    }
+
+    public void setTextAndIcon(String text, Drawable resDr, boolean divider) {
+        boolean z = false;
+        this.textView.setText(text);
+        this.valueTextView.setVisibility(INVISIBLE);
+        if (resDr != null) {
+            this.valueImageView.setVisibility(VISIBLE);
+            this.valueImageView.setImageDrawable(resDr);
+        } else {
+            this.valueImageView.setVisibility(VISIBLE);
+        }
+        this.needDivider = divider;
+        if (!divider) {
+            z = true;
+        }
+        setWillNotDraw(z);
     }
 
     public TextView getTextView() {

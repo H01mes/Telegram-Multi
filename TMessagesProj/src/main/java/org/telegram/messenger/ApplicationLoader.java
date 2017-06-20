@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -30,9 +31,11 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
+import org.telegram.SQLite.DatabaseHandler;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.Components.Favorite;
 import org.telegram.ui.Components.ForegroundDetector;
 
 import java.io.File;
@@ -44,7 +47,18 @@ public class ApplicationLoader extends Application {
     public static volatile Context applicationContext;
     public static volatile Handler applicationHandler;
     private static volatile boolean applicationInited = false;
-
+    public static boolean ENABLE_TAGS = true;
+    public static boolean KEEP_ORIGINAL_FILENAME;
+    public static boolean SHOW_ANDROID_EMOJI;
+    public static boolean USE_DEVICE_FONT;
+    private static Drawable cachedWallpaper;
+    public static DatabaseHandler databaseHandler;
+    private static boolean isCustomTheme;
+    public static boolean isTeslaInstalled = false;
+    private static int selectedColor;
+    private static int serviceMessageColor;
+    private static int serviceSelectedMessageColor;
+    private static final Object sync = new Object();
     public static volatile boolean isScreenOn = false;
     public static volatile boolean mainInterfacePaused = true;
     public static volatile boolean mainInterfacePausedStageQueue = true;
@@ -208,6 +222,13 @@ public class ApplicationLoader extends Application {
         new ForegroundDetector(this);
 
         applicationHandler = new Handler(applicationContext.getMainLooper());
+        databaseHandler = new DatabaseHandler(applicationContext);
+        Favorite.getInstance();
+        SharedPreferences plusPreferences = applicationContext.getSharedPreferences("plusconfig", 0);
+        SHOW_ANDROID_EMOJI = plusPreferences.getBoolean("showAndroidEmoji", false);
+        KEEP_ORIGINAL_FILENAME = plusPreferences.getBoolean("keepOriginalFilename", false);
+        USE_DEVICE_FONT = plusPreferences.getBoolean("useDeviceFont", false);
+        isTeslaInstalled = AndroidUtilities.isAppInstalled(this, "com.teslacoilsw.notifier");
 
         startPushService();
     }

@@ -171,6 +171,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 
 	@Override
 	public View createView(Context context) {
+		int i;
 		greenDrawable = getParentActivity().getResources().getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
 		greenDrawable.setBounds(0, 0, greenDrawable.getIntrinsicWidth(), greenDrawable.getIntrinsicHeight());
 		greenDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedGreenIcon), PorterDuff.Mode.MULTIPLY));
@@ -197,7 +198,13 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 		});
 
 		fragmentView = new FrameLayout(context);
-		fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+//		fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+		if (Theme.usePlusTheme) {
+			i = Theme.chatsRowColor;
+		} else {
+			i = Theme.getColor(Theme.key_windowBackgroundGray);
+		}
+		fragmentView.setBackgroundColor(i);
 		FrameLayout frameLayout = (FrameLayout) fragmentView;
 
 		emptyView = new EmptyTextProgressView(context);

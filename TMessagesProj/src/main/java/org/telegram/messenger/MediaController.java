@@ -82,6 +82,7 @@ import java.util.concurrent.Semaphore;
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
 
     private native int startRecord(String path);
+    public static String iFilter = "*";
     private native int writeFrame(ByteBuffer frame, int len);
     private native void stopRecord();
     private native int openOpusFile(String path);
@@ -1700,15 +1701,16 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             raisedToTop = 0;
             countLess = 0;
         } else if (proximityTouched) {
-            if (playingMessageObject != null && playingMessageObject.isVoice()) {
-                if (!useFrontSpeaker) {
+            if (this.playingMessageObject != null && this.playingMessageObject.isVoice()) {
+                SharedPreferences plusPreferences = ApplicationLoader.applicationContext.getSharedPreferences("plusconfig", 0);
+                if (!(this.useFrontSpeaker || plusPreferences.getBoolean("disableAudioStop", false))) {
                     FileLog.e("start listen by proximity only");
-                    if (proximityHasDifferentValues && proximityWakeLock != null && !proximityWakeLock.isHeld()) {
-                        proximityWakeLock.acquire();
+                    if (!(!this.proximityHasDifferentValues || this.proximityWakeLock == null || this.proximityWakeLock.isHeld())) {
+                        this.proximityWakeLock.acquire();
                     }
-                    useFrontSpeaker = true;
+                    this.useFrontSpeaker = true;
                     startAudioAgain(false);
-                    ignoreOnPause = true;
+                    this.ignoreOnPause = true;
                 }
             }
         } else if (!proximityTouched) {

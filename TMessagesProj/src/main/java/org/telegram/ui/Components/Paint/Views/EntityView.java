@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Point;
 import org.telegram.ui.Components.Rect;
 
@@ -268,8 +269,8 @@ public class EntityView extends FrameLayout {
             setWillNotDraw(false);
 
             paint.setColor(0xffffffff);
-
-            dotPaint.setColor(0xff3ccaef);
+            this.dotPaint.setColor(Theme.usePlusTheme ? Theme.defColor : 0xff3ccaef);
+//            dotPaint.setColor(0xff3ccaef);
             dotStrokePaint.setColor(0xffffffff);
             dotStrokePaint.setStyle(Paint.Style.STROKE);
             dotStrokePaint.setStrokeWidth(AndroidUtilities.dp(1));

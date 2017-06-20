@@ -29,6 +29,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LetterDrawable;
 
 import java.util.ArrayList;
 
@@ -80,6 +81,16 @@ public class StickerSetCell extends FrameLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY));
+        if (Theme.usePlusTheme) {
+            setTheme();
+        }
+    }
+
+    private void setTheme() {
+        setBackgroundColor(Theme.prefBGColor);
+        this.textView.setTextColor(Theme.prefTitleColor);
+        this.valueTextView.setTextColor(Theme.prefSummaryColor);
+        LetterDrawable.paint.setColor(Theme.prefDividerColor);
     }
 
     public void setStickersSet(TLRPC.TL_messages_stickerSet set, boolean divider) {

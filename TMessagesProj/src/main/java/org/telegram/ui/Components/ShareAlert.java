@@ -82,7 +82,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     private EmptyTextProgressView searchEmptyView;
     private Drawable shadowDrawable;
     private HashMap<Long, TLRPC.TL_dialog> selectedDialogs = new HashMap<>();
-
+    private boolean favsFirst = ApplicationLoader.applicationContext.getSharedPreferences("plusconfig", 0).getBoolean("directShareFavsFirst", false);
+    private Switch quoteSwitch;
+    private TextView quoteTextView;
+    private int textColor;
     private TLRPC.TL_exportedMessageLink exportedMessageLink;
     private boolean loadingLink;
     private boolean copyLinkOnEnd;
@@ -487,24 +490,68 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         }
 
         public void fetchDialogs() {
-            dialogs.clear();
-            for (int a = 0; a < MessagesController.getInstance().dialogsServerOnly.size(); a++) {
-                TLRPC.TL_dialog dialog = MessagesController.getInstance().dialogsServerOnly.get(a);
-                int lower_id = (int) dialog.id;
-                int high_id = (int) (dialog.id >> 32);
-                if (lower_id != 0 && high_id != 1) {
-                    if (lower_id > 0) {
-                        dialogs.add(dialog);
-                    } else {
-                        TLRPC.Chat chat = MessagesController.getInstance().getChat(-lower_id);
-                        if (!(chat == null || ChatObject.isNotInChat(chat) || ChatObject.isChannel(chat) && !chat.creator && !chat.editor && !chat.megagroup)) {
-                            dialogs.add(dialog);
+            int a;
+            TLRPC.TL_dialog dialog;
+            int lower_id;
+            int high_id;
+            TLRPC.Chat chat;
+            this.dialogs.clear();
+            if (ShareAlert.this.favsFirst) {
+                for (a = 0; a < MessagesController.getInstance().dialogsFavs.size(); a++) {
+                    dialog = (TLRPC.TL_dialog) MessagesController.getInstance().dialogsFavs.get(a);
+                    lower_id = (int) dialog.id;
+                    high_id = (int) (dialog.id >> 32);
+                    if (!(lower_id == 0 || high_id == 1)) {
+                        if (lower_id > 0) {
+                            this.dialogs.add(dialog);
+                        } else {
+                            chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                            if (!(chat == null || ChatObject.isNotInChat(chat) || (ChatObject.isChannel(chat) && !chat.creator && !chat.editor && !chat.megagroup))) {
+                                this.dialogs.add(dialog);
+                            }
+                        }
+                    }
+                }
+            }
+            for (a = 0; a < MessagesController.getInstance().dialogsServerOnly.size(); a++) {
+                dialog = (TLRPC.TL_dialog) MessagesController.getInstance().dialogsServerOnly.get(a);
+                if (!ShareAlert.this.favsFirst || !Favorite.getInstance().isFavorite(Long.valueOf(dialog.id))) {
+                    lower_id = (int) dialog.id;
+                    high_id = (int) (dialog.id >> 32);
+                    if (!(lower_id == 0 || high_id == 1)) {
+                        if (lower_id > 0) {
+                            this.dialogs.add(dialog);
+                        } else {
+                            chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                            if (!(chat == null || ChatObject.isNotInChat(chat) || (ChatObject.isChannel(chat) && !chat.creator && !chat.editor && !chat.megagroup))) {
+                                this.dialogs.add(dialog);
+                            }
                         }
                     }
                 }
             }
             notifyDataSetChanged();
         }
+
+//        public void fetchDialogs() {
+//            dialogs.clear();
+//            for (int a = 0; a < MessagesController.getInstance().dialogsServerOnly.size(); a++) {
+//                TLRPC.TL_dialog dialog = MessagesController.getInstance().dialogsServerOnly.get(a);
+//                int lower_id = (int) dialog.id;
+//                int high_id = (int) (dialog.id >> 32);
+//                if (lower_id != 0 && high_id != 1) {
+//                    if (lower_id > 0) {
+//                        dialogs.add(dialog);
+//                    } else {
+//                        TLRPC.Chat chat = MessagesController.getInstance().getChat(-lower_id);
+//                        if (!(chat == null || ChatObject.isNotInChat(chat) || ChatObject.isChannel(chat) && !chat.creator && !chat.editor && !chat.megagroup)) {
+//                            dialogs.add(dialog);
+//                        }
+//                    }
+//                }
+//            }
+//            notifyDataSetChanged();
+//        }
 
         @Override
         public int getItemCount() {

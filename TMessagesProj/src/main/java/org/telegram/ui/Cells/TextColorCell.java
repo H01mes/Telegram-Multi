@@ -13,6 +13,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.FrameLayout;
@@ -22,6 +23,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LetterDrawable;
 
 import java.util.ArrayList;
 
@@ -45,6 +47,7 @@ public class TextColorCell extends FrameLayout {
         }
 
         textView = new TextView(context);
+        this.textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView.setLines(1);
@@ -68,6 +71,15 @@ public class TextColorCell extends FrameLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY));
+        if (Theme.usePlusTheme) {
+            setTheme();
+        }
+    }
+
+    private void setTheme() {
+        setBackgroundColor(Theme.prefBGColor);
+        this.textView.setTextColor(Theme.prefTitleColor);
+        LetterDrawable.paint.setColor(Theme.prefDividerColor);
     }
 
     public void setTextAndColor(String text, int color, boolean divider) {

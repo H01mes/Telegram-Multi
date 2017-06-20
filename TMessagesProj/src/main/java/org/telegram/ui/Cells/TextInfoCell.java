@@ -38,6 +38,14 @@ public class TextInfoCell extends FrameLayout {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
     }
 
+    public void setTextColor(int color) {
+        this.textView.setTextColor(color);
+    }
+
+    public void setTextSize(int size) {
+        this.textView.setTextSize(1, (float) size);
+    }
+
     public void setText(String text) {
         textView.setText(text);
     }

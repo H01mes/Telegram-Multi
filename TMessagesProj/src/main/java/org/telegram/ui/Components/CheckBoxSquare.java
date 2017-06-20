@@ -34,6 +34,7 @@ public class CheckBoxSquare extends View {
     private boolean isChecked;
     private boolean isDisabled;
     private boolean isAlert;
+    private int color = Theme.defColor;
 
     private final static float progressBounceDiff = 0.2f;
 
@@ -51,6 +52,10 @@ public class CheckBoxSquare extends View {
         }
         progress = value;
         invalidate();
+    }
+
+    public void setColor(int value) {
+        this.color = value;
     }
 
     public float getProgress() {

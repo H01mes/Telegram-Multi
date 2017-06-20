@@ -12,6 +12,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -21,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.query.StickersQuery;
@@ -180,6 +182,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
                 addButton.setText(LocaleController.getString("StickersRemove", R.string.StickersRemove).toUpperCase());
             } else {
                 addButton.setBackgroundDrawable(addDrawable);
+                this.addButton.getBackground().setColorFilter(ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0).getInt(Theme.pkey_chatEmojiViewTabColor, Theme.lightColor), PorterDuff.Mode.SRC_IN);
                 addButton.setText(LocaleController.getString("Add", R.string.Add).toUpperCase());
             }
         } else {

@@ -9,6 +9,7 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -17,8 +18,10 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.R;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.LayoutHelper;
@@ -42,7 +45,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
 
     public PhotoAttachPhotoCell(Context context) {
         super(context);
-
+        SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
         imageView = new BackupImageView(context);
         addView(imageView, LayoutHelper.createFrame(80, 80));
         checkFrame = new FrameLayout(context);
@@ -52,7 +55,8 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         checkBox.setSize(30);
         checkBox.setCheckOffset(AndroidUtilities.dp(1));
         checkBox.setDrawBackground(true);
-        checkBox.setColor(0xff3ccaef, 0xffffffff);
+//        checkBox.setColor(0xff3ccaef, 0xffffffff);
+        this.checkBox.setColor(Theme.usePlusTheme ? Theme.defColor : -12793105, Theme.usePlusTheme ? Theme.chatAttachBGColor : -1);
         addView(checkBox, LayoutHelper.createFrame(30, 30, Gravity.LEFT | Gravity.TOP, 46, 4, 0, 0));
         checkBox.setVisibility(VISIBLE);
     }

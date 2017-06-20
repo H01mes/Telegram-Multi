@@ -13,6 +13,7 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Layout;
@@ -25,13 +26,14 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 
 public class AvatarDrawable extends Drawable {
-
+    private static int[] arrColorsNames = new int[]{-769226, -1499549, -6543440, -10011977, -12627531, -14575885, -16537100, -16728876, AndroidUtilities.defColor, -11751600, -7617718, -3285959, -5317, -16121, -26624, -43230, -8825528, -6381922, -10453621}; //TODO Multi color
     private TextPaint namePaint;
     private int color;
     private StaticLayout textLayout;
     private float textWidth;
     private float textHeight;
     private float textLeft;
+    private int radius;
     private boolean isProfile;
     private boolean drawBrodcast;
     private boolean drawPhoto;
@@ -39,11 +41,20 @@ public class AvatarDrawable extends Drawable {
 
     public AvatarDrawable() {
         super();
-
+        this.radius = 32;
         namePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         namePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         namePaint.setTextSize(AndroidUtilities.dp(18));
     }
+
+    public void setRadius(int value) {
+        this.radius = value;
+    }
+
+    public int getRadius() {
+        return this.radius;
+    }
+
 
     public AvatarDrawable(TLRPC.User user) {
         this(user, false);
@@ -216,7 +227,14 @@ public class AvatarDrawable extends Drawable {
         Theme.avatar_backgroundPaint.setColor(color);
         canvas.save();
         canvas.translate(bounds.left, bounds.top);
-        canvas.drawCircle(size / 2, size / 2, size / 2, Theme.avatar_backgroundPaint);
+        if (Theme.usePlusTheme) {
+            RectF rectF = new RectF(new Rect(0, 0, size, size));
+            int r = getRadius();
+            canvas.drawRoundRect(rectF, (float) r, (float) r, Theme.avatar_backgroundPaint);
+        } else {
+            canvas.drawCircle((float) (size / 2), (float) (size / 2), (float) (size / 2), Theme.avatar_backgroundPaint);
+        }
+//        canvas.drawCircle(size / 2, size / 2, size / 2, Theme.avatar_backgroundPaint);
 
         if (drawBrodcast && Theme.avatar_broadcastDrawable != null) {
             int x = (size - Theme.avatar_broadcastDrawable.getIntrinsicWidth()) / 2;

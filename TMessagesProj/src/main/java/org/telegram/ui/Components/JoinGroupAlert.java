@@ -9,6 +9,7 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
@@ -39,6 +41,7 @@ public class JoinGroupAlert extends BottomSheet {
     private TLRPC.ChatInvite chatInvite;
     private String hash;
     private BaseFragment fragment;
+    private int nameColor;
 
     public JoinGroupAlert(final Context context, TLRPC.ChatInvite invite, String group, BaseFragment parentFragment) {
         super(context, false);
@@ -52,6 +55,11 @@ public class JoinGroupAlert extends BottomSheet {
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setClickable(true);
+        SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+        this.nameColor = themePrefs.getInt(Theme.pkey_chatAttachTextColor, -6710887);
+        if (Theme.usePlusTheme) {
+            linearLayout.setBackgroundColor(Theme.chatAttachBGColor);
+        }
         setCustomView(linearLayout);
 
         String title;
@@ -84,16 +92,21 @@ public class JoinGroupAlert extends BottomSheet {
         TextView textView = new TextView(context);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-        textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+//        textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        textView.setTextColor(this.nameColor);
         textView.setText(title);
         textView.setSingleLine(true);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         linearLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 10, 10, 10, participants_count > 0 ? 0 : 10));
 
         if (participants_count > 0) {
+            int color = themePrefs.getInt(Theme.pkey_chatAttachTextColor, -6710887);
             textView = new TextView(context);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             textView.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
+            if (color != Theme.getColor(Theme.key_dialogTextGray3)) {
+                textView.setTextColor(AndroidUtilities.setDarkColor(color, -64));
+            }
             textView.setSingleLine(true);
             textView.setEllipsize(TextUtils.TruncateAt.END);
             textView.setText(LocaleController.formatPluralString("Members", participants_count));
@@ -131,7 +144,13 @@ public class JoinGroupAlert extends BottomSheet {
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
         pickerBottomLayout.doneButton.setVisibility(View.VISIBLE);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(View.GONE);
-        pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
+//        pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
+        pickerBottomLayout.doneButtonTextView.setTextColor(Theme.defColor);
+        pickerBottomLayout.setBackgroundColor(Theme.chatAttachBGColor);
+        if (Theme.chatAttachTextColor != Theme.defColor) {
+            pickerBottomLayout.cancelButton.setTextColor(AndroidUtilities.setDarkColor(Theme.chatAttachTextColor, -64));
+            pickerBottomLayout.doneButtonTextView.setTextColor(AndroidUtilities.setDarkColor(Theme.chatAttachTextColor, -64));
+        }
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", R.string.JoinGroup));
         pickerBottomLayout.doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,18 +240,33 @@ public class JoinGroupAlert extends BottomSheet {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             JoinSheetUserCell cell = (JoinSheetUserCell) holder.itemView;
-            if (position < chatInvite.participants.size()) {
-                cell.setUser(chatInvite.participants.get(position));
+            if (position < JoinGroupAlert.this.chatInvite.participants.size()) {
+                cell.setUser((TLRPC.User) JoinGroupAlert.this.chatInvite.participants.get(position));
             } else {
                 int participants_count;
-                if (chatInvite.chat != null) {
-                    participants_count = chatInvite.chat.participants_count;
+                if (JoinGroupAlert.this.chatInvite.chat != null) {
+                    participants_count = JoinGroupAlert.this.chatInvite.chat.participants_count;
                 } else {
-                    participants_count = chatInvite.participants_count;
+                    participants_count = JoinGroupAlert.this.chatInvite.participants_count;
                 }
-                cell.setCount(participants_count - chatInvite.participants.size());
+                cell.setCount(participants_count - JoinGroupAlert.this.chatInvite.participants.size());
             }
+            cell.setNameColor(JoinGroupAlert.this.nameColor);
         }
+//        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+//            JoinSheetUserCell cell = (JoinSheetUserCell) holder.itemView;
+//            if (position < chatInvite.participants.size()) {
+//                cell.setUser(chatInvite.participants.get(position));
+//            } else {
+//                int participants_count;
+//                if (chatInvite.chat != null) {
+//                    participants_count = chatInvite.chat.participants_count;
+//                } else {
+//                    participants_count = chatInvite.participants_count;
+//                }
+//                cell.setCount(participants_count - chatInvite.participants.size());
+//            }
+//        }
 
         @Override
         public int getItemViewType(int i) {

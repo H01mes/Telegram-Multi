@@ -9,28 +9,32 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.UserObject;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.messenger.UserConfig;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.ActionBar.SimpleTextView;
 
 public class UserCell extends FrameLayout {
 
@@ -42,6 +46,11 @@ public class UserCell extends FrameLayout {
     private CheckBoxSquare checkBoxBig;
     private ImageView adminImage;
 
+    //Multi
+    private Drawable curDrawable = null;
+    private int nameColor = Color.RED; //TODO Multi color
+    private int radius = 32;
+    //
     private AvatarDrawable avatarDrawable;
     private TLObject currentObject;
 
@@ -69,7 +78,8 @@ public class UserCell extends FrameLayout {
         addView(avatarImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 7 + padding, 8, LocaleController.isRTL ? 7 + padding : 0, 0));
 
         nameTextView = new SimpleTextView(context);
-        nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.nameTextView.setTextColor(Theme.usePlusTheme ? Theme.profileRowTitleColor : Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+//        nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         nameTextView.setTextSize(17);
         nameTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 28 + (checkbox == 2 ? 18 : 0) : (68 + padding), 11.5f, LocaleController.isRTL ? (68 + padding) : 28 + (checkbox == 2 ? 18 : 0), 0));
@@ -90,7 +100,8 @@ public class UserCell extends FrameLayout {
         } else if (checkbox == 1) {
             checkBox = new CheckBox(context, R.drawable.round_check2);
             checkBox.setVisibility(INVISIBLE);
-            checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
+            this.checkBox.setColor(Theme.usePlusTheme ? Theme.defColor : Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
+//            checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
             addView(checkBox, LayoutHelper.createFrame(22, 22, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 37 + padding, 38, LocaleController.isRTL ? 37 + padding : 0, 0));
         }
 
@@ -107,12 +118,49 @@ public class UserCell extends FrameLayout {
         }
         adminImage.setVisibility(value != 0 ? VISIBLE : GONE);
         nameTextView.setPadding(LocaleController.isRTL && value != 0 ? AndroidUtilities.dp(16) : 0, 0, !LocaleController.isRTL && value != 0 ? AndroidUtilities.dp(16) : 0, 0);
+        String tag = getTag() != null ? getTag().toString() : "";
+        if (Theme.usePlusTheme && tag.contains("Profile")) {
+            setStatusColors(Theme.profileRowStatusColor, Theme.profileRowOnlineColor);
+        }
+        int i;
         if (value == 1) {
             setTag(Theme.key_profile_creatorIcon);
-            adminImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_creatorIcon), PorterDuff.Mode.MULTIPLY));
+            ImageView imageView = this.adminImage;
+            if (Theme.usePlusTheme) {
+                i = Theme.profileRowCreatorStarColor;
+            } else {
+                i = Theme.getColor(Theme.key_profile_creatorIcon);
+            }
+            imageView.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
         } else if (value == 2) {
             setTag(Theme.key_profile_adminIcon);
-            adminImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_adminIcon), PorterDuff.Mode.MULTIPLY));
+            this.adminImage.setColorFilter(new PorterDuffColorFilter(Theme.usePlusTheme ? Theme.profileRowAdminStarColor : Theme.getColor(Theme.key_profile_adminIcon), PorterDuff.Mode.MULTIPLY));
+        }
+    }
+
+    private void updateTheme() {
+        SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+        String tag = getTag() != null ? getTag().toString() : "";
+        if (tag.contains("Contacts")) {
+            setStatusColors(themePrefs.getInt("contactsStatusColor", -5723992), themePrefs.getInt("contactsOnlineColor", Theme.darkColor));
+            this.nameColor = themePrefs.getInt("contactsNameColor", -14606047);
+            this.nameTextView.setTextColor(this.nameColor);
+            this.nameTextView.setTextSize(themePrefs.getInt("contactsNameSize", 17));
+            setStatusSize(themePrefs.getInt("contactsStatusSize", 14));
+            setAvatarRadius(themePrefs.getInt("contactsAvatarRadius", 32));
+        } else if (tag.contains("Profile")) {
+            this.nameColor = themePrefs.getInt("profileTitleColor", -14606047);
+            this.nameTextView.setTextColor(this.nameColor);
+            this.nameTextView.setTextSize(17);
+            setStatusSize(14);
+            setAvatarRadius(Theme.profileRowAvatarRadius);
+            if (this.currentDrawable != 0) {
+                getResources().getDrawable(this.currentDrawable).setColorFilter(Theme.profileRowIconsColor, PorterDuff.Mode.SRC_IN);
+            }
+        } else if (tag.contains("Pref")) {
+            setStatusColors(Theme.prefSummaryColor, Theme.lightColor);
+            this.nameColor = Theme.prefTitleColor;
+            this.nameTextView.setTextColor(this.nameColor);
         }
     }
 
@@ -190,7 +238,9 @@ public class UserCell extends FrameLayout {
                 photo = currentChat.photo.photo_small;
             }
         }
-
+        if (Theme.usePlusTheme) {
+            updateTheme();
+        }
         if (mask != 0) {
             boolean continueUpdate = false;
             if ((mask & MessagesController.UPDATE_MASK_AVATAR) != 0) {
@@ -270,7 +320,37 @@ public class UserCell extends FrameLayout {
             imageView.setVisibility(currentDrawable == 0 ? GONE : VISIBLE);
             imageView.setImageResource(currentDrawable);
         }
+        if (this.curDrawable != null) {
+            this.imageView.setImageDrawable(this.curDrawable);
+        }
+        this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp((float) this.radius));
+        this.avatarDrawable.setRadius(AndroidUtilities.dp((float) this.radius));
+
         avatarImageView.setImage(photo, "50_50", avatarDrawable);
+    }
+
+    public void setNameColor(int color) {
+        this.nameColor = color;
+    }
+
+    public void setNameSize(int size) {
+        this.nameTextView.setTextSize(size);
+    }
+
+    public void setStatusColor(int color) {
+        this.statusColor = color;
+    }
+
+    public void setStatusSize(int size) {
+        this.statusTextView.setTextSize(size);
+    }
+
+    public void setImageDrawable(Drawable drawable) {
+        this.curDrawable = drawable;
+    }
+
+    public void setAvatarRadius(int value) {
+        this.radius = value;
     }
 
     @Override

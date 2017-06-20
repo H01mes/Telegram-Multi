@@ -41,7 +41,7 @@ public class FileUploadOperation {
     private String uploadingFilePath;
     private int state;
     private byte[] readBuffer;
-    private FileUploadOperationDelegate delegate;
+    public FileUploadOperationDelegate delegate;
     private HashMap<Integer, Integer> requestTokens = new HashMap<>();
     private int currentPartNum;
     private long currentFileId;

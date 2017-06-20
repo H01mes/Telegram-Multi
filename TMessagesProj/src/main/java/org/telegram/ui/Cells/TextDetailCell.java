@@ -11,6 +11,7 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -65,6 +66,25 @@ public class TextDetailCell extends FrameLayout {
         textView.setText(text);
         valueTextView.setText(value);
         imageView.setVisibility(INVISIBLE);
+    }
+
+    public void setTextAndValueAndIcon(String text, String value, Drawable drawable) {
+        this.textView.setText(text);
+        this.valueTextView.setText(value);
+        this.imageView.setVisibility(VISIBLE);
+        this.imageView.setImageDrawable(drawable);
+    }
+
+    public void setTextColor(int color) {
+        this.textView.setTextColor(color);
+    }
+
+    public void setValueColor(int color) {
+        this.valueTextView.setTextColor(color);
+    }
+
+    public void setIconColor(int color) {
+        this.imageView.setColorFilter(color, PorterDuff.Mode.SRC_IN);
     }
 
     public void setTextAndValueAndIcon(String text, String value, int resId) {

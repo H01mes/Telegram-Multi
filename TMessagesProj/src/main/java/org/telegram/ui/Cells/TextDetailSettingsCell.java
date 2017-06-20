@@ -20,6 +20,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LetterDrawable;
 
 public class TextDetailSettingsCell extends FrameLayout {
 
@@ -54,11 +55,56 @@ public class TextDetailSettingsCell extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (!multiline) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY));
+        int i = 0;
+        if (this.multiline) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.EXACTLY));
         } else {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+            int makeMeasureSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY);
+            int dp = AndroidUtilities.dp(64.0f);
+            if (this.needDivider) {
+                i = 1;
+            }
+            super.onMeasure(makeMeasureSpec, MeasureSpec.makeMeasureSpec(i + dp, MeasureSpec.EXACTLY));
         }
+        if (Theme.usePlusTheme) {
+            setTheme();
+        }
+    }
+
+    public void setMultilineText(boolean value) {
+        this.multiline = value;
+        if (value) {
+            this.textView.setLines(0);
+            this.textView.setMaxLines(0);
+            this.textView.setSingleLine(false);
+            this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(35.0f));
+            removeView(this.valueTextView);
+            addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 80, 17.0f, 0.0f, 17.0f, 12.0f));
+            return;
+        }
+        this.textView.setLines(1);
+        this.textView.setMaxLines(1);
+        this.textView.setSingleLine(true);
+        this.textView.setPadding(0, 0, 0, 0);
+    }
+
+    public void setTitleColor(int color) {
+        this.textView.setTextColor(color);
+    }
+
+    public void setSummaryColor(int color) {
+        this.valueTextView.setTextColor(color);
+    }
+
+    public void setDividerColor(int color) {
+        LetterDrawable.paint.setColor(color);
+    }
+
+    private void setTheme() {
+        setBackgroundColor(Theme.prefBGColor);
+        this.textView.setTextColor(Theme.prefTitleColor);
+        this.valueTextView.setTextColor(Theme.prefSummaryColor);
+        LetterDrawable.paint.setColor(Theme.prefDividerColor);
     }
 
     public void setMultilineDetail(boolean value) {

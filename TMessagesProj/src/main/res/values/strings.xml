@@ -1,5 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--multi-->
+    <string name="Themes">Themes</string>
+    <string name="ThemesAppMsg">Would you like to check some themes created by other Plus Messenger users?</string>
+    <string name="SavedTo">%1$s saved to %2$s</string>
+    <string name="SaveErrorMsg0">Theme not created yet. Apply any MOD first, please</string>
+    <string name="NoMediaMessage">No SD card found.</string>
+    <string name="restoreErrorMsg">No preferences file found in %s</string>
+    <string name="All">All</string>
+    <string name="Users">Users</string>
+    <string name="Groups">Groups</string>
+    <string name="SuperGroups">Supergroups</string>
+    <string name="Channels">Channels</string>
+    <string name="Bots">Bots</string>
+    <string name="Favorites">Favorites</string>
+    <string name="TelegramForAndroid">Plus Messenger for Android</string>
+    <string name="DownloadThemes">Download themes</string>
+    <string name="Theming">Theming</string>
+    <string name="PlusSettings">Plus Settings</string>
+    <string name="OfficialChannel">Official channel</string>
+    <string name="Community">G+ community</string>
+    <string name="ChatsCounters">Chats Counters</string>
+    <string name="NoChatsYet">No more %s</string>
+    <string name="TabsWarningMsg">To show tabs there must be at least 2 visible tabs</string>
+    <string name="EditBio">Edit bio</string>
+    <string name="ShowProfile">Profile</string>
+    <string name="RemoveUserAdmin">Remove</string>
+    <string name="ShowUserMessages">Show user messages</string>
+    <string name="ShowUserMedia">Show user media</string>
+    <string name="LeaveWithoutDeleteMsg">Do you want to leave the group with option to return?</string>
+    <string name="MessageSaved">Message saved to cloud</string>
+    <string name="MessageSize">Message size</string>
+    <string name="MessagesSaved">%s messages saved to cloud</string>
+    <!--app-->
     <string name="AppName">Telegram Multi</string>
     <string name="AppNameBeta">Telegram Multi Beta</string>
     <string name="ShortAppName" translatable="false">Telegram Multi</string>

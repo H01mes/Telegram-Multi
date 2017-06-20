@@ -17,7 +17,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,21 +38,25 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChangeUserHelper;
+import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.FileLog;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
-import org.telegram.messenger.Utilities;
+import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenu;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Adapters.ContactsAdapter;
@@ -60,10 +66,6 @@ import org.telegram.ui.Cells.LetterSectionCell;
 import org.telegram.ui.Cells.ProfileSearchCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.UserCell;
-import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarMenu;
-import org.telegram.ui.ActionBar.ActionBarMenuItem;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -141,6 +143,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
+        NotificationCenter.getInstance().postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.contactsDidLoaded);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.encryptedChatCreated);
@@ -153,7 +156,11 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 
         searching = false;
         searchWas = false;
-
+        SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+        int iconColor = themePrefs.getInt("contactsHeaderIconsColor", -1);
+        if (Theme.usePlusTheme) {
+            this.actionBar.setItemsColor(iconColor, false);
+        }
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (destroyAfterSelect) {
@@ -223,7 +230,17 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         });
         item.getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         if (!createSecretChat && !returnAsResult) {
-            menu.addItem(add_button, R.drawable.add);
+            if (Theme.usePlusTheme) {
+                Drawable add = getParentActivity().getResources().getDrawable(R.drawable.add);
+                add.setColorFilter(iconColor, PorterDuff.Mode.MULTIPLY);
+                menu.addItem(1, add);
+                item.getSearchField().setTextColor(themePrefs.getInt("contactsHeaderTitleColor", -1));
+                Drawable clear = getParentActivity().getResources().getDrawable(R.drawable.ic_close_white);
+                clear.setColorFilter(iconColor, PorterDuff.Mode.MULTIPLY);
+                item.getClearButton().setImageDrawable(clear);
+            } else {
+                menu.addItem(1, (int) R.drawable.add);
+            }
         }
 
         searchListViewAdapter = new SearchAdapter(context, ignoreUsers, allowUsernameSearch, false, false, allowBots);
@@ -518,6 +535,37 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 }
             }
         }
+        if (Theme.usePlusTheme) {
+            updateTheme();
+        }
+    }
+
+    private void updateTheme() {
+        SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
+        int def = themePrefs.getInt(Theme.pkey_themeColor, AndroidUtilities.defColor);
+        this.actionBar.setBackgroundColor(themePrefs.getInt("contactsHeaderColor", def));
+        int val = themePrefs.getInt("contactsHeaderGradient", 0);
+        if (val > 0) {
+            GradientDrawable.Orientation go;
+            switch (val) {
+                case 2:
+                    go = GradientDrawable.Orientation.LEFT_RIGHT;
+                    break;
+                case 3:
+                    go = GradientDrawable.Orientation.TL_BR;
+                    break;
+                case 4:
+                    go = GradientDrawable.Orientation.BL_TR;
+                    break;
+                default:
+                    go = GradientDrawable.Orientation.TOP_BOTTOM;
+                    break;
+            }
+            int gradColor = themePrefs.getInt("contactsHeaderGradientColor", def);
+            this.actionBar.setBackgroundDrawable(new GradientDrawable(go, new int[]{0, gradColor})); //TODO Multi hColor
+        }
+        this.actionBar.setTitleColor(themePrefs.getInt("contactsHeaderTitleColor", -1));
+        getParentActivity().getResources().getDrawable(R.drawable.ic_ab_search).setColorFilter(themePrefs.getInt("contactsHeaderIconsColor", -1), PorterDuff.Mode.MULTIPLY);
     }
 
     @Override

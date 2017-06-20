@@ -67,6 +67,8 @@ public class ChatActionCell extends BaseCell {
         imageReceiver = new ImageReceiver(this);
         imageReceiver.setRoundRadius(AndroidUtilities.dp(32));
         avatarDrawable = new AvatarDrawable();
+        imageReceiver.setRoundRadius(AndroidUtilities.dp((float) Theme.chatAvatarRadius));
+        avatarDrawable.setRadius(AndroidUtilities.dp((float) Theme.chatAvatarRadius));
     }
 
     public void setDelegate(ChatActionCellDelegate delegate) {

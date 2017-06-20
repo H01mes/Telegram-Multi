@@ -18,8 +18,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.R;
+import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class BaseFragment {
@@ -170,7 +175,10 @@ public class BaseFragment {
     }
 
     public void onResume() {
-
+        if (AndroidUtilities.needRestart) {
+            AndroidUtilities.needRestart = false;
+            Utilities.restartApp();
+        }
     }
 
     public void onPause() {
@@ -320,6 +328,28 @@ public class BaseFragment {
                 }
             });
             visibleDialog.show();
+            if (Theme.usePlusTheme) {
+                TextView tv = (TextView) this.visibleDialog.findViewById(this.visibleDialog.getContext().getResources().getIdentifier("android:id/alertTitle", null, null));
+                if (tv != null) {
+                    tv.setTextColor(Theme.dialogColor);
+                }
+                View divider = this.visibleDialog.findViewById(this.visibleDialog.getContext().getResources().getIdentifier("android:id/titleDivider", null, null));
+                if (divider != null) {
+                    divider.setBackgroundColor(Theme.dialogColor);
+                }
+                Button btn = (Button) this.visibleDialog.findViewById(android.R.id.button1);
+                if (btn != null) {
+                    btn.setTextColor(Theme.dialogColor);
+                }
+                btn = (Button) this.visibleDialog.findViewById(android.R.id.button2);
+                if (btn != null) {
+                    btn.setTextColor(Theme.dialogColor);
+                }
+                btn = (Button) this.visibleDialog.findViewById(android.R.id.button3);
+                if (btn != null) {
+                    btn.setTextColor(Theme.dialogColor);
+                }
+            }
             return visibleDialog;
         } catch (Exception e) {
             FileLog.e(e);
