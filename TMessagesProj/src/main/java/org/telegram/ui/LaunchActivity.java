@@ -40,25 +40,26 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import org.telegram.messenger.AndroidUtilities;
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChangeUserHelper;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NativeCrashManager;
-import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.messenger.UserObject;
-import org.telegram.messenger.Utilities;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLog;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -66,19 +67,18 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.messenger.UserConfig;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.ActionBar.ActionBarLayout;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.JoinGroupAlert;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PasscodeView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.StickersAlert;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ThemeEditorView;
 
 import java.io.BufferedReader;
@@ -336,67 +336,102 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 if (position == 0) {
                     Bundle args = new Bundle();
                     args.putInt("user_id", UserConfig.getClientUserId());
-                    presentFragment(new ChatActivity(args));
-                    drawerLayoutContainer.closeDrawer(false);
+                    LaunchActivity.this.presentFragment(new ChatActivity(args));
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 2) {
-                    if (!MessagesController.isFeatureEnabled("chat_create", actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1))) {
-                        return;
+                    if (MessagesController.isFeatureEnabled("chat_create", (BaseFragment) LaunchActivity.this.actionBarLayout.fragmentsStack.get(LaunchActivity.this.actionBarLayout.fragmentsStack.size() - 1))) {
+                        LaunchActivity.this.presentFragment(new GroupCreateActivity());
+                        LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                     }
-                    presentFragment(new GroupCreateActivity());
-                    drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 3) {
                     Bundle args = new Bundle();
                     args.putBoolean("onlyUsers", true);
                     args.putBoolean("destroyAfterSelect", true);
                     args.putBoolean("createSecretChat", true);
                     args.putBoolean("allowBots", false);
-                    presentFragment(new ContactsActivity(args));
-                    drawerLayoutContainer.closeDrawer(false);
+                    LaunchActivity.this.presentFragment(new ContactsActivity(args));
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 4) {
-                    if (!MessagesController.isFeatureEnabled("broadcast_create", actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1))) {
-                        return;
+                    if (MessagesController.isFeatureEnabled("broadcast_create", (BaseFragment) LaunchActivity.this.actionBarLayout.fragmentsStack.get(LaunchActivity.this.actionBarLayout.fragmentsStack.size() - 1))) {
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                        if (BuildVars.DEBUG_VERSION || !preferences.getBoolean("channel_intro", false)) {
+                            LaunchActivity.this.presentFragment(new ChannelIntroActivity());
+                            preferences.edit().putBoolean("channel_intro", true).commit();
+                        } else {
+                            Bundle args = new Bundle();
+                            args.putInt("step", 0);
+                            LaunchActivity.this.presentFragment(new ChannelCreateActivity(args));
+                        }
+                        LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                     }
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig"+ ChangeUserHelper.getUserTag(), Activity.MODE_PRIVATE);
-                    if (!BuildVars.DEBUG_VERSION && preferences.getBoolean("channel_intro", false)) {
-                        Bundle args = new Bundle();
-                        args.putInt("step", 0);
-                        presentFragment(new ChannelCreateActivity(args));
-                    } else {
-                        presentFragment(new ChannelIntroActivity());
-                        preferences.edit().putBoolean("channel_intro", true).commit();
-                    }
-                    drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 6) {
-                    presentFragment(new ContactsActivity(null));
-                    drawerLayoutContainer.closeDrawer(false);
-                } else if (id == 7) {
+                    LaunchActivity.this.presentFragment(new ContactsActivity(null));
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 17) {
                     try {
-                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        Intent intent = new Intent("android.intent.action.SEND");
                         intent.setType("text/plain");
-                        intent.putExtra(Intent.EXTRA_TEXT, ContactsController.getInstance().getInviteText());
-                        startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteFriends", R.string.InviteFriends)), 500);
-                    } catch (Exception e) {
+                        intent.putExtra("android.intent.extra.TEXT", ContactsController.getInstance().getInviteText());
+                        LaunchActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteFriends", R.string.InviteFriends)), 500);
+                    } catch (Throwable e) {
                         FileLog.e(e);
                     }
-                    drawerLayoutContainer.closeDrawer(false);
-                } else if (id == 8) {
-                    presentFragment(new SettingsActivity());
-                    drawerLayoutContainer.closeDrawer(false);
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 9) {
+                    LaunchActivity.this.presentFragment(new SettingsActivity());
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 16) {
                     Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl));
-                    drawerLayoutContainer.closeDrawer(false);
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 10) {
-                    presentFragment(new CallLogActivity());
-                    drawerLayoutContainer.closeDrawer(false);
+                    LaunchActivity.this.presentFragment(new CallLogActivity());
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 7) {
+                    try {
+                        String packageName = "es.rafalense.themes";
+                        Intent intent = LaunchActivity.this.getPackageManager().getLaunchIntentForPackage(packageName);
+                        if (intent == null) {
+                            intent = new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=" + packageName));
+                        }
+                        LaunchActivity.this.startActivityForResult(intent, 503);
+                    } catch (Exception e2) {
+                        LaunchActivity.this.startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id=es.rafalense.themes")), 503);
+                        FileLog.e("tmessages", e2);
+                    }
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 8) {
+                    LaunchActivity.this.presentFragment(new ThemingActivity());
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 11) {
-//                    presentFragment(new CallLogActivityTest());
-//                    drawerLayoutContainer.closeDrawer(false);
+                    LaunchActivity.this.presentFragment(new PlusSettingsActivity());
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 12) {
+                    try {
+                        LaunchActivity.this.startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse(LocaleController.getString("ChannelLink", R.string.ChannelLink))), 504);
+                    } catch (Exception e22) {
+                        FileLog.e("tmessages", e22);
+                    }
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 13) {
                     Intent changeUser = new Intent(getApplicationContext(), ChangeUserActivity.class);
                     ChangeUserActivity.showPrepareDialog(LaunchActivity.this, getText(R.string.ScanningProfiles).toString());
                     startActivity(changeUser);
+                } else if (id == 15) {
+                    try {
+                        LaunchActivity.this.startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id=org.telegram.plus")), 502);
+                    } catch (Exception e2222) {
+                        FileLog.e("tmessages", e2222);
+                    }
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 14) {
+                    LaunchActivity.this.presentFragment(new PlusChatsStatsActivity());
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 }
             }
         });
+//                    Intent changeUser = new Intent(getApplicationContext(), ChangeUserActivity.class);
+//                    ChangeUserActivity.showPrepareDialog(LaunchActivity.this, getText(R.string.ScanningProfiles).toString());
+//                    startActivity(changeUser);
 
         drawerLayoutContainer.setParentActionBarLayout(actionBarLayout);
         actionBarLayout.setDrawerLayoutContainer(drawerLayoutContainer);

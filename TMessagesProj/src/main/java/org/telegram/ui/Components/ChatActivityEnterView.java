@@ -1101,7 +1101,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void updateTheme() {
         SharedPreferences themePrefs = ApplicationLoader.applicationContext.getSharedPreferences(AndroidUtilities.THEME_PREFS, 0);
-        this.sendButton.setColorFilter(themePrefs.getInt(Theme.pkey_chatSendIconColor, themePrefs.getInt(Theme.pkey_chatEditTextIconsColor, themePrefs.getInt(Theme.pkey_themeColor, AndroidUtilities.defColor))), Mode.SRC_IN);
+        this.sendButton.setColorFilter(themePrefs.getInt(Theme.pkey_chatSendIconColor, themePrefs.getInt(Theme.pkey_chatEditTextIconsColor, themePrefs.getInt(Theme.pkey_themeColor, AndroidUtilities.defColor))), PorterDuff.Mode.SRC_IN);
         this.messageEditText.setTextColor(themePrefs.getInt(Theme.pkey_chatEditTextColor, -16777216));
         this.messageEditText.setHintTextColor(AndroidUtilities.getIntAlphaColor(Theme.pkey_chatEditTextColor, -16777216, 0.35f));
         this.messageEditText.setTextSize((float) themePrefs.getInt(Theme.pkey_chatEditTextSize, 18));

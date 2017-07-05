@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -119,7 +120,7 @@ public class DrawerProfileCell extends FrameLayout {
                 TLRPC.User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
                 if (user.photo != null && user.photo.photo_big != null) {
                     PhotoViewer.getInstance().setParentActivity(activity);
-                    PhotoViewer.getInstance().openPhoto(user.photo.photo_big, (PhotoViewer.PhotoViewerProvider) DrawerProfileCell.this);
+                    PhotoViewer.getInstance().openPhoto(user.photo.photo_big, (PhotoViewer.PhotoViewerProvider) DrawerProfileCell.this); //TODO Multi error in open profile
                 }
             }
         });
@@ -302,7 +303,7 @@ public class DrawerProfileCell extends FrameLayout {
         }
         int[] coords = new int[2];
         this.avatarImageView.getLocationInWindow(coords);
-        PhotoViewer.PlaceProviderObject object = new PlaceProviderObject();
+        PhotoViewer.PlaceProviderObject object = new PhotoViewer.PlaceProviderObject();
         object.viewX = coords[0];
         object.viewY = coords[1] - AndroidUtilities.statusBarHeight;
         object.parentView = this.avatarImageView;
@@ -364,6 +365,7 @@ public class DrawerProfileCell extends FrameLayout {
                     break;
             }
             int gradColor = themePrefs.getInt("drawerHeaderGradientColor", tColor);
+            int hColor = Color.BLACK;//TODO Multi colors
             setBackgroundDrawable(new GradientDrawable(go, new int[]{hColor, gradColor}));
         }
         this.nameTextView.setTextColor(themePrefs.getInt(Theme.pkey_drawerNameColor, -1));
@@ -371,16 +373,16 @@ public class DrawerProfileCell extends FrameLayout {
         this.phoneTextView.setTextColor(themePrefs.getInt(Theme.pkey_drawerPhoneColor, Theme.lightColor));
         this.phoneTextView.setTextSize(1, (float) themePrefs.getInt("drawerPhoneSize", 13));
         if (!Theme.plusHideMobile || Theme.plusShowUsername) {
-            this.phoneTextView.setVisibility(0);
+            this.phoneTextView.setVisibility(VISIBLE);
         } else {
-            this.phoneTextView.setVisibility(8);
+            this.phoneTextView.setVisibility(VISIBLE);
         }
         TLRPC.User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
         TLObject photo = null;
         if (!(user == null || user.photo == null || user.photo.photo_small == null)) {
             photo = user.photo.photo_small;
         }
-        Drawable avatarDrawable = new AvatarDrawable(user);
+        AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         avatarDrawable.setColor(themePrefs.getInt("drawerAvatarColor", Theme.darkColor));
         int radius = AndroidUtilities.dp((float) themePrefs.getInt("drawerAvatarRadius", 32));
         avatarDrawable.setRadius(radius);

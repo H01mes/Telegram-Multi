@@ -5176,8 +5176,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (currentPhotoObject == null) {
                 return;
             }
-            fileName = ApplicationLoader.KEEP_ORIGINAL_FILENAME ? FileLoader.getAttachFileName(this.currentPhotoObject, null, this.currentMessageObject.isOutOwner()) : FileLoader.getAttachFileName(this.currentPhotoObject);
-//            fileName = FileLoader.getAttachFileName(currentPhotoObject);
+            fileName = FileLoader.getAttachFileName(this.currentPhotoObject);
+//            fileName = FileLoader.getAttachFileName(currentPhotoObject); //TODO Multi keep original filename
             fileExists = currentMessageObject.mediaExists;
         } else if (currentMessageObject.type == 8 || documentAttachType == DOCUMENT_ATTACH_TYPE_VIDEO || currentMessageObject.type == 9 || documentAttachType == DOCUMENT_ATTACH_TYPE_AUDIO || documentAttachType == DOCUMENT_ATTACH_TYPE_MUSIC) {
             if (currentMessageObject.useCustomPhoto) {

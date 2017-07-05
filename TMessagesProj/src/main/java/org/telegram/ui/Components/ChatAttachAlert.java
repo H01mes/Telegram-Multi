@@ -775,7 +775,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                             AndroidUtilities.runOnUIThread(videoRecordRunnable, 1000);
                         }
                     };
-                    AndroidUtilities.lockOrientation(parentFragment.getParentActivity());
+//                    AndroidUtilities.lockOrientation(getParentActivity()); //TODO multi
                     CameraController.getInstance().recordVideo(cameraView.getCameraSession(), cameraFile, new CameraController.VideoTakeCallback() {
                         @Override
                         public void onFinishVideoRecording(final Bitmap thumb) {

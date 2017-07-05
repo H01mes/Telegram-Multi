@@ -3,10 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/background_image_intro"/>
+        android:src="@drawable/cats"
+        android:scaleType="centerCrop"/>
 
     <FrameLayout
         android:layout_width="498dp"

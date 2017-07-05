@@ -2233,7 +2233,9 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                         }
                         putToDelayedMessages(location, message);
                         if (message.obj.videoEditedInfo != null) {
-                            FileLoader.getInstance().uploadFile(location, false, false, message.documentLocation.size, ConnectionsManager.FileTypeVideo);
+//                            FileLoader.getInstance().uploadFile(location, false, false, ConnectionsManager.FileTypeVideo);
+//TODO Multi
+                            FileLoader.getInstance().uploadFile(location, false, false,ConnectionsManager.FileTypeVideo , message.documentLocation.size);
                         } else {
                             FileLoader.getInstance().uploadFile(location, false, false, ConnectionsManager.FileTypeVideo);
                         }

@@ -1021,7 +1021,7 @@ public class ImageLoader {
                     } else if (location instanceof TLRPC.Document) {
                         FileLoader.getInstance().cancelLoadFile((TLRPC.Document) location);
                     } else if (location instanceof TLRPC.TL_webDocument) {
-                        FileLoader.getInstance().cancelLoadFile((TLRPC.TL_webDocument) location);
+//                        FileLoader.getInstance().cancelLoadFile((TLRPC.TL_webDocument   ) location) //TODO Multi;
                     }
                 }
                 if (cacheTask != null) {
@@ -1776,7 +1776,7 @@ public class ImageLoader {
                                 } else if (imageLocation instanceof TLRPC.Document) {
                                     FileLoader.getInstance().loadFile((TLRPC.Document) imageLocation, true, cacheOnly);
                                 } else if (imageLocation instanceof TLRPC.TL_webDocument) {
-                                    FileLoader.getInstance().loadFile((TLRPC.TL_webDocument) imageLocation, true, cacheOnly);
+                                    FileLoader.getInstance().loadFile((TLRPC.Document) imageLocation, true, cacheOnly);
                                 }
                             } else {
                                 String file = Utilities.MD5(httpLocation);
@@ -1846,12 +1846,7 @@ public class ImageLoader {
                 if (imageReceiver.getExt() != null || location.key != null || location.volume_id == Integer.MIN_VALUE && location.local_id < 0) {
                     saveImageToCache = true;
                 }
-            } else if (imageLocation instanceof TLRPC.TL_webDocument) {
-                TLRPC.TL_webDocument document = (TLRPC.TL_webDocument) imageLocation;
-                String defaultExt = FileLoader.getExtensionByMime(document.mime_type);
-                key = Utilities.MD5(document.url);
-                url = key + "." + getHttpUrlExtension(document.url, defaultExt);
-            } else if (imageLocation instanceof TLRPC.Document) {
+            }  else if (imageLocation instanceof TLRPC.Document) {
                 TLRPC.Document document = (TLRPC.Document) imageLocation;
                 if (document.id == 0 || document.dc_id == 0) {
                     return;

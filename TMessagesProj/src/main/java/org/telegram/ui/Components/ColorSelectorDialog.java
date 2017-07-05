@@ -6,13 +6,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 
 import org.telegram.messenger.R;
 
-public class ColorSelectorDialog extends Dialog implements org.telegram.ui.Components.ColorPickerView.OnColorChangedListener, OnClickListener {
+//import android.view.View.OnClickListener;
+
+public class ColorSelectorDialog extends Dialog implements org.telegram.ui.Components.ColorPickerView.OnColorChangedListener, View.OnClickListener {//TODO Multi View or Dialog??
     public static final int BOTTOM = 1;
     public static final int CENTER = 0;
     public static final int LEFT = 4;
@@ -64,13 +65,16 @@ public class ColorSelectorDialog extends Dialog implements org.telegram.ui.Compo
         } else if (this.side == 1) {
         }
         this.btnOld = (Button) findViewById(R.id.button_old);
-        this.btnOld.setOnClickListener(new OnClickListener() {
+        this.btnOld.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 ColorSelectorDialog.this.dismiss();
             }
         });
+        ColorSelectorDialog.this.dismiss();
+
         this.btnNew = (Button) findViewById(R.id.button_new);
-        this.btnNew.setOnClickListener(new OnClickListener() {
+        this.btnNew.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (ColorSelectorDialog.this.listener != null) {
                     ColorSelectorDialog.this.listener.colorChanged(ColorSelectorDialog.this.color);

@@ -388,7 +388,7 @@ public class AndroidUtilities {
         }
         try {
             if (prevOrientation != -10) {
-                activity.setRequestedOrientation(prevOrientation);
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
                 prevOrientation = -10;
             }
         } catch (Exception e) {
@@ -1686,8 +1686,8 @@ public class AndroidUtilities {
     }
 
     public static void brandGlowEffect(Context context, int brandColor) {
-        context.getResources().getDrawable(context.getResources().getIdentifier("overscroll_glow", "drawable", "android")).setColorFilter(brandColor, Mode.SRC_IN);
-        context.getResources().getDrawable(context.getResources().getIdentifier("overscroll_edge", "drawable", "android")).setColorFilter(brandColor, Mode.SRC_IN);
+        context.getResources().getDrawable(context.getResources().getIdentifier("overscroll_glow", "drawable", "android")).setColorFilter(brandColor, PorterDuff.Mode.SRC_IN);
+        context.getResources().getDrawable(context.getResources().getIdentifier("overscroll_edge", "drawable", "android")).setColorFilter(brandColor, PorterDuff.Mode.SRC_IN);
     }
 
     public static int getIntColor(String key) {

@@ -35,17 +35,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
-    private static final int callsRow = 10;
-    private static final int channelRow = 12;
-    private static final int chatsStatsRow = 14;
-    private static final int communityRow = 13;
-    private static final int contactsRow = 6;
-    private static final int plusSettingsRow = 11;
-    private static final int settingsRow = 9;
-    private static final int themesRow = 7;
-    private static final int themingRow = 8;
-    private static final int versionRow = 15;
-    private static final int versionType = 4;
     private SharedPreferences themePrefs;
     private Context mContext;
     private ArrayList<Item> items = new ArrayList<>(11);
@@ -174,30 +163,51 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             return 3;
         }    }
 
+//    private void resetItems() {
+//        items.clear();
+//        if (!UserConfig.isClientActivated()) {
+//            return;
+//        }
+//        items.add(null); // profile
+//        items.add(null); // padding
+//        items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_newgroup));
+//        items.add(new Item(3, LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.menu_secret));
+//        items.add(new Item(4, LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.menu_broadcast));
+//        items.add(null); // divider
+//        items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), R.drawable.menu_contacts));
+//
+//        this.items.add(new Item(7, LocaleController.getString("DownloadThemes", R.string.DownloadThemes), R.drawable.menu_themes));
+//
+//        this.items.add(new Item(8, LocaleController.getString("Theming", R.string.Theming), R.drawable.menu_theming));
+//        this.items.add(new Item(9, LocaleController.getString("Settings", R.string.Settings), R.drawable.menu_settings));
+//        if (MessagesController.getInstance().callsEnabled) {
+//            items.add(new Item(10, LocaleController.getString("Calls", R.string.Calls), R.drawable.menu_calls));
+//        }
+//        items.add(new Item(11, LocaleController.getString("Change_another_user", R.string.Change_another_user), R.drawable.menu_invite));
+
+
     private void resetItems() {
-        items.clear();
-        if (!UserConfig.isClientActivated()) {
-            return;
+        this.items.clear();
+        if (UserConfig.isClientActivated()) {
+            this.items.add(null);
+            this.items.add(null);
+            this.items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_newgroup));
+            this.items.add(new Item(3, LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.menu_secret));
+            this.items.add(new Item(4, LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.menu_broadcast));
+            this.items.add(null);
+            this.items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), R.drawable.menu_contacts));
+            if (MessagesController.getInstance().callsEnabled) {
+                this.items.add(new Item(10, LocaleController.getString("Calls", R.string.Calls), R.drawable.menu_calls));
+            }
+            this.items.add(new Item(7, LocaleController.getString("DownloadThemes", R.string.DownloadThemes), R.drawable.menu_themes));
+            this.items.add(new Item(8, LocaleController.getString("Theming", R.string.Theming), R.drawable.menu_theming));
+            this.items.add(new Item(9, LocaleController.getString("Settings", R.string.Settings), R.drawable.menu_settings));
+            this.items.add(new Item(11, LocaleController.getString("PlusSettings", R.string.PlusSettings), R.drawable.menu_plus));
+            this.items.add(new Item(12, LocaleController.getString("OfficialChannel", R.string.OfficialChannel), R.drawable.menu_broadcast));
+            this.items.add(new Item(13, LocaleController.getString("Change_another_user", R.string.Change_another_user), R.drawable.menu_invite));
+            this.items.add(new Item(14, LocaleController.getString("ChatsCounters", R.string.ChatsCounters), R.drawable.profile_list));
+            this.items.add(null);
         }
-        items.add(null); // profile
-        items.add(null); // padding
-        items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_newgroup));
-        items.add(new Item(3, LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.menu_secret));
-        items.add(new Item(4, LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.menu_broadcast));
-        items.add(null); // divider
-        items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), R.drawable.menu_contacts));
-        if (MessagesController.getInstance().callsEnabled) {
-            items.add(new Item(10, LocaleController.getString("Calls", R.string.Calls), R.drawable.menu_calls));
-        }
-        this.items.add(new Item(7, LocaleController.getString("DownloadThemes", R.string.DownloadThemes), R.drawable.menu_themes));
-        items.add(new Item(11, LocaleController.getString("Change_another_user", R.string.Change_another_user), R.drawable.menu_invite));
-        this.items.add(new Item(8, LocaleController.getString("Theming", R.string.Theming), R.drawable.menu_theming));
-        this.items.add(new Item(9, LocaleController.getString("Settings", R.string.Settings), R.drawable.menu_settings));
-        this.items.add(new Item(11, LocaleController.getString("PlusSettings", R.string.PlusSettings), R.drawable.menu_plus));
-        this.items.add(new Item(12, LocaleController.getString("OfficialChannel", R.string.OfficialChannel), R.drawable.menu_broadcast));
-        this.items.add(new Item(13, LocaleController.getString("Community", R.string.Community), R.drawable.menu_forum));
-        this.items.add(new Item(14, LocaleController.getString("ChatsCounters", R.string.ChatsCounters), R.drawable.profile_list));
-        this.items.add(null);
     }
 
     public int getId(int position) {

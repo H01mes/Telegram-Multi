@@ -18,6 +18,7 @@
 
     <permission android:name="org.telegram.multi.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
     <permission android:name="org.telegram.multi.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <permission android:name="org.telegram.multi.android.provider.ACCESS" android:protectionLevel="signature"/>
 
     <application
         android:allowBackup="true"

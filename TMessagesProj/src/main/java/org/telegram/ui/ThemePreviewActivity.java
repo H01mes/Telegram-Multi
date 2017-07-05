@@ -754,6 +754,11 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                     }
 
                     @Override
+                    public void didLongPressedAvatar(ChatMessageCell chatMessageCell, TLRPC.User user) {
+
+                    }
+
+                    @Override
                     public void didPressedUserAvatar(ChatMessageCell cell, TLRPC.User user) {
 
                     }

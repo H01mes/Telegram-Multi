@@ -8,8 +8,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
-import java.io.File;
+
 import org.telegram.ui.ActionBar.Theme;
+
+import java.io.File;
+import java.io.IOException;
 
 public class ModuleContentProvider extends ContentProvider {
     private static final String AUTHORITY = "org.telegram.plus.android.provider.content";
@@ -60,7 +63,11 @@ public class ModuleContentProvider extends ContentProvider {
                 Theme.applyThemeFile(themeFile, themeFile.getName(), false);
                 return 11;
             }
-            applyTheme(theme);
+            try {
+                applyTheme(theme);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return 10;
         }
         throw new UnsupportedOperationException();
@@ -71,7 +78,7 @@ public class ModuleContentProvider extends ContentProvider {
         throw new UnsupportedOperationException();
     }
 
-    private void applyTheme(String xmlFile) {
+    private void applyTheme(String xmlFile) throws IOException {
         String wName = xmlFile.substring(0, xmlFile.lastIndexOf(".")) + "_wallpaper.jpg";
         if (new File(wName).exists()) {
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
