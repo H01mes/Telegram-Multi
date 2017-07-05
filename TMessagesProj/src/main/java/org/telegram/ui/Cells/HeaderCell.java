@@ -29,11 +29,11 @@ public class HeaderCell extends FrameLayout {
         textView = new TextView(getContext());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-//        this.textView.setTextColor(Theme.usePlusTheme ? Theme.prefSectionColor : Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
-//        if (Theme.usePlusTheme) {
-//            setBackgroundColor(Theme.prefBGColor);
-//        }
-        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
+        this.textView.setTextColor(Theme.usePlusTheme ? Theme.prefSectionColor : Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
+        if (Theme.usePlusTheme) {
+            setBackgroundColor(Theme.prefBGColor);
+        }
+
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 17, 15, 17, 0));
     }
